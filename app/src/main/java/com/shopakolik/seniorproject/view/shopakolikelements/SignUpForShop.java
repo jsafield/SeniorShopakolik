@@ -1,7 +1,9 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.shopakolik.seniorproject.R;
 
@@ -14,5 +16,10 @@ public class SignUpForShop extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signupshop);
 
+    }
+
+    public void categoriesClick(View view){
+        Intent getNameScreenIntent = new Intent(this,CategoryPage.class);
+        startActivity(getNameScreenIntent);
     }
 }

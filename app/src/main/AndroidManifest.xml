@@ -30,6 +30,12 @@
         <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.ForgetPassword"
             android:label="Sign up Shop"
             android:theme="@style/AppTheme"/>
+
+
+        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.CategoryPage"
+            android:label="Category Page"
+            android:theme="@style/AppTheme"/>
+
     </application>
 
 </manifest>

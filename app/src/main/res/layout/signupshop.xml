@@ -38,19 +38,22 @@
 
     </LinearLayout>
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/bilinmezlikler"
-        android:text="KATEGORILERI VE LOCATIONLARI NASIL ALACAGIZ RAPORDAKI UYGUN DEGIL BENCE.
-        LOGO NASIL OLACAK ONU DA ANLAMIS DEGILIM"
-        android:layout_below="@+id/linearLayoutName"/>
+        android:id="@+id/categories_clickable"
+        android:text="Categories"
+        android:layout_below="@+id/linearLayoutName"
+        android:padding="15dp"
+        android:layout_centerHorizontal="true"
+        android:onClick="categoriesClick"
+        />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:layout_below="@+id/bilinmezlikler"
+        android:layout_below="@+id/categories_clickable"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"/>
 
