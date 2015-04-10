@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/campaignpage">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:src="@mipmap/esteelaudericon"
+            android:layout_alignBottom="@+id/brandname"
+            android:layout_alignLeft="@+id/description"
+            android:layout_alignStart="@+id/description" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estee Lauder"
+            android:id="@+id/brandname"
+            android:capitalize="words"
+            android:textColor="#ffff2877"
+            android:textSize="@android:dimen/app_icon_size"
+            android:theme="@android:style/Animation"
+            android:layout_marginTop="49dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/imageView"
+            android:layout_toEndOf="@+id/imageView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Campaign Starts : "
+            android:id="@+id/campaignname"
+            android:textColor="#ff000000"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:layout_above="@+id/description"
+            android:layout_alignLeft="@+id/loadimage"
+            android:layout_alignStart="@+id/loadimage"
+            android:layout_marginBottom="69dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/editText"
+            android:layout_alignBottom="@+id/campaignname"
+            android:layout_alignRight="@+id/startdate"
+            android:layout_alignEnd="@+id/startdate"
+            android:layout_toRightOf="@+id/campaignname"
+            android:layout_toEndOf="@+id/campaignname" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:id="@+id/startdate"
+            android:layout_alignBottom="@+id/editText"
+            android:layout_alignRight="@+id/brandname"
+            android:layout_alignEnd="@+id/brandname" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Campaign Finish : "
+            android:id="@+id/campaignfinish"
+            android:textColor="#ff000000"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:layout_alignBottom="@+id/editText2"
+            android:layout_alignLeft="@+id/campaignname"
+            android:layout_alignStart="@+id/campaignname" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/editText2"
+            android:layout_below="@+id/editText"
+            android:layout_alignRight="@+id/startdate"
+            android:layout_alignEnd="@+id/startdate"
+            android:layout_toRightOf="@+id/campaignname"
+            android:layout_toEndOf="@+id/campaignname" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:id="@+id/finishdate"
+            android:layout_below="@+id/editText"
+            android:layout_alignLeft="@+id/startdate"
+            android:layout_alignStart="@+id/startdate" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description : "
+            android:id="@+id/description"
+            android:textColor="#ff000000"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:layout_centerVertical="true"
+            android:layout_alignRight="@+id/loadimage"
+            android:layout_alignEnd="@+id/loadimage" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/descriptiontext"
+            android:text="Description Text"
+            android:layout_alignTop="@+id/description"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="29dp"
+            android:layout_marginEnd="29dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/brandimage"
+            android:src="@mipmap/esteelaudericon"
+            android:layout_marginBottom="23dp"
+            android:layout_above="@+id/post"
+            android:layout_alignLeft="@+id/descriptiontext"
+            android:layout_alignStart="@+id/descriptiontext" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Image Load : "
+            android:id="@+id/loadimage"
+            android:textColor="#ff000000"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:layout_alignTop="@+id/brandimage"
+            android:layout_toLeftOf="@+id/brandimage"
+            android:layout_toStartOf="@+id/brandimage" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post"
+            android:id="@+id/post"
+            android:layout_marginBottom="37dp"
+            android:layout_above="@+id/favorites"
+            android:layout_toLeftOf="@+id/finishdate"
+            android:layout_toStartOf="@+id/finishdate" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mainmenu"
+            android:layout_alignParentBottom="true"
+            android:src="@android:drawable/ic_dialog_dialer"
+            android:layout_toLeftOf="@+id/brandname"
+            android:layout_alignLeft="@+id/loadimage"
+            android:layout_alignStart="@+id/loadimage" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/settings"
+            android:src="@android:drawable/ic_menu_manage"
+            android:layout_below="@+id/post"
+            android:layout_alignRight="@+id/post"
+            android:layout_alignEnd="@+id/post" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/personal"
+            android:src="@android:drawable/stat_notify_chat"
+            android:layout_below="@+id/post"
+            android:layout_toStartOf="@+id/brandimage"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/brandimage" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/favorites"
+            android:src="@android:drawable/star_big_on"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addimage"
+            android:src="@android:drawable/ic_menu_mapmode"
+            android:layout_alignBottom="@+id/brandimage"
+            android:layout_alignLeft="@+id/post"
+            android:layout_alignStart="@+id/post" />
+
+
+    </RelativeLayout>
+</LinearLayout>
