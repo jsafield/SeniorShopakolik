@@ -14,16 +14,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/categories_list"
-        android:layout_below="@+id/categories_header"/>
+        android:layout_below="@+id/categories_header"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:layout_marginBottom="100dp"
+    />
+
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:text="I'm ready"
-        android:layout_below="@+id/categories_list"
         android:id="@+id/categories_submit_button"
-        android:onClick="categoriesSubmitButtonClick"/>
+        android:onClick="categoriesSubmitButtonClick"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="47dp" />
 
 
 </RelativeLayout>
