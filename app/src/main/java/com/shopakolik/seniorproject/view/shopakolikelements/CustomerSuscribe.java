@@ -16,7 +16,7 @@ public class CustomerSuscribe extends Activity {
     Button button;
     String categoryType [] = {"Woman" , "Man" , "Kids", "Shoes", "Accessory", "Handbags, Wallets & Cases", " Jewelry" ,"Books", " DVDs & Movies","Sport", "Baby"};
 
-
+    String categoryType1 [] = {"ekleme"};
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customer_suscribe);
