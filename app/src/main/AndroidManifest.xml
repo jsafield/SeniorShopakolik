@@ -38,6 +38,10 @@
             android:label="Category Page"
             android:theme="@style/AppTheme"/>
 
+        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.CustomerSuscribe"
+            android:label="Customer Suscribe Page"
+            android:theme="@style/AppTheme"/>
+
     </application>
 
 </manifest>

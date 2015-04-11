@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView android:text="customer suscribe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"
+        android:textColor="#445894"
+        android:id="@+id/customersuscribe_header" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/customer_suscribe_categories_list"
+        android:layout_below="@+id/customersuscribe_header"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:layout_marginBottom="100dp"
+        />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I'm ready"
+        android:id="@+id/customer_suscribe_categories_submit_button"
+        android:onClick="customersuscribecategoriesSubmitButtonClick"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="47dp" />
+
+
+</RelativeLayout>

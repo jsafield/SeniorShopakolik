@@ -56,6 +56,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void signInButtonClick(View view) {
+        Intent getNameScreenIntent = new Intent(this,CustomerSuscribe.class);
+        startActivity(getNameScreenIntent);
     }
 
     public void forgetPasswordClick(View view) {
