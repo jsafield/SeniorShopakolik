@@ -1,4 +1,4 @@
-package com.shopakolik.seniorproject.controller.model.shopakolikelements;
+package com.shopakolik.seniorproject.model.shopakolikelements;
 
 public class Category {
     private int categoryId;
