@@ -15,7 +15,7 @@ public class CategoryPage extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.signupcustomer);
+        setContentView(R.layout.categorypage);
         populateListView();
     }
 
