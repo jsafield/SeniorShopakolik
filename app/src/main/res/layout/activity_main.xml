@@ -35,6 +35,7 @@
         android:hint="password"/>
 
     <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -43,28 +44,29 @@
         android:id="@+id/signInButton"
         android:onClick="signInButtonClick"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/forgetPassword"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/signInButton"
-        android:layout_toEndOf="@+id/signInButton"
-        android:onClick="forgetPasswordClick"
-        android:id="@+id/forgetPassword" />
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/forgetPassword"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_toRightOf="@+id/signInButton"-->
+        <!--android:layout_toEndOf="@+id/signInButton"-->
+        <!--android:onClick="forgetPasswordClick"-->
+        <!--android:id="@+id/forgetPassword" />-->
 
     <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signUpCustomer"
-        android:layout_below="@+id/forgetPassword"
+        android:layout_below="@+id/signInButton"
         android:id="@+id/signUpCustomer"
-        android:layout_alignLeft="@+id/password"
-        android:layout_alignStart="@+id/password"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="66dp"
         android:onClick="signUpCustomerClick"/>
 
     <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signUpStore"
@@ -73,4 +75,5 @@
         android:layout_alignLeft="@+id/signUpCustomer"
         android:layout_alignStart="@+id/signUpCustomer"
         android:onClick="signUpShopClick"/>
+
 </RelativeLayout>
