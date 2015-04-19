@@ -162,7 +162,8 @@
             android:layout_alignLeft="@+id/pickanimagebutton"
             android:layout_alignRight="@+id/pickanimagebutton"
             android:layout_alignStart="@+id/pickanimagebutton"
-            android:layout_below="@+id/pickanimagebutton" />
+            android:layout_below="@+id/pickanimagebutton"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/linearLayoutLocation"

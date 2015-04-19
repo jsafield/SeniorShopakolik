@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -43,7 +42,7 @@ public class SignUpForShop extends ActionBarActivity {
     }
 
     public void pickimageclicked(View view){
-        Log.e("pickimageclicked","pickimageclicked");
+        
         // To open up a gallery browser
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -55,19 +54,11 @@ public class SignUpForShop extends ActionBarActivity {
     // To handle when an image is selected from the browser, add the following to your Activity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("onActivityResult","onActivityResult");
         if (resultCode == RESULT_OK) {
-            Log.e("RESULT_OK","RESULT_OK");
             if (requestCode == 1) {
-                Log.e("requestCode","requestCode");
                 // currImageURI is the global variable I'm using to hold the content:// URI of the image
                 Uri currImageURI = data.getData();
-                Log.e("path uri", "path uri");
                 path = getRealPathFromURI(currImageURI);
-                if(path == null)
-                    Log.e("path nul", "path null");
-                else
-                    Log.e("path not nul", "path not null");
                 File imgFile = new  File(path);
 
                 if(imgFile.exists()){
@@ -75,7 +66,7 @@ public class SignUpForShop extends ActionBarActivity {
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
                     iv.setImageBitmap(myBitmap);
-                   // iv.setVisibility(View.VISIBLE);
+                    iv.setVisibility(View.VISIBLE);
 
                 }
             }
