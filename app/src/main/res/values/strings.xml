@@ -8,6 +8,8 @@
     <string name="forgetPassword">Forget password</string>
     <string name="signUpCustomer">Sign up as Customer</string>
     <string name="signUpStore">Sign up as Shop</string>
+    <string name="signUpSuccess">Your account successfully created.</string>
+    <string name="ok">Ok</string>
 
     <string-array name="menu_array">
         <item>Wall</item>
