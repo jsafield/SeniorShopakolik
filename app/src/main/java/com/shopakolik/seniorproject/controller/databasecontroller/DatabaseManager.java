@@ -44,7 +44,7 @@ public class DatabaseManager {
     }
 
     // send http post request and read http response
-    private String httpPost(String url, String urlParameters) throws Exception {
+    private static String httpPost(String url, String urlParameters) throws Exception {
 
         URL url0;
         HttpURLConnection conn;
@@ -104,7 +104,7 @@ public class DatabaseManager {
     }
 
     // send http post request to upload file and returns the name of file in server
-    private String httpPostFile(String url, String sourceFileUri) throws Exception {
+    private static String httpPostFile(String url, String sourceFileUri) throws Exception {
 
         URL url0;
         HttpURLConnection conn;
@@ -196,7 +196,7 @@ public class DatabaseManager {
         return result;
     }
 
-    private Store parseSimpleStoreFromJSON(String result) throws Exception {
+    private static Store parseSimpleStoreFromJSON(String result) throws Exception {
 
         JSONObject jsonObject = new JSONObject(result);
 
@@ -261,7 +261,7 @@ public class DatabaseManager {
         return new Store(storeId, name, logo, categories, locations);
     }
 
-    private Store parseStoreFromJSON(String result) throws Exception {
+    private static Store parseStoreFromJSON(String result) throws Exception {
 
         Store store = parseSimpleStoreFromJSON(result);
 
@@ -278,7 +278,7 @@ public class DatabaseManager {
         return store;
     }
 
-    private ArrayList<Store> parseStoresFromJSON(String result) throws Exception {
+    private static ArrayList<Store> parseStoresFromJSON(String result) throws Exception {
         ArrayList<Store> stores = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(result);
 
@@ -288,7 +288,7 @@ public class DatabaseManager {
         return stores;
     }
 
-    private ArrayList<Campaign> parseCampaignsFromJSON(String result) throws Exception {
+    private static ArrayList<Campaign> parseCampaignsFromJSON(String result) throws Exception {
 
         ArrayList<Campaign> campaigns = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(result);
@@ -324,12 +324,12 @@ public class DatabaseManager {
         return campaigns;
     }
 
-    public UserType login(User user) throws Exception {
+    public static UserType login(User user) throws Exception {
 
         return login(user.getEmail(), user.getPassword());
     }
 
-    public UserType login(String email, String password) throws Exception {
+    public static UserType login(String email, String password) throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
@@ -345,7 +345,7 @@ public class DatabaseManager {
         throw new Exception("Unexpected Error In PHP File");
     }
 
-    public boolean addCustomer(Customer customer) throws Exception {
+    public static boolean addCustomer(Customer customer) throws Exception {
 
         String urlParameters = "name=" + URLEncoder.encode(customer.getName(), "UTF-8")
                 + "&surname=" + URLEncoder.encode(customer.getSurname(), "UTF-8")
@@ -360,7 +360,7 @@ public class DatabaseManager {
         return result.equals("success");
     }
 
-    public boolean addStore(Store store) throws Exception {
+    public static boolean addStore(Store store) throws Exception {
 
         locationError = false;
         String logo = httpPostFile(SERVER_URL + "UploadStoreLogo.php", store.getLogo());
@@ -396,12 +396,12 @@ public class DatabaseManager {
         return result.equals("success");
     }
 
-    public boolean deleteUser(User user) throws Exception {
+    public static boolean deleteUser(User user) throws Exception {
 
         return deleteUser(user.getEmail(), user.getPassword());
     }
 
-    public boolean deleteUser(String email, String password) throws Exception {
+    public static boolean deleteUser(String email, String password) throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
@@ -410,12 +410,12 @@ public class DatabaseManager {
         return result.equals("success");
     }
 
-    public boolean addCampaign(Store store, Campaign campaign) throws Exception {
+    public static boolean addCampaign(Store store, Campaign campaign) throws Exception {
 
         return addCampaign(store.getEmail(), store.getPassword(), campaign);
     }
 
-    public boolean addCampaign(String email, String password, Campaign campaign) throws Exception {
+    public static boolean addCampaign(String email, String password, Campaign campaign) throws Exception {
 
         String image = httpPostFile(SERVER_URL + "UploadCampaignImage.php", campaign.getImage());
 
@@ -436,12 +436,12 @@ public class DatabaseManager {
         return result.equals("success");
     }
 
-    public ArrayList<Category> getCategoryList(User user) throws Exception {
+    public static ArrayList<Category> getCategoryList(User user) throws Exception {
 
         return getCategoryList(user.getEmail(), user.getPassword());
     }
 
-    public ArrayList<Category> getCategoryList(String email, String password) throws Exception {
+    public static ArrayList<Category> getCategoryList(String email, String password) throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
@@ -464,7 +464,7 @@ public class DatabaseManager {
         return categories;
     }
 
-    public Store getStore(String email, String password, int store_id) throws Exception {
+    public static Store getStore(String email, String password, int store_id) throws Exception {
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&store_id=" + URLEncoder.encode("" + store_id, "UTF-8");
@@ -473,12 +473,13 @@ public class DatabaseManager {
         return parseStoreFromJSON(result);
     }
 
-    public ArrayList<Store> getStores(User user, Category category) throws Exception {
+    public static ArrayList<Store> getStores(User user, Category category) throws Exception {
 
         return getStores(user.getEmail(), user.getPassword(), category.getCategoryId());
     }
 
-    public ArrayList<Store> getStores(String email, String password, int categoryId) throws Exception {
+    public static ArrayList<Store> getStores(String email, String password, int categoryId)
+            throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
@@ -491,12 +492,13 @@ public class DatabaseManager {
         return parseStoresFromJSON(result);
     }
 
-    public ArrayList<Campaign> getCampaigns(User user, Store store) throws Exception {
+    public static ArrayList<Campaign> getCampaigns(User user, Store store) throws Exception {
 
         return getCampaigns(user.getEmail(), user.getPassword(), store.getStoreId());
     }
 
-    public ArrayList<Campaign> getCampaigns(String email, String password, int storeId) throws Exception {
+    public static ArrayList<Campaign> getCampaigns(String email, String password, int storeId)
+            throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
@@ -509,12 +511,12 @@ public class DatabaseManager {
         return parseCampaignsFromJSON(result);
     }
 
-    public boolean addFavoriteStore(User user, Store store) throws Exception {
+    public static boolean addFavoriteStore(User user, Store store) throws Exception {
 
         return addFavoriteStore(user.getEmail(), user.getPassword(), store.getStoreId());
     }
 
-    public boolean addFavoriteStore(String email, String password, int storeId) throws Exception {
+    public static boolean addFavoriteStore(String email, String password, int storeId) throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
@@ -524,12 +526,13 @@ public class DatabaseManager {
         return result.equals("success");
     }
 
-    public boolean addFavoriteCampaign(User user, Campaign campaign) throws Exception {
+    public static boolean addFavoriteCampaign(User user, Campaign campaign) throws Exception {
 
         return addFavoriteCampaign(user.getEmail(), user.getPassword(), campaign.getCampaignId());
     }
 
-    public boolean addFavoriteCampaign(String email, String password, int campaignId) throws Exception {
+    public static boolean addFavoriteCampaign(String email, String password, int campaignId)
+            throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
@@ -539,12 +542,12 @@ public class DatabaseManager {
         return result.equals("success");
     }
 
-    public ArrayList<Store> getFavoriteStores(User user) throws Exception {
+    public static ArrayList<Store> getFavoriteStores(User user) throws Exception {
 
         return getFavoriteStores(user.getEmail(), user.getPassword());
     }
 
-    public ArrayList<Store> getFavoriteStores(String email, String password) throws Exception {
+    public static ArrayList<Store> getFavoriteStores(String email, String password) throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
@@ -556,12 +559,12 @@ public class DatabaseManager {
         return parseStoresFromJSON(result);
     }
 
-    public ArrayList<Campaign> getFavoriteCampaigns(User user) throws Exception {
+    public static ArrayList<Campaign> getFavoriteCampaigns(User user) throws Exception {
 
         return getFavoriteCampaigns(user.getEmail(), user.getPassword());
     }
 
-    public ArrayList<Campaign> getFavoriteCampaigns(String email, String password) throws Exception {
+    public static ArrayList<Campaign> getFavoriteCampaigns(String email, String password) throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
@@ -573,12 +576,12 @@ public class DatabaseManager {
         return parseCampaignsFromJSON(result);
     }
 
-    public boolean removeFavoriteStore(User user, Store store) throws Exception {
+    public static boolean removeFavoriteStore(User user, Store store) throws Exception {
 
         return removeFavoriteStore(user.getEmail(), user.getPassword(), store.getStoreId());
     }
 
-    public boolean removeFavoriteStore(String email, String password, int storeId) throws Exception {
+    public static boolean removeFavoriteStore(String email, String password, int storeId) throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
@@ -588,12 +591,13 @@ public class DatabaseManager {
         return result.equals("success");
     }
 
-    public boolean removeFavoriteCampaign(User user, Campaign campaign) throws Exception {
+    public static boolean removeFavoriteCampaign(User user, Campaign campaign) throws Exception {
 
         return removeFavoriteCampaign(user.getEmail(), user.getPassword(), campaign.getCampaignId());
     }
 
-    public boolean removeFavoriteCampaign(String email, String password, int campaignId) throws Exception {
+    public static boolean removeFavoriteCampaign(String email, String password, int campaignId)
+            throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
@@ -603,7 +607,8 @@ public class DatabaseManager {
         return result.equals("success");
     }
 
-    public boolean enableLocationNotification(String email, String password, boolean locationNotification) throws Exception {
+    public static boolean enableLocationNotification(String email, String password,
+                                                     boolean locationNotification) throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
@@ -613,7 +618,8 @@ public class DatabaseManager {
         return result.equals("success");
     }
 
-    public boolean enableCampaignNotification(String email, String password, boolean campaignNotification) throws Exception {
+    public static boolean enableCampaignNotification(String email, String password,
+                                                     boolean campaignNotification) throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
