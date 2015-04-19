@@ -42,7 +42,7 @@ public class SignUpForShop extends ActionBarActivity {
     }
 
     public void pickimageclicked(View view){
-        
+
         // To open up a gallery browser
         Intent intent = new Intent();
         intent.setType("image/*");
