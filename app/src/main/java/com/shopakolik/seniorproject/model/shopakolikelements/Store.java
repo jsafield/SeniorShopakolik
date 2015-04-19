@@ -29,6 +29,16 @@ public class Store extends User {
         this.locations = locations;
     }
 
+    public Store(int storeId, String name, String logo,
+                 ArrayList<Category> categories, ArrayList<Location> locations) {
+        super(-1, null, null);
+        this.storeId = storeId;
+        this.name = name;
+        this.logo = logo;
+        this.categories = categories;
+        this.locations = locations;
+    }
+
     public int getStoreId() {
         return storeId;
     }
