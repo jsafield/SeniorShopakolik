@@ -71,6 +71,7 @@ public class MainActivity extends ActionBarActivity {
                 try {
 
                     userType = DatabaseManager.login(email.getText().toString(), password.getText().toString());
+
                     if (userType == UserType.Customer)
                     {
                         Intent getNameScreenIntent = new Intent(MainActivity.this,CustomerSuscribe.class);
@@ -83,11 +84,17 @@ public class MainActivity extends ActionBarActivity {
                     }
                     else if(userType == UserType.NonUser)
                     {
-                        Context context = getApplicationContext();
-                        CharSequence text = "Check your email and password!";
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Context context = getApplicationContext();
+                                CharSequence text = "Check your email and password!";
+                                int duration = Toast.LENGTH_SHORT;
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                            }
+                        });
+
                     }
 
                 } catch (Exception e) {
