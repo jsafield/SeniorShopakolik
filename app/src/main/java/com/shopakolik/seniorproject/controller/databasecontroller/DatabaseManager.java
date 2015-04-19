@@ -335,11 +335,11 @@ public class DatabaseManager {
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
         String result = httpPost(SERVER_URL + "Login.php", urlParameters);
 
-        if (result.equals("customer"))
+        if (result.equals("customer\n"))
             return UserType.Customer;
-        if (result.equals("store"))
+        if (result.equals("store\n"))
             return UserType.Store;
-        if (result.equals("non_user"))
+        if (result.equals("non_user\n"))
             return UserType.NonUser;
 
         throw new Exception("Unexpected Error In PHP File");
@@ -357,7 +357,7 @@ public class DatabaseManager {
                 + URLEncoder.encode(customer.isCampaignNotification() ? "1" : "0", "UTF-8");
         String result = httpPost(SERVER_URL + "AddCustomer.php", urlParameters);
 
-        return result.equals("success");
+        return result.equals("success\n");
     }
 
     public static boolean addStore(Store store) throws Exception {

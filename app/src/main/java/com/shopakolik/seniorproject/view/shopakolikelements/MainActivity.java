@@ -1,16 +1,23 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shopakolik.seniorproject.R;
+import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
+import com.shopakolik.seniorproject.controller.databasecontroller.UserType;
+import com.shopakolik.seniorproject.model.shopakolikelements.User;
 
 import org.w3c.dom.Text;
 
@@ -18,7 +25,8 @@ import org.w3c.dom.Text;
 public class MainActivity extends ActionBarActivity {
 
     private Button signInButton;
-    private TextView forgetPassword,signUpCustomer,signUpShop;
+    private TextView forgetPassword,signUpCustomer,signUpShop,email,password;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +40,6 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void signInButtonClick(View view) {
-      //  Intent getNameScreenIntent = new Intent(this,CustomerSuscribe.class);
-        //startActivity(getNameScreenIntent);
-    }
 
     public void forgetPasswordClick(View view) {
         Intent getNameScreenIntent = new Intent(this,ForgetPassword.class);
@@ -46,6 +50,7 @@ public class MainActivity extends ActionBarActivity {
     public void signUpCustomerClick(View view) {
         Intent getNameScreenIntent = new Intent(this,SignUpForCustomer.class);
         startActivity(getNameScreenIntent);
+
     }
 
     public void signUpShopClick(View view) {
@@ -55,9 +60,46 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+    public void signInButtonClick(View view) {
+        email=(TextView)findViewById(R.id.email);
+        password=(TextView)findViewById(R.id.password);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                UserType userType = UserType.NonUser;
+                try {
+
+                    userType = DatabaseManager.login(email.getText().toString(), password.getText().toString());
+                    if (userType == UserType.Customer)
+                    {
+                        Intent getNameScreenIntent = new Intent(MainActivity.this,CustomerSuscribe.class);
+                        startActivity(getNameScreenIntent);
+                    }
+                    else if(userType == UserType.Store)
+                    {
+                        Intent getNameScreenIntent = new Intent(MainActivity.this,ForgetPassword.class);
+                        startActivity(getNameScreenIntent);
+                    }
+                    else if(userType == UserType.NonUser)
+                    {
+                        Context context = getApplicationContext();
+                        CharSequence text = "Check your email and password!";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }).start();
 
 
 
-
+    }
 
 }
