@@ -6,6 +6,6 @@ package com.shopakolik.seniorproject.view.shopakolikelements;
 public class AddCampaignPage {
 
     // datepicker yapilacak && textfield la baglanacak
-    // photo yu kullanicinin yüklemesi saglanacak addphoto butonuna eklenecek
+    // photo yu kullanicinin yuklemesi saglanacak addphoto butonuna eklenecek
 }
 
