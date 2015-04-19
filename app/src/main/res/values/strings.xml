@@ -9,4 +9,17 @@
     <string name="signUpCustomer">Sign up as Customer</string>
     <string name="signUpStore">Sign up as Shop</string>
 
+    <string-array name="menu_array">
+        <item>Wall</item>
+        <item>Favorites</item>
+        <item>Settings</item>
+        <item>Search</item>
+        <item>Profile</item>
+        <item>Log out</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="brand_name">Stravardius</string>
+
 </resources>

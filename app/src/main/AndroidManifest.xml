@@ -1,46 +1,58 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.shopakolik.seniorproject">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
+
+        </activity>
+
+
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.SignUpForCustomer"
+            android:label="Sign up Customer"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.SignUpForShop"
+            android:label="Sign up Shop"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.ForgetPassword"
+            android:label="Sign up Shop"
+            android:theme="@style/AppTheme" />
+
+
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.CategoryPage"
+            android:label="Category Page"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.CustomerSuscribe"
+            android:label="Customer Suscribe Page"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.BrandPage"
+            android:label="Brand Page"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.SignUpForCustomer"
-            android:label="Sign up Customer"
-            android:theme="@style/AppTheme"/>
-
-        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.SignUpForShop"
-            android:label="Sign up Shop"
-            android:theme="@style/AppTheme"/>
-
-        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.ForgetPassword"
-            android:label="Sign up Shop"
-            android:theme="@style/AppTheme"/>
-
-
-        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.CategoryPage"
-            android:label="Category Page"
-            android:theme="@style/AppTheme"/>
-
-        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.CustomerSuscribe"
-            android:label="Customer Suscribe Page"
-            android:theme="@style/AppTheme"/>
 
     </application>
 
