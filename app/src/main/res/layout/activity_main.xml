@@ -1,3 +1,7 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -5,13 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
-    <TextView android:text="@string/app_name"
+    <!--<TextView android:text="@string/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textSize="40sp"
         android:textColor="#445894"
         android:id="@+id/app_name" />
+    -->
 
     <EditText
         android:layout_width="wrap_content"
@@ -39,6 +44,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_alignRight="@+id/password"
+        android:layout_alignLeft="@+id/password"
         android:layout_below="@+id/password"
         android:text="@string/signInButton"
         android:id="@+id/signInButton"
@@ -62,6 +69,8 @@
         android:layout_below="@+id/signInButton"
         android:id="@+id/signUpCustomer"
         android:layout_centerHorizontal="true"
+        android:layout_alignRight="@+id/signInButton"
+        android:layout_alignLeft="@+id/signInButton"
         android:layout_marginTop="66dp"
         android:onClick="signUpCustomerClick"/>
 
@@ -72,8 +81,11 @@
         android:text="@string/signUpStore"
         android:id="@+id/signUpShop"
         android:layout_below="@+id/signUpCustomer"
-        android:layout_alignLeft="@+id/signUpCustomer"
         android:layout_alignStart="@+id/signUpCustomer"
+        android:layout_alignRight="@+id/signUpCustomer"
+        android:layout_alignLeft="@+id/signUpCustomer"
+
         android:onClick="signUpShopClick"/>
 
 </RelativeLayout>
+</ScrollView>

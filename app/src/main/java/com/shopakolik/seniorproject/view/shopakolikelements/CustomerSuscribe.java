@@ -2,6 +2,7 @@ package com.shopakolik.seniorproject.view.shopakolikelements;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by zeyno on 4/11/2015.
  */
-public class CustomerSuscribe extends Activity {
+public class CustomerSuscribe extends ActionBarActivity {
     ListView lv;
     Button button;
     // String categoryType [] = {"Woman" , "Man" , "Kids", "Shoes", "Accessory", "Handbags, Wallets & Cases", " Jewelry" ,"Books", " DVDs & Movies","Sport", "Baby"};

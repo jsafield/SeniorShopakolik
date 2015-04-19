@@ -1,15 +1,14 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.v7.app.ActionBarActivity;
 
 import com.shopakolik.seniorproject.R;
 
 /**
  * Created by zeyno on 2/5/2015.
  */
-public class SignUpForCustomer extends Activity {
+public class SignUpForCustomer extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

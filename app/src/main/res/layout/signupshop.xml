@@ -1,107 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:text="@string/app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize="40sp"
-        android:textColor="#445894"
-        android:id="@+id/app_name" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/linearLayoutName"
-        android:layout_below="@+id/app_name"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp">
-
-        <TextView
+        <!--<TextView
+            android:text="@string/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Shop Name: "
-            android:id="@+id/shop_name"
-            android:padding="15dp"/>
+            android:layout_centerHorizontal="true"
+            android:textSize="40sp"
+            android:textColor="#445894"
+            android:id="@+id/app_name" />-->
 
-        <EditText
-            android:layout_width="168dp"
+
+        <LinearLayout
+            android:id="@+id/linearLayoutEmail"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="name"
-            android:ems="10"
-            android:id="@+id/customer_name_value"
-            android:padding="5dp"/>
+            android:layout_alignEnd="@+id/app_name"
+            android:layout_alignRight="@+id/app_name"
+            android:layout_below="@+id/linearLayoutSurname"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="48dp"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/customer_email"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Email: " />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/categories_clickable"
-        android:text="Categories"
-        android:layout_below="@+id/linearLayoutName"
-        android:padding="15dp"
-        android:layout_centerHorizontal="true"
-        android:onClick="categoriesClick"
-        />
+            <EditText
+                android:id="@+id/customer_email_value"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="email"
+                android:inputType="textEmailAddress"
+                android:padding="5dp" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-    android:layout_alignRight="@+id/imageView"
-        />
+        </LinearLayout>
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pick an image"
-        android:id="@+id/pickanimagebutton"
-        android:layout_below="@+id/categories_clickable"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="43dp"
-        android:onClick="pickimageclicked"/>
+        <LinearLayout
+            android:id="@+id/linearLayoutPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/app_name"
+            android:layout_alignRight="@+id/app_name"
+            android:layout_below="@+id/linearLayoutEmail"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/customer_password"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Password: " />
+
+            <EditText
+                android:id="@+id/customer_password_value"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="password"
+                android:inputType="textPassword"
+                android:padding="5dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutRePassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/app_name"
+            android:layout_alignRight="@+id/app_name"
+            android:layout_below="@+id/linearLayoutPassword"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/customer_re_password"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Re-Password: " />
+
+            <EditText
+                android:id="@+id/customer_re_password_value"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="password"
+                android:inputType="textPassword"
+                android:padding="5dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayoutRePassword"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/shop_name"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Shop Name: " />
+
+            <EditText
+                android:id="@+id/shop_name_value"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="name"
+                android:inputType="text"
+                android:padding="5dp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/categories_clickable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/linearLayoutName"
+            android:layout_alignLeft="@+id/linearLayoutName"
+            android:layout_alignRight="@+id/linearLayoutName"
+            android:layout_alignStart="@+id/linearLayoutName"
+            android:layout_below="@+id/linearLayoutName"
+            android:onClick="categoriesClick"
+            android:padding="15dp"
+            android:text="Categories" />
+
+        <Button
+            android:id="@+id/pickanimagebutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/categories_clickable"
+            android:layout_alignLeft="@+id/categories_clickable"
+            android:layout_alignRight="@+id/categories_clickable"
+            android:layout_alignStart="@+id/categories_clickable"
+            android:layout_below="@+id/categories_clickable"
+            android:onClick="pickimageclicked"
+            android:text="Pick a logo" />
 
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pickanimagebutton"
-        android:id="@+id/imageView"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="280dp"
-        android:layout_marginRight="80dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginBottom="100dp"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="288dp"
+            android:layout_height="288dp"
+            android:layout_alignEnd="@+id/pickanimagebutton"
+            android:layout_alignLeft="@+id/pickanimagebutton"
+            android:layout_alignRight="@+id/pickanimagebutton"
+            android:layout_alignStart="@+id/pickanimagebutton"
+            android:layout_below="@+id/pickanimagebutton" />
 
-        />
+        <LinearLayout
+            android:id="@+id/linearLayoutLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/shop_location"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Branch: " />
+
+            <EditText
+                android:id="@+id/shop_location_value"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Shop Branch"
+                android:inputType="text"
+                android:padding="5dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayoutLocation"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/shop_address"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Address: " />
+
+            <EditText
+                android:id="@+id/shop_address_value"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Branch Address"
+                android:inputType="text"
+                android:padding="5dp" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/linearLayoutAddress"
+            android:layout_alignLeft="@+id/linearLayoutAddress"
+            android:layout_alignRight="@+id/linearLayoutAddress"
+            android:layout_alignStart="@+id/linearLayoutAddress"
+            android:layout_below="@+id/linearLayoutAddress"
+            android:text="Submit" />
 
 
-</RelativeLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </RelativeLayout>
+</ScrollView>
