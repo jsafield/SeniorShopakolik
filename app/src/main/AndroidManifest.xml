@@ -53,6 +53,10 @@
             android:theme="@style/AppTheme">
         </activity>
 
+        <service
+            android:name=".controller.notificationcontroller.NotificationService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

@@ -1,14 +1,17 @@
 //package com.shopakolik.seniorproject.controller.notificationcontroller;
 //
 ///**
-// * Created by Yusuf on 19.04.2015.
-// */
+//* Created by Yusuf on 19.04.2015.
+//*/
+//import android.app.IntentService;
 //import android.app.Notification;
 //import android.app.NotificationManager;
 //import android.app.PendingIntent;
 //import android.app.Service;
 //import android.content.Context;
 //import android.content.Intent;
+//import android.graphics.Bitmap;
+//import android.graphics.BitmapFactory;
 //import android.location.Location;
 //import android.location.LocationListener;
 //import android.location.LocationManager;
@@ -20,21 +23,35 @@
 //import android.widget.RemoteViews;
 //import android.widget.Toast;
 //
+//import com.shopakolik.seniorproject.R;
 //import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 //import com.shopakolik.seniorproject.model.shopakolikelements.Store;
 //
+//import java.io.IOException;
+//import java.net.MalformedURLException;
+//import java.net.URL;
 //import java.text.DateFormat;
 //import java.util.ArrayList;
 //import java.util.Date;
 //
-//public class NotificationService extends Service{
+//public class NotificationService extends IntentService {
 //    LocationManager locationManager;
 //    LocationListener locationListener;
+//    Intent thisIntent;
 //    private ArrayList<Store> stores;
 //
+//    public NotificationService(String name) {
+//        super(name);
+//    }
 //
 //    @Override
-//    public int onStartCommand(Intent intent, int flags, int startId) {
+//    public void onStart(Intent intent, int startId) {
+//        super.onStart(intent, startId);
+//        thisIntent = intent;
+//        /* get intent extra ?
+//
+//
+//         */
 //        stores = DatabaseManager.getFavoriteStores(USER);
 //        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 //        locationListener = new LocationListener() {
@@ -52,22 +69,16 @@
 //                            storeLoc.setLongitude(locs.get(i).getLatitude());
 //                            if(location.distanceTo(storeLoc)<200)
 //                            {
-//                                //
+//                                new Thread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        createNotification();
+//                                    };
+//                                });
 //                            }
 //                        }
 //                    }
 //
-//
-//                    /*Location panora = new Location("myProv");
-//                    panora.setLatitude(39.851397d);
-//                    panora.setLongitude(32.848254d);
-//                    Log.d("DISTANCE", "" + location.distanceTo(panora));
-//                    if(location.distanceTo(panora)<200)
-//                    {
-//                        Log.d("u", "y");
-//                        //createNotification();
-//                    }else
-//                        Log.d("n", "n");*/
 //                }
 //            }
 //
@@ -87,77 +98,56 @@
 //            }
 //        };
 //        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,locationListener);
-//        return START_STICKY;
 //    }
-//
 //    @Override
 //    public IBinder onBind(Intent intent) {
 //
 //        return null;
 //    }
 //
-//    private void createNotification() {
-//        // BEGIN_INCLUDE(notificationCompat)
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-//        // END_INCLUDE(notificationCompat)
+//    @Override
+//    protected void onHandleIntent(Intent intent) {
 //
-//        // BEGIN_INCLUDE(intent)
-//        //Create Intent to launch this Activity again if the notification is clicked.
-//        Intent i = new Intent(this, MainActivity.class);
+//    }
+//
+//    private void createNotification() {
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+//
+//        /*Intent i = new Intent(this, MainActivity.class);
 //        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 //        PendingIntent intent = PendingIntent.getActivity(this, 0, i,
 //                PendingIntent.FLAG_UPDATE_CURRENT);
-//        builder.setContentIntent(intent);
-//        // END_INCLUDE(intent)
+//        builder.setContentIntent(intent);*/
 //
-//        // BEGIN_INCLUDE(ticker)
-//        // Sets the ticker text
-//        builder.setTicker(getResources().getString(R.string.custom_notification));
+//        builder.setTicker("one new notification!");
 //
-//        // Sets the small icon for the ticker
-//        builder.setSmallIcon(R.drawable.ic_stat_custom);
-//        // END_INCLUDE(ticker)
+//        builder.setSmallIcon(R.drawable.ic_launcher);
 //
-//        // BEGIN_INCLUDE(buildNotification)
-//        // Cancel the notification when clicked
 //        builder.setAutoCancel(true);
 //
-//        // Build the notification
 //        Notification notification = builder.build();
-//        // END_INCLUDE(buildNotification)
 //
-//        // BEGIN_INCLUDE(customLayout)
-//        // Inflate the notification layout as RemoteViews
-//        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.notification);
+//        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.notifcollapsed);
 //
-//        // Set text on a TextView in the RemoteViews programmatically.
-//        final String time = DateFormat.getTimeInstance().format(new Date()).toString();
-//        final String text = getResources().getString(R.string.collapsed, time);
-//        contentView.setTextViewText(R.id.textView, text);
+//        URL url = null;
+//        Bitmap image = null;
+//        try {
+//            url = new URL("https://cdn2.iconfinder.com/data/icons/windows-8-metro-style/512/shop.png");
+//            image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 //
-//        /* Workaround: Need to set the content view here directly on the notification.
-//         * NotificationCompatBuilder contains a bug that prevents this from working on platform
-//         * versions HoneyComb.
-//         * See https://code.google.com/p/android/issues/detail?id=30495
-//         */
+//        contentView.setTextViewText(R.id.notiftext1, text);
+//        contentView.setImageViewBitmap(R.id.notifimage1, image);
+//        // set content view
 //        notification.contentView = contentView;
 //
-//        // Add a big content view to the notification if supported.
-//        // Support for expanded notifications was added in API level 16.
-//        // (The normal contentView is shown when the notification is collapsed, when expanded the
-//        // big content view set here is displayed.)
-//        if (Build.VERSION.SDK_INT >= 16) {
-//            // Inflate and set the layout for the expanded notification view
-//            RemoteViews expandedView =
-//                    new RemoteViews(getPackageName(), R.layout.notification_expanded);
-//            notification.bigContentView = expandedView;
-//        }
-//        // END_INCLUDE(customLayout)
-//
-//        // START_INCLUDE(notify)
-//        // Use the NotificationManager to show the notification
 //        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 //        nm.notify(0, notification);
-//        // END_INCLUDE(notify)
+//
 //    }
 //}
