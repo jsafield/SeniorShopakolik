@@ -43,6 +43,10 @@ public class DatabaseManager {
         return locationError;
     }
 
+    public static String getServerUrl() {
+        return SERVER_URL;
+    }
+
     // send http post request and read http response
     private static String httpPost(String url, String urlParameters) throws Exception {
 
