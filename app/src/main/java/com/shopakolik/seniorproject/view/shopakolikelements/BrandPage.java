@@ -1,132 +1,109 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
-import android.app.SearchManager;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.shopakolik.seniorproject.R;
+import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
+import com.shopakolik.seniorproject.model.shopakolikelements.Store;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by IREM on 4/19/2015.
  */
-public class BrandPage extends ActionBarActivity {
-
-    private CharSequence mTitle, mDrawerTitle;
-    private ListView mDrawerList;
-    private DrawerLayout mDrawerLayout;
-    private String[] menuTitles;
-    private ActionBarDrawerToggle mDrawerToggle;
-
-
-    protected void onCreate(Bundle savedInstanceState) {
+public class BrandPage extends BaseActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.brand_page);
+        Bundle extras = getIntent().getExtras();
 
-        mTitle = mDrawerTitle = getTitle();
-        menuTitles = getResources().getStringArray(R.array.menu_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+//        final int storeID = extras.getInt("storeID");
+//        final String email = extras.getString("email");
+//        final String password = extras.getString("password");
+        final int storeID = 40;
+        final String email = "ayse@hot";
+        final String password = "123456789";
+        RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
+        final View brandView = getLayoutInflater().inflate(R.layout.brandpage, baseLayout, false);
 
-        // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        final LinearLayout campaignList = (LinearLayout) brandView.findViewById(R.id.campaignlist);
 
-        mDrawerList.setAdapter(new ArrayAdapter<>(this,
-                R.layout.drawer_list_item, menuTitles));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final Store store = DatabaseManager.getStore(email, password, storeID);
 
-        // enable ActionBar app icon to behave as action to toggle nav drawer
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
 
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close
-        ) {
-            public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                                String logourl = DatabaseManager.getServerUrl()+ "Images/StoreLogos/" + store.getLogo();
+                                URL url = new URL(logourl);
+                                final Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+
+                                ImageView logo = (ImageView) brandView.findViewById(R.id.brand_logo);
+                                TextView title = (TextView) brandView.findViewById(R.id.brand_name);
+                                logo.setImageBitmap(image);
+                                title.setText(store.getName());
+
+                                for (int i = 0; i < store.getCampaigns().size(); i++) {
+
+                                    final int finalI = i;
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                String campImageURL = DatabaseManager.getServerUrl() + "Images/CampaignImages/" + store.getCampaigns().get(finalI).getImage();
+                                                URL imageURL = new URL(campImageURL);
+                                                final Bitmap imageCamp = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        View itemView = getLayoutInflater().inflate(R.layout.campaignlistitem, campaignList, false);
+                                                        ImageView campaignImage = (ImageView) itemView.findViewById(R.id.campimage);
+                                                        campaignImage.setImageBitmap(imageCamp);
+                                                        campaignList.addView(itemView);
+
+                                                    }
+                                                });
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }).start();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        }).start();
 
-            public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
 
-        };
-        //buraya hangi page gelecekse onu yonlendirecez
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        if (savedInstanceState == null) {
-            selectItem(0);
-        }
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    /* Called whenever we call invalidateOptionsMenu() */
-  //  @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        // If the nav drawer is open, hide action items related to the content view
-//        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-//        menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
-//        return super.onPrepareOptionsMenu(menu);
-//    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        // ActionBarDrawerToggle will take care of this.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return false;
-    }
-
-    // burada sayfalara yonlendirecegiz
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
-
-    private void selectItem(int position) {
-        // update the main content by replacing fragments
-
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        baseLayout.addView(brandView);
     }
 
 }

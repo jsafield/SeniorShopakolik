@@ -2,7 +2,7 @@
     package="com.shopakolik.seniorproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -13,12 +13,14 @@
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.MainActivity"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+
+
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.BaseActivity"
+            android:label="Shopakolik"
+            android:theme="@style/AppTheme" />
 
 
         <activity
@@ -51,11 +53,16 @@
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.BrandPage"
             android:label="Brand Page"
             android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service
             android:name=".controller.notificationcontroller.NotificationService"
-            android:exported="false"/>
+            android:exported="false" />
 
     </application>
 
