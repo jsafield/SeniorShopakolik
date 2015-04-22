@@ -194,7 +194,7 @@ public class DatabaseManager {
         }
         is.close();
         conn.disconnect();
-        if (result.equals("failure")) {
+        if (result.equals("failure\n")) {
             throw new Exception("File Upload Failure");
         }
         return result;
@@ -393,11 +393,11 @@ public class DatabaseManager {
 
         String result = httpPost(SERVER_URL + "AddStore.php", urlParameters);
 
-        if (result.equals("location_error")) {
+        if (result.equals("location_error\n")) {
             locationError = true;
             return true;
         }
-        return result.equals("success");
+        return result.equals("success\n");
     }
 
     public static boolean deleteUser(User user) throws Exception {
@@ -411,7 +411,7 @@ public class DatabaseManager {
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
         String result = httpPost(SERVER_URL + "DeleteUser.php", urlParameters);
 
-        return result.equals("success");
+        return result.equals("success\n");
     }
 
     public static boolean addCampaign(Store store, Campaign campaign) throws Exception {
@@ -437,21 +437,19 @@ public class DatabaseManager {
                 + "&amount=" + URLEncoder.encode("" + campaign.getAmount(), "UTF-8");
         String result = httpPost(SERVER_URL + "AddCampaign.php", urlParameters);
 
-        return result.equals("success");
+        return result.equals("success\n");
     }
 
     public static ArrayList<Category> getCategoryList(User user) throws Exception {
 
-        return getCategoryList(user.getEmail(), user.getPassword());
+        return getCategoryList();
     }
 
-    public static ArrayList<Category> getCategoryList(String email, String password) throws Exception {
+    public static ArrayList<Category> getCategoryList() throws Exception {
 
-        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
-                + "&password=" + URLEncoder.encode(password, "UTF-8");
-        String result = httpPost(SERVER_URL + "GetCategoryList.php", urlParameters);
+        String result = httpPost(SERVER_URL + "GetCategoryList.php", null);
 
-        if (result.equals("failure"))
+        if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
 
         ArrayList<Category> categories = new ArrayList<>();
@@ -490,7 +488,7 @@ public class DatabaseManager {
                 + "&category_id=" + URLEncoder.encode("" + categoryId, "UTF-8");
         String result = httpPost(SERVER_URL + "GetStores.php", urlParameters);
 
-        if (result.equals("failure"))
+        if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
 
         return parseStoresFromJSON(result);
@@ -509,7 +507,7 @@ public class DatabaseManager {
                 + "&store_id=" + URLEncoder.encode("" + storeId, "UTF-8");
         String result = httpPost(SERVER_URL + "GetCampaigns.php", urlParameters);
 
-        if (result.equals("failure"))
+        if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
 
         return parseCampaignsFromJSON(result);
@@ -527,7 +525,7 @@ public class DatabaseManager {
                 + "&store_id=" + URLEncoder.encode("" + storeId, "UTF-8");
         String result = httpPost(SERVER_URL + "AddFavoriteStore.php", urlParameters);
 
-        return result.equals("success");
+        return result.equals("success\n");
     }
 
     public static boolean addFavoriteCampaign(User user, Campaign campaign) throws Exception {
@@ -543,7 +541,7 @@ public class DatabaseManager {
                 + "&campaign_id=" + URLEncoder.encode("" + campaignId, "UTF-8");
         String result = httpPost(SERVER_URL + "AddFavoriteCampaign.php", urlParameters);
 
-        return result.equals("success");
+        return result.equals("success\n");
     }
 
     public static ArrayList<Store> getFavoriteStores(User user) throws Exception {
@@ -557,7 +555,7 @@ public class DatabaseManager {
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
         String result = httpPost(SERVER_URL + "GetFavoriteStores.php", urlParameters);
 
-        if (result.equals("failure"))
+        if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
 
         return parseStoresFromJSON(result);
@@ -574,7 +572,7 @@ public class DatabaseManager {
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
         String result = httpPost(SERVER_URL + "GetFavoriteCampaigns.php", urlParameters);
 
-        if (result.equals("failure"))
+        if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
 
         return parseCampaignsFromJSON(result);
@@ -592,7 +590,7 @@ public class DatabaseManager {
                 + "&store_id=" + URLEncoder.encode("" + storeId, "UTF-8");
         String result = httpPost(SERVER_URL + "RemoveFavoriteStore.php", urlParameters);
 
-        return result.equals("success");
+        return result.equals("success\n");
     }
 
     public static boolean removeFavoriteCampaign(User user, Campaign campaign) throws Exception {
@@ -608,7 +606,7 @@ public class DatabaseManager {
                 + "&campaign_id=" + URLEncoder.encode("" + campaignId, "UTF-8");
         String result = httpPost(SERVER_URL + "RemoveFavoriteCampaign.php", urlParameters);
 
-        return result.equals("success");
+        return result.equals("success\n");
     }
 
     public static boolean enableLocationNotification(String email, String password,
@@ -619,7 +617,7 @@ public class DatabaseManager {
                 + "&locationNotification=" + URLEncoder.encode(locationNotification ? "1" : "0", "UTF-8");
         String result = httpPost(SERVER_URL + "EnableLocationNotification.php", urlParameters);
 
-        return result.equals("success");
+        return result.equals("success\n");
     }
 
     public static boolean enableCampaignNotification(String email, String password,
@@ -630,6 +628,6 @@ public class DatabaseManager {
                 + "&campaignNotification=" + URLEncoder.encode(campaignNotification ? "1" : "0", "UTF-8");
         String result = httpPost(SERVER_URL + "EnableLocationNotification.php", urlParameters);
 
-        return result.equals("success");
+        return result.equals("success\n");
     }
 }
