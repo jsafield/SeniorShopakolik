@@ -34,7 +34,7 @@ public class CustomerSuscribe extends ActionBarActivity {
             public void run() {
                 DatabaseManager db = new DatabaseManager();
                 try {
-                    categoryType = db.getCategoryList("mmmn", "mn");
+                    categoryType = db.getCategoryList();
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -74,7 +74,7 @@ public class MainActivity extends ActionBarActivity {
 
                     if (userType == UserType.Customer)
                     {
-                        Intent getNameScreenIntent = new Intent(MainActivity.this,CustomerSuscribe.class);
+                        Intent getNameScreenIntent = new Intent(MainActivity.this,BrandPage.class);
                         startActivity(getNameScreenIntent);
                     }
                     else if(userType == UserType.Store)

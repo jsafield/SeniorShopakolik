@@ -47,10 +47,10 @@ public class SignUpForCustomer extends ActionBarActivity {
 
 
                 try {
-                    if (password.getText().toString().equals(re_password.getText().toString()) && password.length() > 8 && password.length() < 16) {
-                        int index = email.getText().toString().indexOf('@');
-                        int index2 = email.getText().toString().indexOf(".com");
-                        if (index > 0 && index2 > 0) {
+                    int index = email.getText().toString().indexOf('@');
+                    int index2 = email.getText().toString().indexOf(".com");
+                    if (index > 0 && index2 > 0) {
+                        if (password.getText().toString().equals(re_password.getText().toString()) && password.length() > 8 && password.length() < 16) {
                             Customer customer = new Customer(email.getText().toString(), password.getText().toString(), name.getText().toString(), surname.getText().toString());
                             result = DatabaseManager.addCustomer(customer);
                             if (result) {
@@ -87,12 +87,12 @@ public class SignUpForCustomer extends ActionBarActivity {
                                 Log.e("false", "false");
                             }
                         } else {
-                            text = "Check your email!";
                             valid = false;
+                            text = "Check your password!Your password's length should be between 8 and 16 characters.";
                         }
                     } else {
+                        text = "Check your email!";
                         valid = false;
-                        text = "Check your password!Your password's length should be between 8 and 16 characters.";
                     }
                     runOnUiThread(new Runnable() {
                         @Override

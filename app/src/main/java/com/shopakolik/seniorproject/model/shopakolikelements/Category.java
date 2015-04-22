@@ -1,6 +1,8 @@
 package com.shopakolik.seniorproject.model.shopakolikelements;
 
-public class Category {
+import java.io.Serializable;
+
+public class Category implements Serializable {
     private int categoryId;
     private String name;
 
@@ -27,5 +29,10 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString (){
+        return this.name;
     }
 }

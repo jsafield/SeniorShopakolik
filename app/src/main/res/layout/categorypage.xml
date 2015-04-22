@@ -26,7 +26,6 @@
         android:layout_height="wrap_content"
         android:text="I'm ready"
         android:id="@+id/categories_submit_button"
-        android:onClick="categoriesSubmitButtonClick"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="47dp" />

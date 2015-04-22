@@ -149,7 +149,7 @@
             android:layout_alignLeft="@+id/categories_clickable"
             android:layout_alignRight="@+id/categories_clickable"
             android:layout_alignStart="@+id/categories_clickable"
-            android:layout_below="@+id/categories_clickable"
+            android:layout_below="@+id/textView"
             android:onClick="pickimageclicked"
             android:text="Pick a logo" />
 
@@ -226,6 +226,18 @@
             android:layout_alignStart="@+id/linearLayoutAddress"
             android:layout_below="@+id/linearLayoutAddress"
             android:text="Submit" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="New Text"
+            android:id="@+id/textView"
+            android:layout_below="@+id/categories_clickable"
+            android:layout_alignEnd="@+id/linearLayoutAddress"
+            android:layout_alignLeft="@+id/categories_clickable"
+            android:layout_alignRight="@+id/categories_clickable"
+            android:layout_alignStart="@+id/categories_clickable"
+            android:visibility="gone"/>
 
 
     </RelativeLayout>

@@ -13,7 +13,11 @@
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.MainActivity"
             android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
 
@@ -38,12 +42,6 @@
             android:label="Sign up Shop"
             android:theme="@style/AppTheme" />
 
-
-        <activity
-            android:name="com.shopakolik.seniorproject.view.shopakolikelements.CategoryPage"
-            android:label="Category Page"
-            android:theme="@style/AppTheme" />
-
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.CustomerSuscribe"
             android:label="Customer Suscribe Page"
@@ -55,11 +53,6 @@
         <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.AddCampaignPage"
             android:label= "Add Campaign Page"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service
