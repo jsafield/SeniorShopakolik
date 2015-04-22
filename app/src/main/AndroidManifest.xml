@@ -48,10 +48,12 @@
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.CustomerSuscribe"
             android:label="Customer Suscribe Page"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.BrandPage"
             android:label="Brand Page"
+            android:theme="@style/AppTheme"/>
+        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.AddCampaignPage"
+            android:label= "Add Campaign Page"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
