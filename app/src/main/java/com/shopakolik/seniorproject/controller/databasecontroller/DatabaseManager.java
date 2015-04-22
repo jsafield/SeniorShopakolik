@@ -440,14 +440,9 @@ public class DatabaseManager {
         return result.equals("success\n");
     }
 
-    public static ArrayList<Category> getCategoryList(User user) throws Exception {
-
-        return getCategoryList();
-    }
-
     public static ArrayList<Category> getCategoryList() throws Exception {
 
-        String result = httpPost(SERVER_URL + "GetCategoryList.php", null);
+        String result = httpPost(SERVER_URL + "GetCategoryList.php", "");
 
         if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
