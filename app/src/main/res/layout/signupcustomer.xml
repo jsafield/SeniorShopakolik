@@ -164,6 +164,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="?android:attr/buttonStyleSmall"
         android:layout_alignEnd="@+id/linearLayoutRePassword"
         android:layout_alignRight="@+id/linearLayoutRePassword"
         android:layout_below="@+id/linearLayoutRePassword"

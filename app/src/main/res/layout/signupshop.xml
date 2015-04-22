@@ -130,6 +130,7 @@
 
         <Button
             android:id="@+id/categories_clickable"
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/linearLayoutName"
@@ -143,6 +144,7 @@
 
         <Button
             android:id="@+id/pickanimagebutton"
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/categories_clickable"
@@ -220,6 +222,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="?android:attr/buttonStyleSmall"
             android:layout_alignEnd="@+id/linearLayoutAddress"
             android:layout_alignLeft="@+id/linearLayoutAddress"
             android:layout_alignRight="@+id/linearLayoutAddress"
