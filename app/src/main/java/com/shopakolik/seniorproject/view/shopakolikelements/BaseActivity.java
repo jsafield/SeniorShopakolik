@@ -55,18 +55,7 @@ public class BaseActivity extends ActionBarActivity {
                 mDrawerLayout,         /* DrawerLayout object */
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close
-        ) {
-            public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-        };
+        );
         //buraya hangi page gelecekse onu yonlendirecez
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         if (savedInstanceState == null) {

@@ -195,7 +195,8 @@
                 android:layout_alignLeft="@+id/txt_layout"
                 android:layout_alignRight="@+id/txt_layout"
                 android:layout_alignStart="@+id/txt_layout"
-                android:layout_below="@+id/imageView"/>
+                android:layout_below="@+id/imageView"
+                android:layout_marginBottom="16dp"/>
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

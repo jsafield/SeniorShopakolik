@@ -110,4 +110,9 @@ public class Store extends User {
     public void removeCampaign(Campaign campaign){
         campaigns.remove(campaign);
     }
+
+    @Override
+    public String toString (){
+        return this.name;
+    }
 }
