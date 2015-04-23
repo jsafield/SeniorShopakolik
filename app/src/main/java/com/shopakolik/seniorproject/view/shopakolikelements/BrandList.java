@@ -29,12 +29,16 @@ public class BrandList extends DialogFragment {
     private ArrayList<Store> stores = new ArrayList<>();
     public static ArrayList<Store> selectedBrands;
     private ListView list;
-    User user = new User("ayse@hot", "123456789");
+    private User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        user = new User(Wall.getEmail(),Wall.getPassword());
+
         final View rootView = inflater.inflate(R.layout.brand_list, container,
                 false);
 
@@ -67,6 +71,8 @@ public class BrandList extends DialogFragment {
                                     @Override
                                     public void run() {
                                         Intent intent = new Intent(BrandList.this.getActivity(), Wall.class);
+                                        intent.putExtra("user_email", Wall.getEmail());
+                                        intent.putExtra("user_password", Wall.getPassword());
                                         startActivity(intent);
                                     }
                                 });

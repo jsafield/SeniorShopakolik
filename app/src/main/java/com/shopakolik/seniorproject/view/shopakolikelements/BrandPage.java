@@ -42,9 +42,7 @@ public class BrandPage extends BaseActivity {
         final int storeID = extras.getInt("store_id");
         final String email = extras.getString("user_email");
         final String password = extras.getString("user_password");
-//        final int storeID = 42;
-//        final String email = "ayse@hot";
-//        final String password = "123456789";
+
         RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
         final View brandView = getLayoutInflater().inflate(R.layout.brandpage, baseLayout, false);
 

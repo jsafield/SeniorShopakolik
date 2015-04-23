@@ -28,11 +28,9 @@ public class FavoriteCampaignPage extends BaseActivity {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
 
-//        final int storeID = extras.getInt("storeID");
-//        final String email = extras.getString("email");
-//        final String password = extras.getString("password");
-        final String email = "ayse@hot";
-        final String password = "123456789";
+        final String email = extras.getString("user_email");
+        final String password = extras.getString("user_password");
+
 
         RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
         final View favView = getLayoutInflater().inflate(R.layout.favorite_campaign_page, baseLayout, false);

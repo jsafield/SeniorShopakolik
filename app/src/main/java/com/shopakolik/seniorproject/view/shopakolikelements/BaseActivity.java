@@ -28,11 +28,18 @@ public class BaseActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private String[] menuTitles;
     private ActionBarDrawerToggle mDrawerToggle;
+    private String email,password;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.baselayout);
+
+        Intent intent = getIntent();
+        email = intent.getStringExtra("user_email");
+        password = intent.getStringExtra("user_password");
+
+        Log.e(email,password);
 
         mTitle = mDrawerTitle = getTitle();
         menuTitles = getResources().getStringArray(R.array.menu_array);
@@ -109,7 +116,7 @@ public class BaseActivity extends ActionBarActivity {
                 intent = new Intent(this, Wall.class);
                 break;
             case 1:
-                intent = new Intent(this, ForgetPassword.class);
+                intent = new Intent(this, FavoriteCampaignPage.class);
                 break;
             case 2:
                 intent = new Intent(this, SignUpForShop.class);
@@ -118,7 +125,7 @@ public class BaseActivity extends ActionBarActivity {
                 intent = new Intent(this, BrandPage.class);
                 break;
             case 4:
-                intent = new Intent(this, BrandPage.class);
+                intent = new Intent(this, ProfilePage.class);
                 break;
             case 5:
                 intent = new Intent(this, MainActivity.class);
@@ -126,6 +133,8 @@ public class BaseActivity extends ActionBarActivity {
             default:
                 Log.e("dçmdsc", " yanliiiiis" + position );
         }
+        intent.putExtra("user_email", email);
+        intent.putExtra("user_password", password);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }

@@ -1,6 +1,7 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,8 @@ public class SignUpForCustomer extends ActionBarActivity {
         email = (TextView) findViewById(R.id.customer_email_value);
         password = (TextView) findViewById(R.id.customer_password_value);
         re_password = (TextView) findViewById(R.id.customer_re_password_value);
+
+        ProgressDialog.show(SignUpForCustomer.this,"","Loading",true);
 
         new Thread(new Runnable() {
             @Override

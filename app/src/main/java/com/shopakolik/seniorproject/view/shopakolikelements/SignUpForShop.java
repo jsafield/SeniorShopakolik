@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -54,7 +55,7 @@ public class SignUpForShop extends ActionBarActivity {
         iv=(ImageView)findViewById(R.id.imageView);
     }
 
-        public void categoriesClick(View view){
+    public void categoriesClick(View view){
 
         // Show DialogFragment
         CategoryPage categoryPage = new CategoryPage();
@@ -132,6 +133,8 @@ public class SignUpForShop extends ActionBarActivity {
         Location loc = new Location(location.getText().toString(),0,0,address.getText().toString());
         Log.e("bgjv",location.getText().toString());
         locations.add(loc);
+
+        ProgressDialog.show(SignUpForShop.this, "", "Loading", true);
 
         new Thread(new Runnable() {
             @Override

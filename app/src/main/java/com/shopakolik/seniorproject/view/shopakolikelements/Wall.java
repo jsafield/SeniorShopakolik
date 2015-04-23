@@ -33,14 +33,15 @@ import java.util.ArrayList;
  */
 public class Wall extends BaseActivity {
 
+    private static String email,password;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        final String email = intent.getStringExtra("user_email");
-        final String password = intent.getStringExtra("user_password");
+        email = intent.getStringExtra("user_email");
+        password = intent.getStringExtra("user_password");
 
         Log.e("email",email);
         Log.e("password", password);
@@ -101,6 +102,14 @@ public class Wall extends BaseActivity {
         }).start();
 
         baseLayout.addView(wallView);
+    }
+
+    public static String getEmail() {
+        return email;
+    }
+
+    public static String getPassword() {
+        return password;
     }
 
     @Override

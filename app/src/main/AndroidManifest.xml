@@ -37,6 +37,16 @@
             android:theme="@style/AppTheme" />
 
         <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.ProfilePage"
+            android:label="Profile Page"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.FavoriteCampaignPage"
+            android:label="Favorite Campaigns"
+            android:theme="@style/AppTheme" />
+
+        <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.ForgetPassword"
             android:label="Sign up Shop"
             android:theme="@style/AppTheme" />
