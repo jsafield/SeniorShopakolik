@@ -82,29 +82,33 @@ public class DatabaseManager {
         dos.flush();
         dos.close();
 
-        InputStream is = conn.getInputStream();
-        String result;
+        try {
+            InputStream is = conn.getInputStream();
+            String result;
 
-        // read http response via input stream
-        if (conn.getResponseCode() == 200) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-                sb.append("\n");
+            // read http response via input stream
+            if (conn.getResponseCode() == 200) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                    sb.append("\n");
+                }
+                reader.close();
+                result = sb.toString();
+            } else {
+                throw new Exception("Unexpected HTTP Response");
             }
-            reader.close();
-            result = sb.toString();
-        } else {
-            throw new Exception("Unexpected HTTP Response");
+            is.close();
+            conn.disconnect();
+            if (result.equals("connection_error\n")) {
+                throw new Exception("Database Server Connection Error");
+            }
+            return result;
+        } catch (IOException e) {
+            throw new Exception("File Server Connection Fail");
         }
-        is.close();
-        conn.disconnect();
-        if (result.equals("connection_error\n")) {
-            throw new Exception("Database Server Connection Error");
-        }
-        return result;
     }
 
     // send http post request to upload file and returns the name of file in server
@@ -208,7 +212,6 @@ public class DatabaseManager {
         String name = jsonObject.getString("name");
         String logo = jsonObject.getString("logo");
 
-        // TODO too much content
         ArrayList<Category> categories = null;
         try {
             categories = new ArrayList<>();
@@ -233,7 +236,6 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
-        // TODO too much content
         ArrayList<Location> locations = null;
         try {
             locations = new ArrayList<>();
@@ -473,7 +475,7 @@ public class DatabaseManager {
     public static ArrayList<Store> getStores(User user, ArrayList<Category> categories) throws Exception {
 
         int[] categoryIDs = new int[categories.size()];
-        for(int i=0; i<categoryIDs.length;i++)
+        for (int i = 0; i < categoryIDs.length; i++)
             categoryIDs[i] = categories.get(i).getCategoryId();
         return getStores(user.getEmail(), user.getPassword(), categoryIDs);
     }
@@ -485,7 +487,7 @@ public class DatabaseManager {
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&category_count=" + URLEncoder.encode("" + categoryIDs.length, "UTF-8");
 
-        for(int i=0; i<categoryIDs.length;i++)
+        for (int i = 0; i < categoryIDs.length; i++)
             urlParameters += "&category_id_" + i + "=" + URLEncoder.encode("" + categoryIDs[i], "UTF-8");
 
         String result = httpPost(SERVER_URL + "GetStores.php", urlParameters);
@@ -538,7 +540,7 @@ public class DatabaseManager {
     public static boolean addFavoriteStore(User user, ArrayList<Store> stores) throws Exception {
 
         int[] storeIDs = new int[stores.size()];
-        for(int i=0; i<storeIDs.length;i++)
+        for (int i = 0; i < storeIDs.length; i++)
             storeIDs[i] = stores.get(i).getStoreId();
         return addFavoriteStore(user.getEmail(), user.getPassword(), storeIDs);
     }
@@ -549,7 +551,7 @@ public class DatabaseManager {
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&store_count=" + URLEncoder.encode("" + storeIDs.length, "UTF-8");
 
-        for(int i=0; i<storeIDs.length;i++)
+        for (int i = 0; i < storeIDs.length; i++)
             urlParameters += "&store_id_" + i + "=" + URLEncoder.encode("" + storeIDs[i], "UTF-8");
 
         String result = httpPost(SERVER_URL + "AddFavoriteStore.php", urlParameters);
