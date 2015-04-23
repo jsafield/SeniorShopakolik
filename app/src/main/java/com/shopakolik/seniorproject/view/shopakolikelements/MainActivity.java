@@ -87,11 +87,13 @@ public class MainActivity extends ActionBarActivity {
                         Intent getNameScreenIntent = new Intent(MainActivity.this, Wall.class);
                         getNameScreenIntent.putExtra("user_email", email.getText().toString());
                         getNameScreenIntent.putExtra("user_password", password.getText().toString());
+                        getNameScreenIntent.putExtra("user_type", "Customer");
                         startActivity(getNameScreenIntent);
                     } else if (userType == UserType.Store) {
-                        Intent getNameScreenIntent = new Intent(MainActivity.this, ForgetPassword.class);
+                        Intent getNameScreenIntent = new Intent(MainActivity.this, Wall.class);
                         getNameScreenIntent.putExtra("user_email", email.getText().toString());
                         getNameScreenIntent.putExtra("user_password", password.getText().toString());
+                        getNameScreenIntent.putExtra("user_type", "Store");
                         startActivity(getNameScreenIntent);
                     } else if (userType == UserType.NonUser) {
                         runOnUiThread(new Runnable() {

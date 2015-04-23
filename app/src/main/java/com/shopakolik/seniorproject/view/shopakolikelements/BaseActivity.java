@@ -28,7 +28,7 @@ public class BaseActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private String[] menuTitles;
     private ActionBarDrawerToggle mDrawerToggle;
-    private String email,password;
+    private String email,password,userType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,11 +38,18 @@ public class BaseActivity extends ActionBarActivity {
         Intent intent = getIntent();
         email = intent.getStringExtra("user_email");
         password = intent.getStringExtra("user_password");
+        userType = intent.getStringExtra("user_type");
+
+        if(userType.equals("Customer"))
+            menuTitles = getResources().getStringArray(R.array.menu_array);
+        else if(userType.equals("Store")){
+            menuTitles = getResources().getStringArray(R.array.menu_shop_array);
+        }
 
         Log.e(email,password);
 
+        Log.e("userType",userType);
         mTitle = mDrawerTitle = getTitle();
-        menuTitles = getResources().getStringArray(R.array.menu_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
