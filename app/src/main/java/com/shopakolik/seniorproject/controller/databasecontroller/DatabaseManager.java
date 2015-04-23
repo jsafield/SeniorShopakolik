@@ -470,6 +470,32 @@ public class DatabaseManager {
         return parseStoreFromJSON(result);
     }
 
+    public static ArrayList<Store> getStores(User user, ArrayList<Category> categories) throws Exception {
+
+        int[] categoryIDs = new int[categories.size()];
+        for(int i=0; i<categoryIDs.length;i++)
+            categoryIDs[i] = categories.get(i).getCategoryId();
+        return getStores(user.getEmail(), user.getPassword(), categoryIDs);
+    }
+
+    public static ArrayList<Store> getStores(String email, String password, int[] categoryIDs)
+            throws Exception {
+
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&category_count=" + URLEncoder.encode("" + categoryIDs.length, "UTF-8");
+
+        for(int i=0; i<categoryIDs.length;i++)
+            urlParameters += "&category_id_" + i + "=" + URLEncoder.encode("" + categoryIDs[i], "UTF-8");
+
+        String result = httpPost(SERVER_URL + "GetStores.php", urlParameters);
+
+        if (result.equals("failure\n"))
+            throw new Exception("Unexpected Error In PHP File");
+
+        return parseStoresFromJSON(result);
+    }
+
     public static ArrayList<Store> getStores(User user, Category category) throws Exception {
 
         return getStores(user.getEmail(), user.getPassword(), category.getCategoryId());
@@ -480,7 +506,8 @@ public class DatabaseManager {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
-                + "&category_id=" + URLEncoder.encode("" + categoryId, "UTF-8");
+                + "&category_count=" + URLEncoder.encode("1", "UTF-8")
+                + "&category_id_0=" + URLEncoder.encode("" + categoryId, "UTF-8");
         String result = httpPost(SERVER_URL + "GetStores.php", urlParameters);
 
         if (result.equals("failure\n"))
@@ -508,6 +535,28 @@ public class DatabaseManager {
         return parseCampaignsFromJSON(result);
     }
 
+    public static boolean addFavoriteStore(User user, ArrayList<Store> stores) throws Exception {
+
+        int[] storeIDs = new int[stores.size()];
+        for(int i=0; i<storeIDs.length;i++)
+            storeIDs[i] = stores.get(i).getStoreId();
+        return addFavoriteStore(user.getEmail(), user.getPassword(), storeIDs);
+    }
+
+    public static boolean addFavoriteStore(String email, String password, int[] storeIDs) throws Exception {
+
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&store_count=" + URLEncoder.encode("" + storeIDs.length, "UTF-8");
+
+        for(int i=0; i<storeIDs.length;i++)
+            urlParameters += "&store_id_" + i + "=" + URLEncoder.encode("" + storeIDs[i], "UTF-8");
+
+        String result = httpPost(SERVER_URL + "AddFavoriteStore.php", urlParameters);
+
+        return result.equals("success\n");
+    }
+
     public static boolean addFavoriteStore(User user, Store store) throws Exception {
 
         return addFavoriteStore(user.getEmail(), user.getPassword(), store.getStoreId());
@@ -517,7 +566,8 @@ public class DatabaseManager {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
-                + "&store_id=" + URLEncoder.encode("" + storeId, "UTF-8");
+                + "&store_count=" + URLEncoder.encode("1", "UTF-8")
+                + "&store_id_0=" + URLEncoder.encode("" + storeId, "UTF-8");
         String result = httpPost(SERVER_URL + "AddFavoriteStore.php", urlParameters);
 
         return result.equals("success\n");
