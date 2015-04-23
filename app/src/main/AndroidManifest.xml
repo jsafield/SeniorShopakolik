@@ -37,6 +37,11 @@
             android:theme="@style/AppTheme" />
 
         <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.SettingsPage"
+            android:label="Settings"
+            android:theme="@style/AppTheme" />
+
+        <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.ProfilePage"
             android:label="Profile Page"
             android:theme="@style/AppTheme" />
