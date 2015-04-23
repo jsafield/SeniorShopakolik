@@ -38,9 +38,9 @@ public class MainActivity extends ActionBarActivity {
         //TextView forgetPassword = (TextView) findViewById(R.id.forgetPassword);
         TextView signUpCustomer = (TextView) findViewById(R.id.signUpCustomer);
         TextView signUpShop = (TextView) findViewById(R.id.signUpShop);
-
-        toolBar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolBar);
+//
+//        toolBar = (Toolbar) findViewById(R.id.app_bar);
+//        setSupportActionBar(toolBar);
 
     }
 
