@@ -5,57 +5,60 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
+import com.shopakolik.seniorproject.model.shopakolikelements.Campaign;
+import com.shopakolik.seniorproject.model.shopakolikelements.Category;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by IREM on 4/19/2015.
  */
 public class BrandPage extends BaseActivity {
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Bundle extras = getIntent().getExtras();
-        Intent intent = getIntent();
-        int storeID = -1;
-        storeID = intent.getIntExtra("store_id", storeID);
-        final String email = intent.getStringExtra("user_email");
-        final String password = intent.getStringExtra("user_password");
-//        final int storeID = extras.getInt("storeID");
-//        final String email = extras.getString("email");
-//        final String password = extras.getString("password");
 
-
+        final int storeID = extras.getInt("store_id");
+        final String email = extras.getString("user_email");
+        final String password = extras.getString("user_password");
+//        final int storeID = 42;
+//        final String email = "ayse@hot";
+//        final String password = "123456789";
         RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
         final View brandView = getLayoutInflater().inflate(R.layout.brandpage, baseLayout, false);
 
         final LinearLayout campaignList = (LinearLayout) brandView.findViewById(R.id.campaignlist);
 
-        final int finalStoreID = storeID;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    final Store store = DatabaseManager.getStore(email, password, finalStoreID);
+                    final Store store = DatabaseManager.getStore(email, password, storeID);
 
-
-                                String logourl = DatabaseManager.getServerUrl()+ "Images/StoreLogos/" + store.getLogo();
-                                URL url = new URL(logourl);
-                                final Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-
-
+                    String logourl = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + store.getLogo();
+                    URL url = new URL(logourl);
+                    final Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -81,9 +84,60 @@ public class BrandPage extends BaseActivity {
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
+                                                        //TODO pull campaign according to date and list them
+
+                                                        //decleare
                                                         View itemView = getLayoutInflater().inflate(R.layout.campaignlistitem, campaignList, false);
+                                                        //initialize
                                                         ImageView campaignImage = (ImageView) itemView.findViewById(R.id.campimage);
+                                                        TextView features = (TextView) itemView.findViewById(R.id.features);
+                                                        TextView peramo = (TextView) itemView.findViewById(R.id.peramo);
+                                                        TextView date = (TextView) itemView.findViewById(R.id.dateRemainer);
+                                                        //set
                                                         campaignImage.setImageBitmap(imageCamp);
+                                                        String feats = "";
+                                                        String cond = store.getCampaigns().get(finalI).getCondition();
+                                                        if (cond != null && cond != "") {
+                                                            feats = cond;
+                                                        }
+                                                        String details = store.getCampaigns().get(finalI).getDetails();
+                                                        if (details != null && details != "") {
+                                                            feats += "\n" + details;
+                                                        }
+                                                        features.setText(feats);
+
+                                                        String percamo = "";
+                                                        int pers = store.getCampaigns().get(finalI).getPercentage();
+                                                        if (pers != 0) {
+                                                            percamo = pers + "%";
+                                                        } else {
+                                                            float amo = store.getCampaigns().get(finalI).getAmount();
+                                                            if (amo != 0) {
+                                                                percamo = "$" + String.format("%.2f", amo);
+                                                            }
+                                                        }
+                                                        peramo.setText(percamo);
+
+                                                        long diff = Math.abs(store.getCampaigns().get(finalI).getEndDate().getTime() - System.currentTimeMillis());
+                                                        date.setText("" + (diff / (24 * 60 * 60 * 1000)) + " days");
+
+                                                        ToggleButton button = (ToggleButton) itemView.findViewById(R.id.favorite_button);
+                                                        button.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
+                                                                new Thread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        try {
+                                                                            DatabaseManager.addFavoriteCampaign(email,password,store.getCampaigns().get(finalI).getCampaignId());
+                                                                        } catch (Exception e) {
+                                                                            e.printStackTrace();
+                                                                        }
+                                                                    }
+                                                                }).start();
+
+                                                            }
+                                                        });
                                                         campaignList.addView(itemView);
 
                                                     }

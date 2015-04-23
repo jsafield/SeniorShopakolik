@@ -54,7 +54,7 @@ public class SignUpForShop extends ActionBarActivity {
         iv=(ImageView)findViewById(R.id.imageView);
     }
 
-    public void categoriesClick(View view){
+        public void categoriesClick(View view){
 
         // Show DialogFragment
         CategoryPage categoryPage = new CategoryPage();

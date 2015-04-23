@@ -23,6 +23,13 @@
         <item>Logout</item>
     </string-array>
 
+    <string-array name="menu_shop_array">
+        <item>Settings</item>
+        <item>Add Campaign</item>
+        <item>Profile</item>
+        <item>Logout</item>
+    </string-array>
+
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="brand_name">Stravardius</string>

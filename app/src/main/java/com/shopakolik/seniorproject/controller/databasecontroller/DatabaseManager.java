@@ -477,6 +477,7 @@ public class DatabaseManager {
         int[] categoryIDs = new int[categories.size()];
         for (int i = 0; i < categoryIDs.length; i++)
             categoryIDs[i] = categories.get(i).getCategoryId();
+
         return getStores(user.getEmail(), user.getPassword(), categoryIDs);
     }
 
@@ -491,6 +492,7 @@ public class DatabaseManager {
             urlParameters += "&category_id_" + i + "=" + URLEncoder.encode("" + categoryIDs[i], "UTF-8");
 
         String result = httpPost(SERVER_URL + "GetStores.php", urlParameters);
+
 
         if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");

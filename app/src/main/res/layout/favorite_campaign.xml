@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/itemLayout"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:id="@+id/favorite_campaign_layout">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/brandNameLayout"
+        android:weightSum="1">
+
+        <!--<ImageView-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:id="@+id/brand_logo" />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="257dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+            <!--android:id="@+id/brand_name"-->
+            <!--android:padding="15dp"-->
+            <!--android:layout_weight="1.12"-->
+             <!--/>-->
+
+    </LinearLayout>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="307dp"
         android:layout_height="wrap_content"
-        android:id = "@+id/update_date">
+        android:id = "@+id/update_date"
+        android:layout_below="@+id/brandNameLayout">
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,14 +82,14 @@
         android:layout_alignStart="@+id/pictureLayout">
 
         <!--<ImageButton-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:id="@+id/favoriteButton"-->
-            <!--android:src="@android:drawable/btn_star_big_on"-->
-            <!--android:layout_gravity="left"-->
-            <!--android:layout_below="@+id/pictureLayout"-->
-            <!--android:layout_alignLeft="@+id/pictureLayout"-->
-            <!--android:layout_alignStart="@+id/pictureLayout" />-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:id="@+id/favoriteButton"-->
+        <!--android:src="@android:drawable/btn_star_big_on"-->
+        <!--android:layout_gravity="left"-->
+        <!--android:layout_below="@+id/pictureLayout"-->
+        <!--android:layout_alignLeft="@+id/pictureLayout"-->
+        <!--android:layout_alignStart="@+id/pictureLayout" />-->
 
         <ToggleButton
             android:layout_width="wrap_content"

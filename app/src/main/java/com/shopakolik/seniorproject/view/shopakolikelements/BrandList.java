@@ -29,6 +29,7 @@ public class BrandList extends DialogFragment {
     private ArrayList<Store> stores = new ArrayList<>();
     public static ArrayList<Store> selectedBrands;
     private ListView list;
+    User user = new User("ayse@hot", "123456789");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,38 +40,51 @@ public class BrandList extends DialogFragment {
 
         list = (ListView) rootView.findViewById(R.id.filter_list);
         Button button = (Button) rootView.findViewById(R.id.submit_button);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SparseBooleanArray checked = list.getCheckedItemPositions();
                 selectedBrands = new ArrayList<>();
-                Log.e("baslangic","baslangic");
+
                 if (checked != null)
                     for (int i = 0; i < checked.size(); i++)
                         if (checked.valueAt(i) == true) {
                             Store tag = (Store) list.getItemAtPosition(checked.keyAt(i));
                             selectedBrands.add(tag);
-                            // TODO add favorute daabase
                         }
-                Log.e("ifden sonra","ifden sonra");
                 if (selectedBrands.size() == 0) {
                     CharSequence text = "Please choose a brand ";
                     Toast toast = Toast.makeText(rootView.getContext(), text, Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
-                    Intent intent = new Intent(BrandList.this.getActivity(), Wall.class);
-                    startActivity(intent);
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                DatabaseManager.addFavoriteStore(user, selectedBrands);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent(BrandList.this.getActivity(), Wall.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+                    thread.start();
                 }
-                Log.e("sona geliyor mu","kontrol");
             }
         });
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                DatabaseManager db = new DatabaseManager();
                 try {
-                    User user = new User("ayse@hot", "123456789");
                     stores = DatabaseManager.getStores(user, PickCategoryPage.selectedCategories);
 
 
