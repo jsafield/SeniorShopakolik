@@ -23,6 +23,7 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="brand_name">Stravardius</string>
+    <string name="next">Next</string>
 
     <string name="addFavoriteBrand">Add Favorite Brand</string>
 </resources>

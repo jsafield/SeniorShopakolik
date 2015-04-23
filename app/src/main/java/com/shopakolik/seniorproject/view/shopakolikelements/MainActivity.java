@@ -3,6 +3,7 @@ package com.shopakolik.seniorproject.view.shopakolikelements;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
 
     private Button signInButton;
     private TextView forgetPassword,signUpCustomer,signUpShop,email,password;
-
+    private Toolbar toolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,9 @@ public class MainActivity extends ActionBarActivity {
         //TextView forgetPassword = (TextView) findViewById(R.id.forgetPassword);
         TextView signUpCustomer = (TextView) findViewById(R.id.signUpCustomer);
         TextView signUpShop = (TextView) findViewById(R.id.signUpShop);
+
+        toolBar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolBar);
 
     }
 
