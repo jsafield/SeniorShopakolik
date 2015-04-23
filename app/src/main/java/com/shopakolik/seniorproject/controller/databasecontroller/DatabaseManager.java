@@ -442,6 +442,21 @@ public class DatabaseManager {
         return result.equals("success\n");
     }
 
+    public static boolean removeCampaign(Store store, Campaign campaign) throws Exception {
+
+        return removeCampaign(store.getEmail(), store.getPassword(), campaign.getCampaignId());
+    }
+
+    public static boolean removeCampaign(String email, String password, int campaignID) throws Exception {
+
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&campaign_id=" + URLEncoder.encode("" + campaignID, "UTF-8");
+        String result = httpPost(SERVER_URL + "AddCampaign.php", urlParameters);
+
+        return result.equals("success\n");
+    }
+
     public static ArrayList<Category> getCategoryList() throws Exception {
 
         String result = httpPost(SERVER_URL + "GetCategoryList.php", "");
