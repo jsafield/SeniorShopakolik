@@ -143,6 +143,7 @@ public class SignUpForShop extends ActionBarActivity {
                     int index = email.getText().toString().indexOf('@');
                     int index2 = email.getText().toString().indexOf(".com");
                     if (index > 0 && index2 > 0) {
+                        Log.e("bgjv",email.getText().toString());
                         if (password.getText().toString().equals(re_password.getText().toString()) && password.length() > 8 && password.length() < 16 ) {
                             if (path == null){
                                 text = "Please select a logo";

@@ -26,24 +26,29 @@ public class BrandPage extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle extras = getIntent().getExtras();
 
+        Bundle extras = getIntent().getExtras();
+        Intent intent = getIntent();
+        int storeID = -1;
+        storeID = intent.getIntExtra("store_id", storeID);
+        final String email = intent.getStringExtra("user_email");
+        final String password = intent.getStringExtra("user_password");
 //        final int storeID = extras.getInt("storeID");
 //        final String email = extras.getString("email");
 //        final String password = extras.getString("password");
-        final int storeID = 40;
-        final String email = "ayse@hot";
-        final String password = "123456789";
+
+
         RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
         final View brandView = getLayoutInflater().inflate(R.layout.brandpage, baseLayout, false);
 
         final LinearLayout campaignList = (LinearLayout) brandView.findViewById(R.id.campaignlist);
 
+        final int finalStoreID = storeID;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    final Store store = DatabaseManager.getStore(email, password, storeID);
+                    final Store store = DatabaseManager.getStore(email, password, finalStoreID);
 
 
                                 String logourl = DatabaseManager.getServerUrl()+ "Images/StoreLogos/" + store.getLogo();

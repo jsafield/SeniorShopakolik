@@ -1,7 +1,10 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
@@ -26,68 +29,71 @@ import org.w3c.dom.Text;
 public class MainActivity extends ActionBarActivity {
 
     private Button signInButton;
-    private TextView forgetPassword,signUpCustomer,signUpShop,email,password;
-    private Toolbar toolBar;
+    private TextView forgetPassword, signUpCustomer, signUpShop, email, password;
+    private String oldemail, oldpassword;
+    public static final String MyPREFERENCES = "MyPrefs";
+    public static final String Email = "emailKey";
+    public static final String Password = "passwordKey";
+
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         Button signInButton = (Button) findViewById(R.id.signInButton);
         //TextView forgetPassword = (TextView) findViewById(R.id.forgetPassword);
         TextView signUpCustomer = (TextView) findViewById(R.id.signUpCustomer);
         TextView signUpShop = (TextView) findViewById(R.id.signUpShop);
-//
-//        toolBar = (Toolbar) findViewById(R.id.app_bar);
-//        setSupportActionBar(toolBar);
 
+        email = (TextView) findViewById(R.id.email);
+        password = (TextView) findViewById(R.id.password);
+
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+        if (sharedpreferences.contains(Email)) {
+            email.setText(sharedpreferences.getString(Email, ""));
+
+        }
+        if (sharedpreferences.contains(Password)) {
+            password.setText(sharedpreferences.getString(Password, ""));
+        }
+
+        oldemail = email.getText().toString();
+        oldpassword = password.getText().toString();
     }
 
 
     public void forgetPasswordClick(View view) {
-        Intent getNameScreenIntent = new Intent(this,ForgetPassword.class);
+        Intent getNameScreenIntent = new Intent(this, ForgetPassword.class);
         startActivity(getNameScreenIntent);
 
     }
 
-    public void signUpCustomerClick(View view) {
-        Intent getNameScreenIntent = new Intent(this,SignUpForCustomer.class);
-        startActivity(getNameScreenIntent);
-
-    }
-
-    public void signUpShopClick(View view) {
-        Intent getNameScreenIntent = new Intent(this,SignUpForShop.class);
-        startActivity(getNameScreenIntent);
-
-    }
-
-
-    public void signInButtonClick(View view) {
-        email=(TextView)findViewById(R.id.email);
-        password=(TextView)findViewById(R.id.password);
-
+    public void userLogin(){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 UserType userType = UserType.NonUser;
+
                 try {
 
                     userType = DatabaseManager.login(email.getText().toString(), password.getText().toString());
 
-                    if (userType == UserType.Customer)
-                    {
-                        Intent getNameScreenIntent = new Intent(MainActivity.this,BrandPage.class);
+                    if (userType == UserType.Customer) {
+                        Log.e("user", userType.toString());
+                        Intent getNameScreenIntent = new Intent(MainActivity.this, Wall.class);
+                        getNameScreenIntent.putExtra("user_email", email.getText().toString());
+                        getNameScreenIntent.putExtra("user_password", password.getText().toString());
                         startActivity(getNameScreenIntent);
-                    }
-                    else if(userType == UserType.Store)
-                    {
-                        Intent getNameScreenIntent = new Intent(MainActivity.this,ForgetPassword.class);
+                    } else if (userType == UserType.Store) {
+                        Intent getNameScreenIntent = new Intent(MainActivity.this, ForgetPassword.class);
+                        getNameScreenIntent.putExtra("user_email", email.getText().toString());
+                        getNameScreenIntent.putExtra("user_password", password.getText().toString());
                         startActivity(getNameScreenIntent);
-                    }
-                    else if(userType == UserType.NonUser)
-                    {
+                    } else if (userType == UserType.NonUser) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -105,12 +111,62 @@ public class MainActivity extends ActionBarActivity {
                     e.printStackTrace();
                 }
 
-
             }
         }).start();
+    }
+
+    public void signUpCustomerClick(View view) {
+        Intent getNameScreenIntent = new Intent(this, SignUpForCustomer.class);
+        startActivity(getNameScreenIntent);
+
+    }
+
+    public void signUpShopClick(View view) {
+        Intent getNameScreenIntent = new Intent(this, SignUpForShop.class);
+        startActivity(getNameScreenIntent);
+
+    }
 
 
+    public void signInButtonClick(View view) {
 
+
+                if (!oldemail.equals(email.getText().toString())) {
+                    Log.e("runOnUiThread", "runOnUiThread");
+                    // 1. Instantiate an AlertDialog.Builder with its constructor
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    Log.e("AlertDialog.Builder", "AlertDialog.Builder");
+
+                    // 2. Chain together various setter methods to set the dialog characteristics
+                    builder.setMessage(R.string.updateUserInfo);
+                    Log.e("builder.setMessage", "builder.setMessage");
+                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString(Email, email.getText().toString());
+                            editor.putString(Password, password.getText().toString());
+                            editor.commit();
+                            userLogin();
+                        }
+                    });
+
+                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            userLogin();
+                        }
+                    });
+
+                    // 3. Get the AlertDialog from create()
+                    AlertDialog dialog = builder.create();
+                    Log.e("builder.create", "builder.create");
+                    dialog.show();
+                }
+                else
+                {
+                    userLogin();
+                }
     }
 
 }

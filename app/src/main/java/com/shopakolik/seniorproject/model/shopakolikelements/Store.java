@@ -1,8 +1,9 @@
 package com.shopakolik.seniorproject.model.shopakolikelements;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Store extends User {
+public class Store extends User implements Serializable {
     private int storeId;
     private String name;
     private String logo;

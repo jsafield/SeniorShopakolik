@@ -1,5 +1,6 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -59,7 +60,8 @@ public class BaseActivity extends ActionBarActivity {
         //buraya hangi page gelecekse onu yonlendirecez
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         if (savedInstanceState == null) {
-            selectItem(0);
+//            selectItem(0);
+            //TODO
         }
     }
 
@@ -94,12 +96,38 @@ public class BaseActivity extends ActionBarActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
+            Log.e("dsdf", " " + position);
         }
     }
 
     private void selectItem(int position) {
         // update the main content by replacing fragments
-        // TODO
+        mDrawerLayout.closeDrawers();
+        Intent intent = null;
+        switch (position) {
+            case 0:
+                intent = new Intent(this, Wall.class);
+                break;
+            case 1:
+                intent = new Intent(this, ForgetPassword.class);
+                break;
+            case 2:
+                intent = new Intent(this, SignUpForShop.class);
+                break;
+            case 3:
+                intent = new Intent(this, BrandPage.class);
+                break;
+            case 4:
+                intent = new Intent(this, BrandPage.class);
+                break;
+            case 5:
+                intent = new Intent(this, MainActivity.class);
+                break;
+            default:
+                Log.e("dçmdsc", " yanliiiiis" + position );
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
     }
 
     @Override

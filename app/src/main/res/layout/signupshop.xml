@@ -228,7 +228,8 @@
             android:layout_alignRight="@+id/linearLayoutAddress"
             android:layout_alignStart="@+id/linearLayoutAddress"
             android:layout_below="@+id/linearLayoutAddress"
-            android:text="Submit" />
+            android:text="Submit"
+            android:onClick="submitShopButtonClick0*ğpğ"/>
 
         <TextView
             android:layout_width="wrap_content"
