@@ -462,7 +462,7 @@ public class DatabaseManager {
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&campaign_id=" + URLEncoder.encode("" + campaignID, "UTF-8");
-        String result = httpPost(SERVER_URL + "AddCampaign.php", urlParameters);
+        String result = httpPost(SERVER_URL + "RemoveCampaign.php", urlParameters);
 
         return result.equals("success\n");
     }
