@@ -267,33 +267,6 @@ public class DatabaseManager {
         return new Store(storeId, name, logo, categories, locations);
     }
 
-    private static Store parseStoreFromJSON(String result) throws Exception {
-
-        Store store = parseSimpleStoreFromJSON(result);
-
-        try {
-            JSONObject jsonObject = new JSONObject(result);
-            String camp = jsonObject.getString("campaigns");
-            ArrayList<Campaign> campaigns = parseCampaignsFromJSON(camp);
-            store.setCampaigns(campaigns);
-        } catch (Exception e) {
-            Log.w("No campaign", "No campaign found for store with store id: " + store.getStoreId());
-            e.printStackTrace();
-        }
-
-        return store;
-    }
-
-    private static ArrayList<Store> parseStoresFromJSON(String result) throws Exception {
-        ArrayList<Store> stores = new ArrayList<>();
-        JSONArray jsonArray = new JSONArray(result);
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            stores.add(parseSimpleStoreFromJSON(jsonArray.getString(i)));
-        }
-        return stores;
-    }
-
     private static ArrayList<Campaign> parseCampaignsFromJSON(String result) throws Exception {
 
         ArrayList<Campaign> campaigns = new ArrayList<>();
@@ -328,6 +301,43 @@ public class DatabaseManager {
             }
         }
         return campaigns;
+    }
+
+    private static Store parseStoreFromJSON(String result) throws Exception {
+
+        Store store = parseSimpleStoreFromJSON(result);
+
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            String camp = jsonObject.getString("campaigns");
+            ArrayList<Campaign> campaigns = parseCampaignsFromJSON(camp);
+            store.setCampaigns(campaigns);
+        } catch (Exception e) {
+            Log.w("No campaign", "No campaign found for store with store id: " + store.getStoreId());
+            e.printStackTrace();
+        }
+
+        return store;
+    }
+
+    private static ArrayList<Store> parseSimpleStoresFromJSON(String result) throws Exception {
+        ArrayList<Store> stores = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray(result);
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            stores.add(parseSimpleStoreFromJSON(jsonArray.getString(i)));
+        }
+        return stores;
+    }
+
+    private static ArrayList<Store> parseStoresFromJSON(String result) throws Exception {
+        ArrayList<Store> stores = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray(result);
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            stores.add(parseStoreFromJSON(jsonArray.getString(i)));
+        }
+        return stores;
     }
 
     public static UserType login(User user) throws Exception {
@@ -487,6 +497,17 @@ public class DatabaseManager {
         return parseStoreFromJSON(result);
     }
 
+    public static ArrayList<Store> getStores(User user, Category category) throws Exception {
+
+        return getStores(user.getEmail(), user.getPassword(), category.getCategoryId());
+    }
+
+    public static ArrayList<Store> getStores(String email, String password, int categoryId)
+            throws Exception {
+
+        return getStores(email, password, new int[]{categoryId});
+    }
+
     public static ArrayList<Store> getStores(User user, ArrayList<Category> categories) throws Exception {
 
         int[] categoryIDs = new int[categories.size()];
@@ -512,27 +533,7 @@ public class DatabaseManager {
         if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
 
-        return parseStoresFromJSON(result);
-    }
-
-    public static ArrayList<Store> getStores(User user, Category category) throws Exception {
-
-        return getStores(user.getEmail(), user.getPassword(), category.getCategoryId());
-    }
-
-    public static ArrayList<Store> getStores(String email, String password, int categoryId)
-            throws Exception {
-
-        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
-                + "&password=" + URLEncoder.encode(password, "UTF-8")
-                + "&category_count=" + URLEncoder.encode("1", "UTF-8")
-                + "&category_id_0=" + URLEncoder.encode("" + categoryId, "UTF-8");
-        String result = httpPost(SERVER_URL + "GetStores.php", urlParameters);
-
-        if (result.equals("failure\n"))
-            throw new Exception("Unexpected Error In PHP File");
-
-        return parseStoresFromJSON(result);
+        return parseSimpleStoresFromJSON(result);
     }
 
     public static ArrayList<Campaign> getCampaigns(User user, Store store) throws Exception {
