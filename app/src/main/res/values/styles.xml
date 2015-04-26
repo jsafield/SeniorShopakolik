@@ -1,9 +1,13 @@
 <resources>
-    <style name="AppTheme" parent ="AppTheme.Base"></style>
+    <style name="AppTheme" parent ="AppTheme.Base">
+
+    </style>
     <style name ="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryColorDark</item>
         <item name="colorAccent">@color/accentColor</item>
+        <item name="android:windowBackground">@color/background1</item>
+
     </style>
     
     <style name="MyCustomToolbarTheme" parent = "ThemeOverlay.AppCompat.Light">
@@ -11,6 +15,8 @@
         <item name="android:textColorSecondary">@color/accentColor</item>
 
     </style>
-
+    <!--<style name="AppTheme.Background" parent=>-->
+        <!--<item name="android:background">@color/background</item>-->
+    <!--</style>-->
 
 </resources>

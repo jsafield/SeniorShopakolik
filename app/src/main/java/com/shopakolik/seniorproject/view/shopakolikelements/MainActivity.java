@@ -90,7 +90,7 @@ public class MainActivity extends ActionBarActivity {
                         getNameScreenIntent.putExtra("user_type", userType.toString());
                         startActivity(getNameScreenIntent);
                     } else if (userType == UserType.Store) {
-                        Intent getNameScreenIntent = new Intent(MainActivity.this, Wall.class);
+                        Intent getNameScreenIntent = new Intent(MainActivity.this, PageOfOwnerShop.class);
                         getNameScreenIntent.putExtra("user_email", email.getText().toString());
                         getNameScreenIntent.putExtra("user_password", password.getText().toString());
                         getNameScreenIntent.putExtra("user_type", userType.toString());

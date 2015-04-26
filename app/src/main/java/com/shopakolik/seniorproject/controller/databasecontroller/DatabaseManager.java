@@ -38,7 +38,7 @@ public class DatabaseManager {
 
     private static final String SERVER_URL = "http://unaldi.0fees.us/shopakolik/";
     private static boolean locationError = false;
-    private static SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     // To inform user whether adding location is failed while store adding
     public static boolean isLocationsAdded() {
@@ -754,6 +754,7 @@ public class DatabaseManager {
                 + "&campaign_id=" + URLEncoder.encode("" + campaignID, "UTF-8");
 
         String result = httpPost(SERVER_URL + "GetCampaign.php", urlParameters);
+        Log.e("result", result);
 
         if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");

@@ -30,8 +30,10 @@ import java.util.ArrayList;
  */
 public class PageOfOwnerShop extends BaseActivity {
 
-    private String email = "shop2@hot.com";
-    private String password = "123456789";
+
+    private String email = "";
+    private String password = "";
+    private String userType = "";
 
     private RelativeLayout baseLayout;
     private View shopView;
@@ -42,20 +44,28 @@ public class PageOfOwnerShop extends BaseActivity {
 
     public void onCreate(Bundle savedInstanceState) {
 
+
+        Bundle extras = getIntent().getExtras();
+
+        email = extras.getString("user_email");
+        password = extras.getString("user_password");
+        userType = extras.getString("user_type");
+
+
         super.onCreate(savedInstanceState);
         baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
         shopView = getLayoutInflater().inflate(R.layout.brandpage, baseLayout, false);
         campaignList = (LinearLayout) shopView.findViewById(R.id.campaignlist);
         scroll = (ScrollView) findViewById(R.id.content_frame);
 
-        Log.e("After on Clck ", "" + scroll.getScrollY());
+//        Log.e("After on Clck ", "" + scroll.getScrollY());
 
-        fillcontent();
+        fillContent();
 
         baseLayout.addView(shopView);
     }
 
-    private void fillcontent() {
+    private void fillContent() {
 
 //        scroll.scrollTo(0, scrollY);
 
@@ -85,6 +95,8 @@ public class PageOfOwnerShop extends BaseActivity {
 
                                 //decleare
                                 final View itemView = getLayoutInflater().inflate(R.layout.campaignlistitem, campaignList, false);
+
+
                                 //initialize
                                 final ImageView campaignImage = (ImageView) itemView.findViewById(R.id.campimage);
                                 final TextView features = (TextView) itemView.findViewById(R.id.features);
@@ -93,10 +105,6 @@ public class PageOfOwnerShop extends BaseActivity {
                                 final ImageView deleteimage = (ImageView) itemView.findViewById(R.id.deleteimage);
                                 final ImageView updateimage = (ImageView) itemView.findViewById(R.id.update);
                                 final ToggleButton button = (ToggleButton) itemView.findViewById(R.id.favorite_button);
-                                // Add campaign page initliza
-                                final TextView startdate = (TextView) itemView.findViewById(R.id.campaign_start);
-                                final TextView enddate = (TextView) itemView.findViewById(R.id.campaign_finish);
-                                final ImageView currentImage = (ImageView) itemView.findViewById(R.id.currentImageView);
 
 
                                 new Thread(new Runnable() {
@@ -157,7 +165,7 @@ public class PageOfOwnerShop extends BaseActivity {
                                                                                 Log.e("S1 crool Y : ", "" + scroll.getScrollY());
                                                                                 campaignList.removeAllViews();
                                                                                 Log.e("2 Scrool Y : ", "" + scroll.getScrollY());
-                                                                                fillcontent();
+                                                                                fillContent();
                                                                                 Log.e("3 Scrool Y : ", "" + scroll.getScrollY());
 
                                                                             }
@@ -198,12 +206,11 @@ public class PageOfOwnerShop extends BaseActivity {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         Intent intent = new Intent(PageOfOwnerShop.this, UpdateCampaignPage.class);
+                                                        intent.putExtra("email",email);
+                                                        intent.putExtra("password",password);
+                                                        intent.putExtra("campaignID",list.get(finalI).getCampaignId());
                                                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                                         startActivity(intent);
-
-//                                                        startdate.setText((CharSequence) list.get(finalI).getStartDate());
-//                                                        enddate.setText((CharSequence) list.get(finalI).getEndDate());
-                                                      //  currentImage.setImageDrawable(list.get(finalI).getImage());
 
                                                     }
                                                 });

@@ -73,6 +73,7 @@ public class BrandList extends DialogFragment {
                                         Intent intent = new Intent(BrandList.this.getActivity(), Wall.class);
                                         intent.putExtra("user_email", Wall.getEmail());
                                         intent.putExtra("user_password", Wall.getPassword());
+                                        intent.putExtra("user_type", "Store");
                                         startActivity(intent);
                                     }
                                 });

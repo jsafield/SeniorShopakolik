@@ -2,6 +2,7 @@ package com.shopakolik.seniorproject.view.shopakolikelements;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,7 +14,7 @@ import com.shopakolik.seniorproject.R;
 /**
  * Created by Zehra on 23.4.2015.
  */
-public class ProfilePage extends BaseActivity {
+public class ProfilePage extends ActionBarActivity {
 
     private TextView name, surname, user_email,old_password,new_password, renew_password ;
     private String email, password;

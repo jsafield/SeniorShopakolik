@@ -20,7 +20,6 @@
             </intent-filter>
         </activity>
 
-
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.BaseActivity"
             android:label="Shopakolik"
