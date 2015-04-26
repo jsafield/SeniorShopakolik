@@ -2,14 +2,17 @@ package com.shopakolik.seniorproject.view.shopakolikelements;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -24,7 +27,11 @@ import com.shopakolik.seniorproject.model.shopakolikelements.Category;
 import com.shopakolik.seniorproject.model.shopakolikelements.Location;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -34,7 +41,7 @@ public class SignUpForShop extends ActionBarActivity {
 
     private static final int SELECTED_PICTURE=1;
     private ImageView iv;
-    private String path;
+    public static String lastpath;
     private TextView email, password, name, re_password, location, address;
     boolean valid = true;
     CharSequence text = "";
@@ -87,19 +94,113 @@ public class SignUpForShop extends ActionBarActivity {
             if (requestCode == 1) {
                 // currImageURI is the global variable I'm using to hold the content:// URI of the image
                 Uri currImageURI = data.getData();
-                path = getRealPathFromURI(currImageURI);
-                File imgFile = new  File(path);
+                try {
+                    InputStream is = getContentResolver().openInputStream(currImageURI);
+                    byte[] inputData = getBytes(is);
 
-                if(imgFile.exists()){
+                    String path = getRealPathFromURI(currImageURI);
+                    File imgFile = new  File(path);
 
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    if(imgFile.exists()){
+                        Bitmap myBitmap = decodeSampledBitmapFromResource(inputData, 100, 100);
+                        saveToCacheFile(myBitmap);
+                        iv.setImageBitmap(myBitmap);
+                        iv.setVisibility(View.VISIBLE);
+                    }
 
-                    iv.setImageBitmap(myBitmap);
-                    iv.setVisibility(View.VISIBLE);
-
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
+    }
+
+    private byte[] getBytes(InputStream inputStream) throws IOException{
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+
+    public static File getSavePath() {
+        File path;
+        if (hasSDCard()) { // SD card
+            path = new File(Environment.getExternalStorageDirectory() + "/shopakolik/");
+            //path = new File("/storage/extSdCard/" + "shopakolik/");
+            boolean b = path.mkdirs();
+            Log.e("boolean if file created"," " + b);
+        } else {
+            path = Environment.getDataDirectory();
+        }
+        return path;
+    }
+
+    public static String getCacheFilename() {
+        File f = getSavePath();
+        Log.e("path of file", f.getAbsolutePath());
+        lastpath = f.getAbsolutePath() + "/cache.png";
+        return f.getAbsolutePath() + "/cache.png";
+    }
+
+    public static void saveToCacheFile(Bitmap bmp) {
+        saveToFile(getCacheFilename(),bmp);
+    }
+
+    public static void saveToFile(String filename,Bitmap bmp) {
+        try {
+            FileOutputStream out = new FileOutputStream(filename);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+        } catch(Exception e) {}
+    }
+
+    public static boolean hasSDCard() { // SD????????
+        String status = Environment.getExternalStorageState();
+        return status.equals(Environment.MEDIA_MOUNTED);
+    }
+
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource( byte[] inputData,int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(inputData, 0, inputData.length, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeByteArray(inputData, 0, inputData.length, options);
     }
 
     // And to convert the image URI to the direct file system pathTextView of the image file
@@ -133,15 +234,13 @@ public class SignUpForShop extends ActionBarActivity {
             @Override
             public void run() {
                 boolean result = false;
-
-
                 try {
                     int index = email.getText().toString().indexOf('@');
                     int index2 = email.getText().toString().indexOf(".com");
                     if (index > 0 && index2 > 0) {
                         Log.e("bgjv",email.getText().toString());
                         if (password.getText().toString().equals(re_password.getText().toString()) && password.length() > 8 && password.length() < 16 ) {
-                            if (path == null){
+                            if (lastpath == null){
                                 text = "Please select a logo";
                                 valid = false;
                             }
@@ -156,7 +255,7 @@ public class SignUpForShop extends ActionBarActivity {
                                         valid = false;
                                     }
                                     else {
-                                        Store store = new Store(email.getText().toString(), password.getText().toString(), name.getText().toString(), path, selectedCategories, locations);
+                                        Store store = new Store(email.getText().toString(), password.getText().toString(), name.getText().toString(), lastpath, selectedCategories, locations);
                                         result = DatabaseManager.addStore(store);
                                         if (result) {
                                             Log.e("true", "true");
@@ -213,12 +312,9 @@ public class SignUpForShop extends ActionBarActivity {
                             }
                         }
                     });
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         }).start();
     }

@@ -230,7 +230,7 @@
             android:layout_alignStart="@+id/linearLayoutAddress"
             android:layout_below="@+id/linearLayoutAddress"
             android:text="Submit"
-            android:onClick="submitShopButtonClick0*ğpğ"/>
+            android:onClick="submitShopButtonClick"/>
 
         <TextView
             android:layout_width="wrap_content"

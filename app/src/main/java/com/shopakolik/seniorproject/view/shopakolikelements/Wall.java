@@ -33,18 +33,20 @@ import java.util.ArrayList;
  */
 public class Wall extends BaseActivity {
 
-    private static String email,password;
+    private static String email,password,userType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        email = intent.getStringExtra("user_email");
-        password = intent.getStringExtra("user_password");
+        Intent intent1 = getIntent();
+        email = intent1.getStringExtra("user_email");
+        password = intent1.getStringExtra("user_password");
+        userType = intent1.getStringExtra("user_type");
 
         Log.e("email",email);
         Log.e("password", password);
+        Log.e("user type", userType);
 
         RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
         final View wallView = getLayoutInflater().inflate(R.layout.wall, baseLayout, false);

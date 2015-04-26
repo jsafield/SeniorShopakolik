@@ -30,6 +30,7 @@ public class FavoriteCampaignPage extends BaseActivity {
 
         final String email = extras.getString("user_email");
         final String password = extras.getString("user_password");
+        final String user_type = extras.getString("user_type");
 
 
         RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);

@@ -39,16 +39,16 @@ public class BaseActivity extends ActionBarActivity {
         email = intent.getStringExtra("user_email");
         password = intent.getStringExtra("user_password");
         userType = intent.getStringExtra("user_type");
+        Log.e("usertype Base Activity",userType);
 
-//        if(userType.equals("Customer"))
+        if(userType.equals("Customer"))
            menuTitles = getResources().getStringArray(R.array.menu_array);
-//        else if(userType.equals("Store")){
-//            menuTitles = getResources().getStringArray(R.array.menu_shop_array);
-//        }
+        else if(userType.equals("Store")){
+            menuTitles = getResources().getStringArray(R.array.menu_shop_array);
+        }
 
        Log.e(email,password);
 
- //       Log.e("userType",userType);
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -118,30 +118,59 @@ public class BaseActivity extends ActionBarActivity {
         // update the main content by replacing fragments
         mDrawerLayout.closeDrawers();
         Intent intent = null;
-        switch (position) {
-            case 0:
-                intent = new Intent(this, Wall.class);
-                break;
-            case 1:
-                intent = new Intent(this, FavoriteCampaignPage.class);
-                break;
-            case 2:
-                intent = new Intent(this, SignUpForShop.class);
-                break;
-            case 3:
-                intent = new Intent(this, BrandPage.class);
-                break;
-            case 4:
-                intent = new Intent(this, ProfilePage.class);
-                break;
-            case 5:
-                intent = new Intent(this, MainActivity.class);
-                break;
-            default:
-                Log.e("dçmdsc", " yanliiiiis" + position );
+        if(userType.equals("Customer"))
+        {
+            switch (position) {
+                case 0:
+                    intent = new Intent(this, Wall.class);
+                    break;
+                case 1:
+                    intent = new Intent(this, FavoriteCampaignPage.class);
+                    break;
+                case 2:
+                    intent = new Intent(this, SignUpForShop.class);
+                    break;
+                case 3:
+                    intent = new Intent(this, BrandPage.class);
+                    break;
+                case 4:
+                    intent = new Intent(this, ProfilePage.class);
+                    break;
+                case 5:
+                    intent = new Intent(this, MainActivity.class);
+                    break;
+                default:
+                    Log.e("dçmdsc", " yanliiiiis" + position );
+            }
         }
+        else if (userType.equals("Store"))
+        {
+            switch (position) {
+                case 0:
+                    intent = new Intent(this, PageOfOwnerShop.class);
+                    break;
+                case 1:
+                    intent = new Intent(this, SettingsPage.class);
+                    break;
+                case 2:
+                    intent = new Intent(this, AddCampaignPage.class);
+                    break;
+                case 3:
+                    intent = new Intent(this, ProfilePage.class);
+                    break;
+                case 4:
+                    intent = new Intent(this, MainActivity.class);
+                    break;
+                default:
+                    Log.e("dçmdsc", " yanliiiiis" + position );
+            }
+        }
+        else
+            Log.e("Base Activity","if calismiyor");
+
         intent.putExtra("user_email", email);
         intent.putExtra("user_password", password);
+        intent.putExtra("user_type", userType);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
