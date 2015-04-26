@@ -2,7 +2,7 @@ package com.shopakolik.seniorproject.model.shopakolikelements;
 
 import java.util.Date;
 
-public class Campaign {
+public class Campaign extends Store {
     private int campaignId;
     private Date startDate;
     private Date endDate;
@@ -16,6 +16,7 @@ public class Campaign {
 
     public Campaign(Date startDate, Date endDate, String image, CampaignType type, String condition,
                     String details, int percentage, float amount, int storeId) {
+        super(storeId, null, null);
         this.startDate = startDate;
         this.endDate = endDate;
         this.image = image;
@@ -29,6 +30,23 @@ public class Campaign {
 
     public Campaign(int campaignId, Date startDate, Date endDate, String image, CampaignType type,
                     String condition, String details, int percentage, float amount, int storeId) {
+        super(storeId, null, null);
+        this.campaignId = campaignId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.image = image;
+        this.type = type;
+        this.condition = condition;
+        this.details = details;
+        this.percentage = percentage;
+        this.amount = amount;
+        this.storeId = storeId;
+    }
+
+    public Campaign(int campaignId, Date startDate, Date endDate, String image, CampaignType type,
+                    String condition, String details, int percentage, float amount, int storeId,
+                    String name, String logo) {
+        super(storeId, name, logo);
         this.campaignId = campaignId;
         this.startDate = startDate;
         this.endDate = endDate;

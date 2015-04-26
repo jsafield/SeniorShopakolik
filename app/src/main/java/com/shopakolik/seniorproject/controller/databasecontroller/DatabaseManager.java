@@ -2,13 +2,7 @@ package com.shopakolik.seniorproject.controller.databasecontroller;
 
 import android.util.Log;
 
-import com.shopakolik.seniorproject.model.shopakolikelements.Campaign;
-import com.shopakolik.seniorproject.model.shopakolikelements.CampaignType;
-import com.shopakolik.seniorproject.model.shopakolikelements.Category;
-import com.shopakolik.seniorproject.model.shopakolikelements.Customer;
-import com.shopakolik.seniorproject.model.shopakolikelements.Location;
-import com.shopakolik.seniorproject.model.shopakolikelements.Store;
-import com.shopakolik.seniorproject.model.shopakolikelements.User;
+import com.shopakolik.seniorproject.model.shopakolikelements.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,6 +25,13 @@ import java.util.Date;
 
 /**
  * Ahmet Cihat Unaldi
+ *
+ * DatabaseManager.java
+ * - Enable to retrieve data from server.
+ * - Based on sending HTTP POST requests to the PHP files in the server.
+ * - PHP files contains SQL queries.
+ * - To retrieve complex data, JSON (JavaScript Object Notation) is used.
+ * - Arrays converted to JSON objects in php files then parsed to ArrayLists here.
  */
 
 public class DatabaseManager {
@@ -39,6 +40,7 @@ public class DatabaseManager {
     private static boolean locationError = false;
     private static SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    // To inform user whether adding location is failed while store adding
     public static boolean isLocationsAdded() {
         return locationError;
     }
@@ -47,7 +49,7 @@ public class DatabaseManager {
         return SERVER_URL;
     }
 
-    // send http post request and read http response
+    // Send http post request and read http response
     private static String httpPost(String url, String urlParameters) throws Exception {
 
         URL url0;
@@ -71,8 +73,6 @@ public class DatabaseManager {
         conn.setDoOutput(true);
         conn.setUseCaches(false);
 
-//            conn.setRequestProperty("enctype", "application/x-www-form-urlencoded"); // default
-//            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded"); // default
         conn.setRequestProperty("Content-Length", Integer.toString(urlParameters.getBytes().length));
         conn.setRequestProperty("Content-Language", "tr-TR");
 
@@ -111,7 +111,7 @@ public class DatabaseManager {
         }
     }
 
-    // send http post request to upload file and returns the name of file in server
+    // Send http post request to upload file and returns the name of file in server
     private static String httpPostFile(String url, String sourceFileUri) throws Exception {
 
         URL url0;
@@ -204,6 +204,7 @@ public class DatabaseManager {
         return result;
     }
 
+    // Parse Store object without categories, locations and campaigns from JSON
     private static Store parseSimpleStoreFromJSON(String result) throws Exception {
 
         JSONObject jsonObject = new JSONObject(result);
@@ -211,10 +212,18 @@ public class DatabaseManager {
         int storeId = jsonObject.getInt("store_id");
         String name = jsonObject.getString("name");
         String logo = jsonObject.getString("logo");
+        return new Store(storeId, name, logo);
+    }
 
-        ArrayList<Category> categories = null;
+    // Parse Store object without campaigns from JSON
+    private static Store parseStoreFromJSON(String result) throws Exception {
+
+        Store store = parseSimpleStoreFromJSON(result);
+        int storeId = store.getStoreId();
+        JSONObject jsonObject = new JSONObject(result);
+
         try {
-            categories = new ArrayList<>();
+            ArrayList<Category> categories = new ArrayList<>();
             JSONArray jsonArray1 = jsonObject.getJSONArray("categories");
 
             for (int j = 0; j < jsonArray1.length(); j++) {
@@ -231,14 +240,15 @@ public class DatabaseManager {
                     e.printStackTrace();
                 }
             }
+            store.setCategories(categories);
+
         } catch (Exception e) {
             Log.e("No category", "No category found for store with store id: " + storeId);
             e.printStackTrace();
         }
 
-        ArrayList<Location> locations = null;
         try {
-            locations = new ArrayList<>();
+            ArrayList<Location> locations = new ArrayList<>();
             JSONArray jsonArray2 = jsonObject.getJSONArray("locations");
 
             for (int j = 0; j < jsonArray2.length(); j++) {
@@ -258,15 +268,35 @@ public class DatabaseManager {
                     e.printStackTrace();
                 }
             }
+            store.setLocations(locations);
 
         } catch (Exception e) {
             Log.e("No location", "No location found for store with store id: " + storeId);
             e.printStackTrace();
         }
 
-        return new Store(storeId, name, logo, categories, locations);
+        return store;
     }
 
+    // Parse Store object with campaigns from JSON
+    private static Store parseStoreWithCampaignsFromJSON(String result) throws Exception {
+
+        Store store = parseStoreFromJSON(result);
+
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            String camp = jsonObject.getString("campaigns");
+            ArrayList<Campaign> campaigns = parseCampaignsFromJSON(camp);
+            store.setCampaigns(campaigns);
+        } catch (Exception e) {
+            Log.w("No campaign", "No campaign found for store with store id: " + store.getStoreId());
+            e.printStackTrace();
+        }
+
+        return store;
+    }
+
+    // Parse campaigns of a store from JSON
     private static ArrayList<Campaign> parseCampaignsFromJSON(String result) throws Exception {
 
         ArrayList<Campaign> campaigns = new ArrayList<>();
@@ -303,23 +333,46 @@ public class DatabaseManager {
         return campaigns;
     }
 
-    private static Store parseStoreFromJSON(String result) throws Exception {
+    // Parse campaigns of a store with store info from JSON
+    private static ArrayList<Campaign> parseDetailedCampaignsFromJSON(String result) throws Exception {
 
-        Store store = parseSimpleStoreFromJSON(result);
+        ArrayList<Campaign> campaigns = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray(result);
 
-        try {
-            JSONObject jsonObject = new JSONObject(result);
-            String camp = jsonObject.getString("campaigns");
-            ArrayList<Campaign> campaigns = parseCampaignsFromJSON(camp);
-            store.setCampaigns(campaigns);
-        } catch (Exception e) {
-            Log.w("No campaign", "No campaign found for store with store id: " + store.getStoreId());
-            e.printStackTrace();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                int campaignId = jsonObject.getInt("campaign_id");
+                Date startDate = SQLDateFormat.parse(jsonObject.getString("start_date"));
+                Date endDate = SQLDateFormat.parse(jsonObject.getString("end_date"));
+                String image = jsonObject.getString("image");
+                CampaignType type = CampaignType.values()[jsonObject.getInt("type")];
+                String condition = jsonObject.getString("precondition");
+                String details = jsonObject.getString("details");
+                int storeId = jsonObject.getInt("store_id");
+                String name = jsonObject.getString("name");
+                String logo = jsonObject.getString("logo");
+
+                int percentage = 0;
+                if (type == CampaignType.DiscountPercentage)
+                    percentage = jsonObject.getInt("percentage");
+
+                float amount = 0;
+                if (type == CampaignType.DiscountAmount || type == CampaignType.ShoppingVoucher)
+                    amount = Float.parseFloat(jsonObject.getString("amount"));
+
+                campaigns.add(new Campaign(campaignId, startDate, endDate, image, type, condition,
+                        details, percentage, amount, storeId, name, logo));
+            } catch (Exception e) {
+                Log.e("Campaign parse fail", "A campaign could not be parsed.");
+                e.printStackTrace();
+            }
         }
-
-        return store;
+        return campaigns;
     }
 
+    // Parse List of Store object without categories, locations and campaigns from JSON
     private static ArrayList<Store> parseSimpleStoresFromJSON(String result) throws Exception {
         ArrayList<Store> stores = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(result);
@@ -330,6 +383,7 @@ public class DatabaseManager {
         return stores;
     }
 
+    // Parse List of Store object without campaigns from JSON
     private static ArrayList<Store> parseStoresFromJSON(String result) throws Exception {
         ArrayList<Store> stores = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(result);
@@ -340,6 +394,18 @@ public class DatabaseManager {
         return stores;
     }
 
+    // Parse List of Store object with campaigns from JSON
+    private static ArrayList<Store> parseStoresWithCampaignsFromJSON(String result) throws Exception {
+        ArrayList<Store> stores = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray(result);
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            stores.add(parseStoreWithCampaignsFromJSON(jsonArray.getString(i)));
+        }
+        return stores;
+    }
+
+    // Sign in
     public static UserType login(User user) throws Exception {
 
         return login(user.getEmail(), user.getPassword());
@@ -349,6 +415,7 @@ public class DatabaseManager {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
+
         String result = httpPost(SERVER_URL + "Login.php", urlParameters);
 
         if (result.equals("customer\n"))
@@ -361,6 +428,7 @@ public class DatabaseManager {
         throw new Exception("Unexpected Error In PHP File");
     }
 
+    // Sign up as a customer
     public static boolean addCustomer(Customer customer) throws Exception {
 
         String urlParameters = "name=" + URLEncoder.encode(customer.getName(), "UTF-8")
@@ -371,15 +439,20 @@ public class DatabaseManager {
                 + URLEncoder.encode(customer.isLocationNotification() ? "1" : "0", "UTF-8")
                 + "&campaignNotification="
                 + URLEncoder.encode(customer.isCampaignNotification() ? "1" : "0", "UTF-8");
+
         String result = httpPost(SERVER_URL + "AddCustomer.php", urlParameters);
 
         return result.equals("success\n");
     }
 
+    // Sign up as a store
     public static boolean addStore(Store store) throws Exception {
 
         locationError = false;
         String logo = httpPostFile(SERVER_URL + "UploadStoreLogo.php", store.getLogo());
+
+        if(logo.equals("failure\n"))
+            return false;
 
         String urlParameters = "email=" + URLEncoder.encode(store.getEmail(), "UTF-8")
                 + "&password=" + URLEncoder.encode(store.getPassword(), "UTF-8")
@@ -412,6 +485,7 @@ public class DatabaseManager {
         return result.equals("success\n");
     }
 
+    // Delete customer or store
     public static boolean deleteUser(User user) throws Exception {
 
         return deleteUser(user.getEmail(), user.getPassword());
@@ -421,11 +495,13 @@ public class DatabaseManager {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
+
         String result = httpPost(SERVER_URL + "DeleteUser.php", urlParameters);
 
         return result.equals("success\n");
     }
 
+    // For Stores, to add a new campaign
     public static boolean addCampaign(Store store, Campaign campaign) throws Exception {
 
         return addCampaign(store.getEmail(), store.getPassword(), campaign);
@@ -434,6 +510,9 @@ public class DatabaseManager {
     public static boolean addCampaign(String email, String password, Campaign campaign) throws Exception {
 
         String image = httpPostFile(SERVER_URL + "UploadCampaignImage.php", campaign.getImage());
+
+        if(image.equals("failure\n"))
+            return false;
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
@@ -447,11 +526,13 @@ public class DatabaseManager {
                 + "&details=" + URLEncoder.encode(campaign.getDetails(), "UTF-8")
                 + "&percentage=" + URLEncoder.encode("" + campaign.getPercentage(), "UTF-8")
                 + "&amount=" + URLEncoder.encode("" + campaign.getAmount(), "UTF-8");
+
         String result = httpPost(SERVER_URL + "AddCampaign.php", urlParameters);
 
         return result.equals("success\n");
     }
 
+    // For Stores, to remove their campaigns
     public static boolean removeCampaign(Store store, Campaign campaign) throws Exception {
 
         return removeCampaign(store.getEmail(), store.getPassword(), campaign.getCampaignId());
@@ -462,11 +543,21 @@ public class DatabaseManager {
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&campaign_id=" + URLEncoder.encode("" + campaignID, "UTF-8");
+
         String result = httpPost(SERVER_URL + "RemoveCampaign.php", urlParameters);
 
         return result.equals("success\n");
     }
 
+    public static boolean updateCampaign(String email, String password, int campaignID, Campaign campaign)
+            throws Exception {
+
+        // TODO
+
+        return false;
+    }
+
+    // To get store categories
     public static ArrayList<Category> getCategoryList() throws Exception {
 
         String result = httpPost(SERVER_URL + "GetCategoryList.php", "");
@@ -488,15 +579,91 @@ public class DatabaseManager {
         return categories;
     }
 
+    // To get customer's profile info and notification settings
+    public static Customer getCustomer(String email, String password) throws Exception {
+
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8");
+
+        String result = httpPost(SERVER_URL + "GetCustomer.php", urlParameters);
+
+        JSONObject jsonObject = new JSONObject(result);
+
+        int userID = jsonObject.getInt("user_id");
+        int customerID = jsonObject.getInt("customer_id");
+        String name = jsonObject.getString("name");
+        String surname = jsonObject.getString("surname");
+        boolean locationNotification = jsonObject.getBoolean("locationNotification");
+        boolean campaignNotification = jsonObject.getBoolean("campaignNotification");
+
+        return new Customer(userID, email, password, customerID, name, surname, locationNotification,
+                campaignNotification);
+    }
+
+    // To get a store's all info by its id
     public static Store getStore(String email, String password, int store_id) throws Exception {
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&store_id=" + URLEncoder.encode("" + store_id, "UTF-8");
+
         String result = httpPost(SERVER_URL + "GetStore.php", urlParameters);
 
-        return parseStoreFromJSON(result);
+        return parseStoreWithCampaignsFromJSON(result);
     }
 
+    // For store owner, to get its store's all info
+    public static Store getMyStore(String email, String password) throws Exception {
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8");
+
+        String result = httpPost(SERVER_URL + "GetMyStore.php", urlParameters);
+
+        return parseStoreWithCampaignsFromJSON(result);
+    }
+
+    // Get all stores in a given category
+    public static ArrayList<Store> getStoreList(User user, Category category) throws Exception {
+
+        return getStoreList(user.getEmail(), user.getPassword(), category.getCategoryId());
+    }
+
+    public static ArrayList<Store> getStoreList(String email, String password, int categoryId)
+            throws Exception {
+
+        return getStoreList(email, password, new int[]{categoryId});
+    }
+
+    // Get all stores in given categories
+    public static ArrayList<Store> getStoreList(User user, ArrayList<Category> categories) throws Exception {
+
+        int[] categoryIDs = new int[categories.size()];
+
+        for (int i = 0; i < categoryIDs.length; i++)
+            categoryIDs[i] = categories.get(i).getCategoryId();
+
+        return getStoreList(user.getEmail(), user.getPassword(), categoryIDs);
+    }
+
+    public static ArrayList<Store> getStoreList(String email, String password, int[] categoryIDs)
+            throws Exception {
+
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&category_count=" + URLEncoder.encode("" + categoryIDs.length, "UTF-8");
+
+        for (int i = 0; i < categoryIDs.length; i++)
+            urlParameters += "&category_id_" + i + "=" + URLEncoder.encode("" + categoryIDs[i], "UTF-8");
+
+        String result = httpPost(SERVER_URL + "GetSimpleStores.php", urlParameters);
+
+
+        if (result.equals("failure\n"))
+            throw new Exception("Unexpected Error In PHP File");
+
+        return parseSimpleStoresFromJSON(result);
+    }
+
+    // Get all stores in a given category
     public static ArrayList<Store> getStores(User user, Category category) throws Exception {
 
         return getStores(user.getEmail(), user.getPassword(), category.getCategoryId());
@@ -508,9 +675,11 @@ public class DatabaseManager {
         return getStores(email, password, new int[]{categoryId});
     }
 
+    // Get all stores in given categories
     public static ArrayList<Store> getStores(User user, ArrayList<Category> categories) throws Exception {
 
         int[] categoryIDs = new int[categories.size()];
+
         for (int i = 0; i < categoryIDs.length; i++)
             categoryIDs[i] = categories.get(i).getCategoryId();
 
@@ -533,9 +702,10 @@ public class DatabaseManager {
         if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
 
-        return parseSimpleStoresFromJSON(result);
+        return parseStoresFromJSON(result);
     }
 
+    // Get all campaigns of given store
     public static ArrayList<Campaign> getCampaigns(User user, Store store) throws Exception {
 
         return getCampaigns(user.getEmail(), user.getPassword(), store.getStoreId());
@@ -547,6 +717,7 @@ public class DatabaseManager {
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&store_id=" + URLEncoder.encode("" + storeId, "UTF-8");
+
         String result = httpPost(SERVER_URL + "GetCampaigns.php", urlParameters);
 
         if (result.equals("failure\n"))
@@ -555,11 +726,14 @@ public class DatabaseManager {
         return parseCampaignsFromJSON(result);
     }
 
+    // For Customers, to add stores as favorite
     public static boolean addFavoriteStore(User user, ArrayList<Store> stores) throws Exception {
 
         int[] storeIDs = new int[stores.size()];
+
         for (int i = 0; i < storeIDs.length; i++)
             storeIDs[i] = stores.get(i).getStoreId();
+
         return addFavoriteStore(user.getEmail(), user.getPassword(), storeIDs);
     }
 
@@ -577,6 +751,7 @@ public class DatabaseManager {
         return result.equals("success\n");
     }
 
+    // For Customers, to add a store as favorite
     public static boolean addFavoriteStore(User user, Store store) throws Exception {
 
         return addFavoriteStore(user.getEmail(), user.getPassword(), store.getStoreId());
@@ -588,11 +763,13 @@ public class DatabaseManager {
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&store_count=" + URLEncoder.encode("1", "UTF-8")
                 + "&store_id_0=" + URLEncoder.encode("" + storeId, "UTF-8");
+
         String result = httpPost(SERVER_URL + "AddFavoriteStore.php", urlParameters);
 
         return result.equals("success\n");
     }
 
+    // For Customers, to add a campaign as favorite
     public static boolean addFavoriteCampaign(User user, Campaign campaign) throws Exception {
 
         return addFavoriteCampaign(user.getEmail(), user.getPassword(), campaign.getCampaignId());
@@ -604,11 +781,13 @@ public class DatabaseManager {
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&campaign_id=" + URLEncoder.encode("" + campaignId, "UTF-8");
+
         String result = httpPost(SERVER_URL + "AddFavoriteCampaign.php", urlParameters);
 
         return result.equals("success\n");
     }
 
+    // Get favorite stores of a customer with campaigns
     public static ArrayList<Store> getFavoriteStores(User user) throws Exception {
 
         return getFavoriteStores(user.getEmail(), user.getPassword());
@@ -618,14 +797,16 @@ public class DatabaseManager {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
+
         String result = httpPost(SERVER_URL + "GetFavoriteStores.php", urlParameters);
 
         if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
 
-        return parseStoresFromJSON(result);
+        return parseStoresWithCampaignsFromJSON(result);
     }
 
+    // Get favorite campaigns of a customer
     public static ArrayList<Campaign> getFavoriteCampaigns(User user) throws Exception {
 
         return getFavoriteCampaigns(user.getEmail(), user.getPassword());
@@ -635,14 +816,16 @@ public class DatabaseManager {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
+
         String result = httpPost(SERVER_URL + "GetFavoriteCampaigns.php", urlParameters);
 
         if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
 
-        return parseCampaignsFromJSON(result);
+        return parseDetailedCampaignsFromJSON(result);
     }
 
+    // For Customers, to remove a store from favorites
     public static boolean removeFavoriteStore(User user, Store store) throws Exception {
 
         return removeFavoriteStore(user.getEmail(), user.getPassword(), store.getStoreId());
@@ -653,11 +836,13 @@ public class DatabaseManager {
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&store_id=" + URLEncoder.encode("" + storeId, "UTF-8");
+
         String result = httpPost(SERVER_URL + "RemoveFavoriteStore.php", urlParameters);
 
         return result.equals("success\n");
     }
 
+    // For Customers, to remove a campaign from favorites
     public static boolean removeFavoriteCampaign(User user, Campaign campaign) throws Exception {
 
         return removeFavoriteCampaign(user.getEmail(), user.getPassword(), campaign.getCampaignId());
@@ -669,30 +854,106 @@ public class DatabaseManager {
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&campaign_id=" + URLEncoder.encode("" + campaignId, "UTF-8");
+
         String result = httpPost(SERVER_URL + "RemoveFavoriteCampaign.php", urlParameters);
 
         return result.equals("success\n");
     }
 
+    // For Customers, to enable/disable notifications for nearby stores
     public static boolean enableLocationNotification(String email, String password,
                                                      boolean locationNotification) throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&locationNotification=" + URLEncoder.encode(locationNotification ? "1" : "0", "UTF-8");
+
         String result = httpPost(SERVER_URL + "EnableLocationNotification.php", urlParameters);
 
         return result.equals("success\n");
     }
 
+    // For Customers, to enable/disable notifications for campaign opportunities
     public static boolean enableCampaignNotification(String email, String password,
                                                      boolean campaignNotification) throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&campaignNotification=" + URLEncoder.encode(campaignNotification ? "1" : "0", "UTF-8");
+
         String result = httpPost(SERVER_URL + "EnableLocationNotification.php", urlParameters);
 
         return result.equals("success\n");
+    }
+
+    // Update profile information of customer
+    public boolean updateCustomer(String email, String password, Customer customer)
+            throws Exception {
+
+        String urlParameters = "currentemail=" + URLEncoder.encode(email, "UTF-8")
+                + "&currentpassword=" + URLEncoder.encode(password, "UTF-8")
+                + "&email=" + URLEncoder.encode(customer.getEmail(), "UTF-8")
+                + "&password=" + URLEncoder.encode(customer.getPassword(), "UTF-8")
+                + "&name=" + URLEncoder.encode(customer.getName(), "UTF-8")
+                + "&surname=" + URLEncoder.encode(customer.getSurname(), "UTF-8");
+
+        String result = httpPost(SERVER_URL + "UpdateCustomer.php", urlParameters);
+
+        return result.equals("success\n");
+    }
+
+    // Update email, password, name and categories of a store
+    public static boolean updateStore(String email, String password, Store store) throws Exception {
+
+        String urlParameters = "currentemail=" + URLEncoder.encode(email, "UTF-8")
+                + "&currentpassword=" + URLEncoder.encode(password, "UTF-8")
+                + "email=" + URLEncoder.encode(store.getEmail(), "UTF-8")
+                + "&password=" + URLEncoder.encode(store.getPassword(), "UTF-8")
+                + "&name=" + URLEncoder.encode(store.getName(), "UTF-8")
+                + "&category_count=" + URLEncoder.encode("" + store.getCategories().size(), "UTF-8");
+
+        for (int i = 0; i < store.getCategories().size(); i++) {
+            urlParameters += "&category_id_" + i + "=" +
+                    URLEncoder.encode("" + store.getCategories().get(i).getCategoryId(), "UTF-8");
+        }
+
+        String result = httpPost(SERVER_URL + "UpdateStore.php", urlParameters);
+
+        return result.equals("success\n");
+    }
+
+    // Update store logo
+    public static boolean updateStoreLogo(String email, String password, String logo) throws Exception {
+
+        // TODO
+
+        return false;
+    }
+
+    // Add a location to store
+    public static boolean addLocation(String email, String password, Location location)
+            throws Exception {
+
+        // TODO
+
+        return false;
+    }
+
+    // Remove a location from store
+    public static boolean removeLocation(String email, String password, int locationID)
+            throws Exception {
+
+        // TODO
+
+        return false;
+    }
+
+    // Update a location of a store
+    public static boolean updateLocation(String email, String password, int locationID, Location location)
+            throws Exception {
+
+        // TODO
+
+        return false;
     }
 }

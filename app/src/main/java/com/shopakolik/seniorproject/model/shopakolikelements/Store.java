@@ -11,6 +11,13 @@ public class Store extends User implements Serializable {
     private ArrayList<Location> locations;
     private ArrayList<Campaign> campaigns;
 
+    public Store(int storeId, String name, String logo) {
+        super(null, null);
+        this.storeId = storeId;
+        this.name = name;
+        this.logo = logo;
+    }
+
     public Store(String email, String password, String name, String logo, ArrayList<Category> categories,
                  ArrayList<Location> locations) {
         super(email, password);
@@ -32,7 +39,7 @@ public class Store extends User implements Serializable {
 
     public Store(int storeId, String name, String logo,
                  ArrayList<Category> categories, ArrayList<Location> locations) {
-        super(-1, null, null);
+        super(null, null);
         this.storeId = storeId;
         this.name = name;
         this.logo = logo;
