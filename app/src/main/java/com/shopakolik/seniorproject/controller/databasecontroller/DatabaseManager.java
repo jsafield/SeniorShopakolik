@@ -451,7 +451,7 @@ public class DatabaseManager {
         locationError = false;
         String logo = httpPostFile(SERVER_URL + "UploadStoreLogo.php", store.getLogo());
 
-        if(logo.equals("failure\n"))
+        if (logo.equals("failure\n"))
             return false;
 
         String urlParameters = "email=" + URLEncoder.encode(store.getEmail(), "UTF-8")
@@ -511,7 +511,7 @@ public class DatabaseManager {
 
         String image = httpPostFile(SERVER_URL + "UploadCampaignImage.php", campaign.getImage());
 
-        if(image.equals("failure\n"))
+        if (image.equals("failure\n"))
             return false;
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
@@ -550,6 +550,26 @@ public class DatabaseManager {
     }
 
     public static boolean updateCampaign(String email, String password, int campaignID, Campaign campaign)
+            throws Exception {
+
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&start_date="
+                + URLEncoder.encode(SQLDateFormat.format(campaign.getStartDate()), "UTF-8")
+                + "&end_date="
+                + URLEncoder.encode(SQLDateFormat.format(campaign.getEndDate()), "UTF-8")
+                + "&type=" + URLEncoder.encode("" + campaign.getType().ordinal(), "UTF-8")
+                + "&precondition=" + URLEncoder.encode(campaign.getCondition(), "UTF-8")
+                + "&details=" + URLEncoder.encode(campaign.getDetails(), "UTF-8")
+                + "&percentage=" + URLEncoder.encode("" + campaign.getPercentage(), "UTF-8")
+                + "&amount=" + URLEncoder.encode("" + campaign.getAmount(), "UTF-8");
+
+        String result = httpPost(SERVER_URL + "UpdateCampaign.php", urlParameters);
+
+        return result.equals("success\n");
+    }
+
+    public static boolean updateCampaignImage(String email, String password, int campaignID, Campaign campaign)
             throws Exception {
 
         // TODO
@@ -724,6 +744,41 @@ public class DatabaseManager {
             throw new Exception("Unexpected Error In PHP File");
 
         return parseCampaignsFromJSON(result);
+    }
+
+    public static Campaign getCampaign(String email, String password, int campaignID)
+            throws Exception {
+
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&campaign_id=" + URLEncoder.encode("" + campaignID, "UTF-8");
+
+        String result = httpPost(SERVER_URL + "GetCampaign.php", urlParameters);
+
+        if (result.equals("failure\n"))
+            throw new Exception("Unexpected Error In PHP File");
+
+        JSONObject jsonObject = new JSONObject(result);
+
+        int campaignId = jsonObject.getInt("campaign_id");
+        Date startDate = SQLDateFormat.parse(jsonObject.getString("start_date"));
+        Date endDate = SQLDateFormat.parse(jsonObject.getString("end_date"));
+        String image = jsonObject.getString("image");
+        CampaignType type = CampaignType.values()[jsonObject.getInt("type")];
+        String condition = jsonObject.getString("precondition");
+        String details = jsonObject.getString("details");
+        int storeId = jsonObject.getInt("store_id");
+
+        int percentage = 0;
+        if (type == CampaignType.DiscountPercentage)
+            percentage = jsonObject.getInt("percentage");
+
+        float amount = 0;
+        if (type == CampaignType.DiscountAmount || type == CampaignType.ShoppingVoucher)
+            amount = Float.parseFloat(jsonObject.getString("amount"));
+
+        return new Campaign(campaignId, startDate, endDate, image, type, condition,
+                details, percentage, amount, storeId);
     }
 
     // For Customers, to add stores as favorite
