@@ -2,9 +2,17 @@
     package="com.shopakolik.seniorproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-library android:name="com.google.android.maps" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -25,6 +33,10 @@
             android:label="Shopakolik"
             android:theme="@style/AppTheme" />
 
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.map"
+            android:label="Shopakolik"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.SignUpForCustomer"
@@ -87,6 +99,10 @@
         <service
             android:name=".controller.notificationcontroller.NotificationService"
             android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDFpxGJ88VeRUINed9sLjUKa_3gIar1pY8" />
 
     </application>
 

@@ -220,7 +220,42 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linearLayoutMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayoutAddress"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Map"
+                android:id="@+id/button"
+                android:layout_below="@+id/linearLayoutAddress"
+                android:layout_toRightOf="@+id/currentImageView"
+                android:layout_toEndOf="@+id/currentImageView"
+                android:onClick="mapOnClick"/>
+
+            <Button
+                android:id="@+id/location_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Current Location"
+                android:layout_alignEnd="@+id/linearLayoutAddress"
+                android:layout_alignLeft="@+id/linearLayoutAddress"
+                android:layout_alignRight="@+id/linearLayoutAddress"
+                android:layout_alignStart="@+id/linearLayoutAddress"
+                android:layout_below="@+id/linearLayoutAddress"
+                android:layout_centerHorizontal="true"
+                android:onClick="locationButtonOnClick"/>
+
+        </LinearLayout>
+
         <Button
+            android:id="@+id/submit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="?android:attr/buttonStyleSmall"
@@ -228,7 +263,7 @@
             android:layout_alignLeft="@+id/linearLayoutAddress"
             android:layout_alignRight="@+id/linearLayoutAddress"
             android:layout_alignStart="@+id/linearLayoutAddress"
-            android:layout_below="@+id/linearLayoutAddress"
+            android:layout_below="@+id/linearLayoutMap"
             android:text="Submit"
             android:onClick="submitShopButtonClick"/>
 
@@ -243,6 +278,8 @@
             android:layout_alignRight="@+id/categories_clickable"
             android:layout_alignStart="@+id/categories_clickable"
             android:visibility="gone"/>
+
+
 
 
     </RelativeLayout>

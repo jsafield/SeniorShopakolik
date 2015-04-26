@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
+import com.shopakolik.seniorproject.controller.gps.gpsController;
 import com.shopakolik.seniorproject.model.shopakolikelements.Category;
 import com.shopakolik.seniorproject.model.shopakolikelements.Location;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
@@ -43,10 +44,12 @@ public class SignUpForShop extends ActionBarActivity {
     private ImageView iv;
     public static String lastpath;
     private TextView email, password, name, re_password, location, address;
+    private float latitude = 0, longitude = 0;
     boolean valid = true;
     CharSequence text = "";
     private ArrayList<Location> locations = new ArrayList<Location>();
     public static ArrayList<Category> selectedCategories = new ArrayList<Category>();
+    gpsController gps;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -224,8 +227,7 @@ public class SignUpForShop extends ActionBarActivity {
         re_password = (TextView) findViewById(R.id.customer_re_password_value);
         location = (TextView) findViewById(R.id.shop_location_value);
         address = (TextView) findViewById(R.id.shop_address_value);
-        Location loc = new Location(location.getText().toString(),0,0,address.getText().toString());
-        Log.e("bgjv",location.getText().toString());
+        Location loc = new Location(location.getText().toString(),latitude,longitude,address.getText().toString());
         locations.add(loc);
 
         ProgressDialog.show(SignUpForShop.this, "", "Loading", true);
@@ -317,5 +319,35 @@ public class SignUpForShop extends ActionBarActivity {
                 }
             }
         }).start();
+    }
+
+    public void locationButtonOnClick(View view) {
+
+        // create class object
+        gps = new gpsController(SignUpForShop.this);
+
+        // check if GPS enabled
+        if(gps.canGetLocation()){
+
+            latitude = (float)gps.getLatitude();
+            longitude =(float)gps.getLongitude();
+            Log.e("latitude"," " + latitude);
+            Log.e("longitude", " " + longitude);
+
+            // \n is for new line
+            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
+    }
+
+    public void mapOnClick(View view) {
+        Intent intent = new Intent(this, map.class);
+        intent.putExtra("longitude",longitude);
+        intent.putExtra("latitude",latitude);
+        startActivity(intent);
     }
 }
