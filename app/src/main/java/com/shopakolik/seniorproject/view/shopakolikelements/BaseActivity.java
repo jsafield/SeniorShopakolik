@@ -40,15 +40,15 @@ public class BaseActivity extends ActionBarActivity {
         password = intent.getStringExtra("user_password");
         userType = intent.getStringExtra("user_type");
 
-        if(userType.equals("Customer"))
-            menuTitles = getResources().getStringArray(R.array.menu_array);
-        else if(userType.equals("Store")){
-            menuTitles = getResources().getStringArray(R.array.menu_shop_array);
-        }
+//        if(userType.equals("Customer"))
+           menuTitles = getResources().getStringArray(R.array.menu_array);
+//        else if(userType.equals("Store")){
+//            menuTitles = getResources().getStringArray(R.array.menu_shop_array);
+//        }
 
-        Log.e(email,password);
+       Log.e(email,password);
 
-        Log.e("userType",userType);
+ //       Log.e("userType",userType);
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -126,10 +126,10 @@ public class BaseActivity extends ActionBarActivity {
                 intent = new Intent(this, FavoriteCampaignPage.class);
                 break;
             case 2:
-                intent = new Intent(this, SettingsPage.class);
+                intent = new Intent(this, SignUpForShop.class);
                 break;
             case 3:
-                intent = new Intent(this, SignUpForCustomer.class);
+                intent = new Intent(this, BrandPage.class);
                 break;
             case 4:
                 intent = new Intent(this, ProfilePage.class);

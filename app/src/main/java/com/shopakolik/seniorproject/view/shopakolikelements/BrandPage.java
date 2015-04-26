@@ -127,7 +127,7 @@ public class BrandPage extends BaseActivity {
                                                                     @Override
                                                                     public void run() {
                                                                         try {
-                                                                            DatabaseManager.addFavoriteCampaign(email,password,store.getCampaigns().get(finalI).getCampaignId());
+                                                                            DatabaseManager.addFavoriteCampaign(email, password, store.getCampaigns().get(finalI).getCampaignId());
                                                                         } catch (Exception e) {
                                                                             e.printStackTrace();
                                                                         }

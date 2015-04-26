@@ -1,9 +1,6 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,11 +13,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +26,6 @@ import com.shopakolik.seniorproject.model.shopakolikelements.Store;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.locks.LockSupport;
 
 /**
  * Created by zeyno on 2/5/2015.
@@ -52,7 +45,7 @@ public class SignUpForShop extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signupshop);
-        iv=(ImageView)findViewById(R.id.imageView);
+        iv=(ImageView)findViewById(R.id.currentImageView);
     }
 
     public void categoriesClick(View view){

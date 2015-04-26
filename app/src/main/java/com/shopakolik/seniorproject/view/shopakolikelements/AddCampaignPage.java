@@ -2,7 +2,6 @@ package com.shopakolik.seniorproject.view.shopakolikelements;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -19,8 +18,6 @@ import android.widget.TextView;
 
 import com.shopakolik.seniorproject.R;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.util.Calendar;
 
@@ -29,8 +26,7 @@ import java.util.Calendar;
  */
 public class AddCampaignPage extends ActionBarActivity {
 
-    /// Biti? tarihi ve start tarihi arasindaki ili?ki belirlenecek biri digerinden once sonra olamaz
-    // photo yu kullanicinin yuklemesi saglanacak addphoto butonuna eklenecek
+    /// Bitis tarihi ve start tarihi arasindaki iliski belirlenecek biri digerinden once sonra olamaz
 
     private TextView campaignS, campaignF;
     private TextView description;
@@ -55,7 +51,7 @@ public class AddCampaignPage extends ActionBarActivity {
         campaignS = (TextView) findViewById(R.id.campaign_sdate);
         campaignF = (TextView) findViewById(R.id.campaign_fdate);
         description = (TextView) findViewById(R.id.description);
-        img=(ImageView)findViewById(R.id.imageView);
+        img=(ImageView)findViewById(R.id.currentImageView);
         // sayfaya baglanacak
         savebtn = (Button)findViewById(R.id.signUpShop);
 

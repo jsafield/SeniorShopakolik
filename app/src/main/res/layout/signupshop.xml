@@ -144,7 +144,7 @@
             android:text="Categories" />
 
         <Button
-            android:id="@+id/pickanimagebutton"
+            android:id="@+id/changeimage"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -158,21 +158,21 @@
 
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/currentImageView"
             android:layout_width="288dp"
             android:layout_height="288dp"
-            android:layout_alignEnd="@+id/pickanimagebutton"
-            android:layout_alignLeft="@+id/pickanimagebutton"
-            android:layout_alignRight="@+id/pickanimagebutton"
-            android:layout_alignStart="@+id/pickanimagebutton"
-            android:layout_below="@+id/pickanimagebutton"
+            android:layout_alignEnd="@+id/changeimage"
+            android:layout_alignLeft="@+id/changeimage"
+            android:layout_alignRight="@+id/changeimage"
+            android:layout_alignStart="@+id/changeimage"
+            android:layout_below="@+id/changeimage"
             android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/linearLayoutLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageView"
+            android:layout_below="@+id/currentImageView"
             android:layout_centerHorizontal="true"
             android:orientation="horizontal">
 

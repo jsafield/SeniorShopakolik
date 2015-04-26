@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/scroll_layout">
+    android:id="@+id/update_campaign_layout">
 
 
     <RelativeLayout
@@ -162,7 +161,7 @@
             android:layout_alignStart="@+id/txt_layout"
             android:layout_below="@+id/txt_layout"
             android:onClick="pickImageClicked"
-            android:text="Pick an image" />
+            android:text="Change the Image" />
 
 
         <ImageView

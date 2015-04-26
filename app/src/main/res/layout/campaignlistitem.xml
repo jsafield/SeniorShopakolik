@@ -23,7 +23,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="00:00:00"
             android:id="@+id/dateRemainer"
-            android:gravity="end" />
+            android:gravity="end"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -43,6 +44,7 @@
             android:id="@+id/campimage"
 
             />
+
     </LinearLayout>
 
     <LinearLayout
@@ -75,12 +77,30 @@
             android:textOff="LIKE" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
             android:id="@+id/features"
-            android:textStyle="italic" />
+            android:layout_weight="1"
+            android:textStyle="italic"
+            android:gravity="center_vertical" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/deleteimage"
+            android:layout_gravity="center_vertical"
+            android:src="@android:drawable/ic_menu_delete"
+            android:visibility="gone" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/update"
+            android:layout_gravity="center_vertical"
+            android:src="@android:drawable/ic_menu_upload"
+            android:visibility="gone" />
 
 
     </LinearLayout>
