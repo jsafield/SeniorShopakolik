@@ -105,17 +105,150 @@
 
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/campaignType"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/txt_layout"
+            android:layout_alignLeft="@+id/txt_layout"
+            android:layout_alignRight="@+id/txt_layout"
+            android:layout_alignStart="@+id/txt_layout"
+            android:layout_below="@+id/campaign2_layout"
+            android:orientation="horizontal">
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/groupRadio">
+
+                <RadioButton
+                    android:id="@+id/sales"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Discount"
+                    android:checked="false"
+                    android:textSize="12dp" />
+
+                <RadioButton
+                    android:id="@+id/shoppingvoucher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ShoppingVoucher"
+                    android:textSize="12dp" />
+
+                <RadioButton
+                    android:id="@+id/otherbutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="other"
+                    android:textSize="12dp" />
+            </RadioGroup>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/amount_percentage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/campaign2_layout"
+            android:layout_alignLeft="@+id/campaign2_layout"
+            android:layout_alignRight="@+id/campaign2_layout"
+            android:layout_alignStart="@+id/campaign2_layout"
+            android:layout_below="@+id/campaignType"
+            android:orientation="horizontal">
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/radio_group">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/percentageRadioButton"/>
+
+                <EditText
+                    android:id="@+id/percentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="4"
+                    android:gravity="right" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="%"
+                    android:textIsSelectable="false"
+                    android:textSize="25dp" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/amountRadioButton"/>
+
+                <EditText
+                    android:id="@+id/amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="4"
+                    android:gravity="right" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="TL"
+                    android:textIsSelectable="false"
+                    android:textSize="18dp"></TextView>
+            </RadioGroup>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/campaign2_layout"
+            android:layout_alignLeft="@+id/campaign2_layout"
+            android:layout_alignRight="@+id/campaign2_layout"
+            android:layout_alignStart="@+id/campaign2_layout"
+            android:layout_below="@+id/amount_percentage"
+            android:id="@+id/shopping_voucher"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Amount : "
+                android:gravity="center_vertical" />
+            <EditText
+                android:id="@+id/voucher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="4" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="TL : "
+                android:gravity="center_vertical"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/description_Layout"
-            android:layout_below="@+id/campaign2_layout"
+            android:layout_below="@+id/shopping_voucher"
             android:layout_alignRight="@+id/campaign2_layout"
             android:layout_alignEnd="@+id/campaign2_layout"
             android:layout_alignLeft="@+id/campaign2_layout"
-            android:layout_alignStart="@+id/campaign2_layout">
+            android:layout_alignStart="@+id/campaign2_layout"
+            >
 
             <TextView
                 android:id="@+id/description"
@@ -172,8 +305,7 @@
             android:layout_alignLeft="@+id/changeimage"
             android:layout_alignRight="@+id/changeimage"
             android:layout_alignStart="@+id/changeimage"
-            android:layout_below="@+id/changeimage"
-            android:visibility="gone" />
+            android:layout_below="@+id/changeimage" />
 
         <LinearLayout
             android:orientation="vertical"

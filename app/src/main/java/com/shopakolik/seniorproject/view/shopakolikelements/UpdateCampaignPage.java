@@ -15,11 +15,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.model.shopakolikelements.Campaign;
+import com.shopakolik.seniorproject.model.shopakolikelements.CampaignType;
 
 import java.io.File;
 import java.net.URL;
@@ -30,7 +34,7 @@ import java.util.Calendar;
  */
 public class UpdateCampaignPage extends ActionBarActivity {
 
-    private TextView startdate, enddate;
+    private TextView startdate, enddate, percentage, amount,voucher,descrip;
     private TextView description;
     private String path;
     private Button saveButton;
@@ -39,11 +43,12 @@ public class UpdateCampaignPage extends ActionBarActivity {
     private String password;
     private int campaignId;
     private boolean isImageChanged = false;
-
+    private RadioGroup radioButtonType;
     private int year;
     private int month;
     private int day;
-
+    private LinearLayout amountPercentage, shoppingVoucher;
+    private  RadioButton radio1, radio2, radio3;
     static final int DATE_DIALOG_ID = 999;
     static final int DATE_DIALOG_ID_2 = 666;
 
@@ -61,11 +66,41 @@ public class UpdateCampaignPage extends ActionBarActivity {
         description = (TextView) findViewById(R.id.description);
         img = (ImageView) findViewById(R.id.currentImageView);
         saveButton = (Button) findViewById(R.id.save);
+        radioButtonType = (RadioGroup) findViewById(R.id.groupRadio);
+        radio1 = (RadioButton)findViewById(R.id.sales);
+        radio2 = (RadioButton)findViewById(R.id.shoppingvoucher);
+        radio3 = (RadioButton)findViewById(R.id.otherbutton);
+
+        percentage = (TextView) findViewById(R.id.percentage);
+        amount = (TextView)findViewById(R.id.amount);
+        voucher = (TextView) findViewById(R.id.voucher);
+        descrip = (TextView) findViewById(R.id.description_txt);
+
+        amountPercentage = (LinearLayout) findViewById(R.id.amount_percentage);
+        shoppingVoucher = (LinearLayout) findViewById(R.id.shopping_voucher);
 
         email = intent.getStringExtra("user_email");
         password = intent.getStringExtra("user_password");
         campaignId = intent.getIntExtra("campaignID", 0);
 
+        radioButtonType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                Log.e("onCheckedChanged", "onCheckedChanged");
+                if (checkedId == R.id.sales) {
+                    amountPercentage.setVisibility(View.VISIBLE);
+                    shoppingVoucher.setVisibility(View.GONE);
+
+                } else if (checkedId == R.id.shoppingvoucher) {
+                    amountPercentage.setVisibility(View.GONE);
+                    shoppingVoucher.setVisibility(View.VISIBLE);
+                } else if (checkedId == R.id.otherbutton) {
+                    shoppingVoucher.setVisibility(View.GONE);
+                    amountPercentage.setVisibility(View.GONE);
+                }
+
+            }
+        });
 
         new Thread(new Runnable() {
             @Override
@@ -73,7 +108,7 @@ public class UpdateCampaignPage extends ActionBarActivity {
                 try {
                     Log.e("campaignID : ","" +  campaignId);
                     final Campaign campaign = DatabaseManager.getCampaign(email, password, campaignId);
-
+                    final CampaignType campaignType= campaign.getType();
                     String campImageURL = DatabaseManager.getServerUrl() + "Images/CampaignImages/" + campaign.getImage();
                     URL imageURL = new URL(campImageURL);
                     final Bitmap imageCamp = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
@@ -88,6 +123,46 @@ public class UpdateCampaignPage extends ActionBarActivity {
 
                             img.setImageBitmap(imageCamp);
                             img.setVisibility(View.VISIBLE);
+
+                            if(campaignType.equals(CampaignType.DiscountAmount) || campaignType.equals(CampaignType.DiscountPercentage)){
+                                radio1.setChecked(true);
+                                Log.e("",campaignType.toString());
+                                amountPercentage.setVisibility(View.VISIBLE);
+                                shoppingVoucher.setVisibility(View.GONE);
+                            }
+                            else if(campaignType.equals(CampaignType.ShoppingVoucher)){
+                                radio2.setChecked(true);
+                                amountPercentage.setVisibility(View.GONE);
+                                shoppingVoucher.setVisibility(View.VISIBLE);
+
+                            }else if(campaignType.equals(CampaignType.Other)){
+                                radio3.setChecked(true);
+                                shoppingVoucher.setVisibility(View.GONE);
+                                amountPercentage.setVisibility(View.GONE);
+                            }
+                            if(campaignType.equals(CampaignType.DiscountAmount))
+                                amount.setText( "" + campaign.getAmount());
+                            else if(campaignType.equals(CampaignType.DiscountPercentage))
+                                percentage.setText(""+ campaign.getPercentage());
+                            else if(campaignType.equals(CampaignType.ShoppingVoucher)){
+                                voucher.setText("" + campaign.getAmount());
+                            }
+
+                            descrip.setText(campaign.getDetails());
+
+//                            saveButton.setOnClickListener(new View.OnClickListener(){
+//                                public void onClick(View v)
+//                                {
+//                                    if(isImageChanged){
+//                                        campaign.setDetails(descrip.getText().toString());
+//
+//                                    }
+//                                    else
+//                                    {
+//
+//                                    }
+//                                }
+//                            });
                         }
                     });
 
@@ -98,19 +173,7 @@ public class UpdateCampaignPage extends ActionBarActivity {
         }).start();
 
 
-        saveButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v)
-            {
-                if(isImageChanged)
-                {
 
-                }
-                else
-                {
-
-                }
-            }
-        });
     }
 
     public void pickImageClicked(View view) {
