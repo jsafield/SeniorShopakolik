@@ -34,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
     public static final String MyPREFERENCES = "MyPrefs";
     public static final String Email = "emailKey";
     public static final String Password = "passwordKey";
+    public static String PACKAGE_NAME;
 
     SharedPreferences sharedpreferences;
 
@@ -41,6 +42,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PACKAGE_NAME = getApplicationContext().getPackageName();
 
 
         Button signInButton = (Button) findViewById(R.id.signInButton);
