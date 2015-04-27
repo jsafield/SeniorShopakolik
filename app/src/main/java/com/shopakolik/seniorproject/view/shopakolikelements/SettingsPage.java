@@ -1,6 +1,8 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
 import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.shopakolik.seniorproject.R;
+import com.shopakolik.seniorproject.controller.notificationcontroller.AlarmReceiver;
 import com.shopakolik.seniorproject.controller.notificationcontroller.NotificationService;
 
 /**
@@ -31,14 +34,26 @@ public class SettingsPage extends BaseActivity{
         final Context context = this;
 
         notifSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            private PendingIntent pendingIntent;
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
                 {
-
+                    Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+                    alarmIntent.putExtra("email", email);
+                    alarmIntent.putExtra("password", password);
+                    pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
+                    AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    int interval = 24*60*1000; // repetition interval
+                    manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
                 }else
                 {
-
+                    Intent intentstop = new Intent(context, AlarmReceiver.class);
+                    PendingIntent senderstop = PendingIntent.getBroadcast(context,
+                            1234567, intentstop, 0);
+                    AlarmManager alarmManagerstop = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    alarmManagerstop.cancel(senderstop);
                 }
             }
         });
