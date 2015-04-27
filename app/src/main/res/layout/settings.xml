@@ -26,7 +26,8 @@
             android:text="New Switch"
             android:id="@+id/notification_switch"
             android:layout_alignLeft = "@+id/notification"
-            android:layout_alignEnd = "@+id/notification"/>
+            android:layout_alignEnd = "@+id/notification"
+            android:checked="false" />
 
     </LinearLayout>
 
@@ -53,7 +54,8 @@
             android:text="New Switch"
             android:id="@+id/location_notification_switch"
             android:layout_alignLeft = "@+id/locationNotification"
-            android:layout_alignEnd = "@+id/locationNotification"/>
+            android:layout_alignEnd = "@+id/locationNotification"
+            android:checked="false" />
 
     </LinearLayout>
 
