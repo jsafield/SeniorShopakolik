@@ -62,8 +62,8 @@ public class UpdateCampaignPage extends ActionBarActivity {
         img = (ImageView) findViewById(R.id.currentImageView);
         saveButton = (Button) findViewById(R.id.save);
 
-        email = intent.getStringExtra("email");
-        password = intent.getStringExtra("password");
+        email = intent.getStringExtra("user_email");
+        password = intent.getStringExtra("user_password");
         campaignId = intent.getIntExtra("campaignID", 0);
 
 

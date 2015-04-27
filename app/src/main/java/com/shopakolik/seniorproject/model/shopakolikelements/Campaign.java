@@ -27,6 +27,19 @@ public class Campaign extends Store {
         this.amount = amount;
         this.storeId = storeId;
     }
+    public Campaign(Date startDate, Date endDate, String image, CampaignType type, String condition,
+                    String details, int percentage, float amount) {
+        super(-1, null, null);
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.image = image;
+        this.type = type;
+        this.condition = condition;
+        this.details = details;
+        this.percentage = percentage;
+        this.amount = amount;
+        this.storeId = storeId;
+    }
 
     public Campaign(int campaignId, Date startDate, Date endDate, String image, CampaignType type,
                     String condition, String details, int percentage, float amount, int storeId) {

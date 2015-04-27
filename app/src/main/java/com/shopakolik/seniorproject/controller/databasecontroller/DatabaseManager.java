@@ -513,6 +513,16 @@ public class DatabaseManager {
 
         if (image.equals("failure\n"))
             return false;
+        Log.e ("email ", email);
+        Log.e ("password ", password);
+        Log.e ("getStartDate() ", SQLDateFormat.format(campaign.getStartDate()));
+        Log.e ("getEndDate ", SQLDateFormat.format(campaign.getEndDate()));
+        Log.e ("image ", image);
+        Log.e ("getType ", ""+campaign.getType());
+        Log.e ("Condition ", campaign.getCondition());
+        Log.e ("getDetails ", campaign.getDetails());
+        Log.e ("getPercentage ", ""+campaign.getPercentage());
+        Log.e ("getAmount ", ""+campaign.getPercentage());
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")

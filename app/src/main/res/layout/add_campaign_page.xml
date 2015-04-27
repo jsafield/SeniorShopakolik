@@ -141,7 +141,8 @@
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/radioGroupType">
 
                 <RadioButton
                     android:id="@+id/sales"
@@ -156,14 +157,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ShoppingVoucher"
-                    android:textSize="12dp" />
+                    android:textSize="12dp"
+                    android:checked="false" />
 
                 <RadioButton
                     android:id="@+id/otherbutton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="other"
-                    android:textSize="12dp" />
+                    android:textSize="12dp"
+                    android:checked="false" />
             </RadioGroup>
 
 
@@ -179,16 +182,19 @@
             android:layout_alignStart="@+id/campaign2_layout"
             android:layout_below="@+id/campaignType"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/radioButton">
 
                 <RadioButton
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:id="@+id/percentageButton"
+                    />
 
                 <EditText
                     android:id="@+id/percentage"
@@ -207,7 +213,8 @@
 
                 <RadioButton
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:id="@+id/amountButton"/>
 
                 <EditText
                     android:id="@+id/amount"
@@ -236,7 +243,8 @@
             android:layout_below="@+id/amount_percentage"
             android:id="@+id/shopping_voucher"
             android:orientation="horizontal"
-            android:weightSum="1">
+            android:weightSum="1"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -256,6 +264,30 @@
                 android:textSize="18dp"/>
 
         </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/campaignRule"
+            android:layout_alignEnd="@+id/campaign2_layout"
+            android:layout_alignLeft="@+id/campaign2_layout"
+            android:layout_alignRight="@+id/campaign2_layout"
+            android:layout_alignStart="@+id/campaign2_layout"
+            android:layout_below="@+id/shopping_voucher">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precondition :"
+                android:id="@+id/precondition"
+                android:gravity="center_vertical" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/precondition_text"
+                android:ems="7"/>
+        </LinearLayout>
 
 
         <LinearLayout
@@ -266,7 +298,7 @@
             android:layout_alignLeft="@+id/campaign2_layout"
             android:layout_alignRight="@+id/campaign2_layout"
             android:layout_alignStart="@+id/campaign2_layout"
-            android:layout_below="@+id/shopping_voucher"
+            android:layout_below="@+id/campaignRule"
             android:orientation="horizontal">
 
             <TextView
@@ -349,6 +381,8 @@
                 android:layout_marginBottom="16dp"
                 android:text="SAVE" />
         </LinearLayout>
+
+
 
     </RelativeLayout>
 </ScrollView>
