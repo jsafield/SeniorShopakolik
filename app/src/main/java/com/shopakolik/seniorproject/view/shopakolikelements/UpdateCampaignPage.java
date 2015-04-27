@@ -60,6 +60,7 @@ public class UpdateCampaignPage extends ActionBarActivity {
         enddate = (TextView) findViewById(R.id.campaign_fdate);
         description = (TextView) findViewById(R.id.description);
         img = (ImageView) findViewById(R.id.currentImageView);
+        saveButton = (Button) findViewById(R.id.save);
 
         email = intent.getStringExtra("email");
         password = intent.getStringExtra("password");
