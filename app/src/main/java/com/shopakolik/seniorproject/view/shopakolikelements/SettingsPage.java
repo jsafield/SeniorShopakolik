@@ -65,10 +65,10 @@ public class SettingsPage extends BaseActivity{
                     Intent intent = new Intent(context, NotificationService.class);
                     intent.putExtra("email", email);
                     intent.putExtra("password", password);
-                    startService(intent);
+                    context.startService(intent);
                 }else if(!isChecked && isMyServiceRunning(NotificationService.class))
                 {
-                    stopService(new Intent(context, NotificationService.class));
+                    context.stopService(new Intent(context, NotificationService.class));
                 }
             }
         });
