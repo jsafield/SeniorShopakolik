@@ -559,15 +559,24 @@ public class DatabaseManager {
         return result.equals("success\n");
     }
 
-    public static boolean updateCampaign(String email, String password, int campaignID, Campaign campaign)
-            throws Exception {
+    public static boolean updateCampaign(String email, String password, Campaign campaign,
+                                         String previousImage) throws Exception {
+
+        String image = httpPostFile(SERVER_URL + "UploadCampaignImage.php", campaign.getImage());
+
+        if (image.equals("failure\n"))
+            return false;
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&campaign_id=" + URLEncoder.encode("" + campaign.getCampaignId(), "UTF-8")
                 + "&start_date="
                 + URLEncoder.encode(SQLDateFormat.format(campaign.getStartDate()), "UTF-8")
                 + "&end_date="
                 + URLEncoder.encode(SQLDateFormat.format(campaign.getEndDate()), "UTF-8")
+                + "&isImageChanged=1"
+                + "&image=" + URLEncoder.encode(image, "UTF-8")
+                + "&previmage=" + URLEncoder.encode(previousImage, "UTF-8")
                 + "&type=" + URLEncoder.encode("" + campaign.getType().ordinal(), "UTF-8")
                 + "&precondition=" + URLEncoder.encode(campaign.getCondition(), "UTF-8")
                 + "&details=" + URLEncoder.encode(campaign.getDetails(), "UTF-8")
@@ -579,12 +588,26 @@ public class DatabaseManager {
         return result.equals("success\n");
     }
 
-    public static boolean updateCampaignImage(String email, String password, int campaignID, Campaign campaign)
+    public static boolean updateCampaign(String email, String password, Campaign campaign)
             throws Exception {
 
-        // TODO
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&campaign_id=" + URLEncoder.encode("" + campaign.getCampaignId(), "UTF-8")
+                + "&start_date="
+                + URLEncoder.encode(SQLDateFormat.format(campaign.getStartDate()), "UTF-8")
+                + "&end_date="
+                + URLEncoder.encode(SQLDateFormat.format(campaign.getEndDate()), "UTF-8")
+                + "&isImageChanged=0"
+                + "&type=" + URLEncoder.encode("" + campaign.getType().ordinal(), "UTF-8")
+                + "&precondition=" + URLEncoder.encode(campaign.getCondition(), "UTF-8")
+                + "&details=" + URLEncoder.encode(campaign.getDetails(), "UTF-8")
+                + "&percentage=" + URLEncoder.encode("" + campaign.getPercentage(), "UTF-8")
+                + "&amount=" + URLEncoder.encode("" + campaign.getAmount(), "UTF-8");
 
-        return false;
+        String result = httpPost(SERVER_URL + "UpdateCampaign.php", urlParameters);
+
+        return result.equals("success\n");
     }
 
     // To get store categories
@@ -973,9 +996,10 @@ public class DatabaseManager {
 
         String urlParameters = "currentemail=" + URLEncoder.encode(email, "UTF-8")
                 + "&currentpassword=" + URLEncoder.encode(password, "UTF-8")
-                + "email=" + URLEncoder.encode(store.getEmail(), "UTF-8")
+                + "$email=" + URLEncoder.encode(store.getEmail(), "UTF-8")
                 + "&password=" + URLEncoder.encode(store.getPassword(), "UTF-8")
                 + "&name=" + URLEncoder.encode(store.getName(), "UTF-8")
+                + "&isLogoChanged=0"
                 + "&category_count=" + URLEncoder.encode("" + store.getCategories().size(), "UTF-8");
 
         for (int i = 0; i < store.getCategories().size(); i++) {
@@ -989,37 +1013,76 @@ public class DatabaseManager {
     }
 
     // Update store logo
-    public static boolean updateStoreLogo(String email, String password, String logo) throws Exception {
+    public static boolean updateStore(String email, String password, Store store, String previousLogo) throws Exception {
 
-        // TODO
+        String logo = httpPostFile(SERVER_URL + "UploadStoreLogo.php", store.getLogo());
 
-        return false;
+        if (logo.equals("failure\n"))
+            return false;
+
+        String urlParameters = "currentemail=" + URLEncoder.encode(email, "UTF-8")
+                + "&currentpassword=" + URLEncoder.encode(password, "UTF-8")
+                + "&email=" + URLEncoder.encode(store.getEmail(), "UTF-8")
+                + "&password=" + URLEncoder.encode(store.getPassword(), "UTF-8")
+                + "&name=" + URLEncoder.encode(store.getName(), "UTF-8")
+                + "&isLogoChanged=1"
+                + "&logo=" + URLEncoder.encode(logo, "UTF-8")
+                + "&prevlogo=" + URLEncoder.encode(previousLogo, "UTF-8")
+                + "&category_count=" + URLEncoder.encode("" + store.getCategories().size(), "UTF-8");
+
+        for (int i = 0; i < store.getCategories().size(); i++) {
+            urlParameters += "&category" + i + "=" +
+                    URLEncoder.encode("" + store.getCategories().get(i).getCategoryId(), "UTF-8");
+        }
+
+        String result = httpPost(SERVER_URL + "UpdateStore.php", urlParameters);
+
+        return result.equals("success\n");
     }
 
     // Add a location to store
     public static boolean addLocation(String email, String password, Location location)
             throws Exception {
 
-        // TODO
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&location=" + URLEncoder.encode(location.getLocation(), "UTF-8")
+                + "&latitude=" + URLEncoder.encode(""+location.getLatitude(), "UTF-8")
+                + "&longitude=" + URLEncoder.encode(""+location.getLongitude(), "UTF-8")
+                + "&address=" + URLEncoder.encode(location.getAddress(), "UTF-8");
 
-        return false;
+        String result = httpPost(SERVER_URL + "AddLocation.php", urlParameters);
+
+        return result.equals("success\n");
     }
 
     // Remove a location from store
     public static boolean removeLocation(String email, String password, int locationID)
             throws Exception {
 
-        // TODO
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&location_id=" + URLEncoder.encode(""+locationID, "UTF-8");
 
-        return false;
+        String result = httpPost(SERVER_URL + "RemoveLocation.php", urlParameters);
+
+        return result.equals("success\n");
     }
 
     // Update a location of a store
-    public static boolean updateLocation(String email, String password, int locationID, Location location)
+    public static boolean updateLocation(String email, String password, Location location)
             throws Exception {
 
-        // TODO
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&location_id=" + URLEncoder.encode(""+location.getLocationId(), "UTF-8")
+                + "&location=" + URLEncoder.encode(location.getLocation(), "UTF-8")
+                + "&latitude=" + URLEncoder.encode(""+location.getLatitude(), "UTF-8")
+                + "&longitude=" + URLEncoder.encode(""+location.getLongitude(), "UTF-8")
+                + "&address=" + URLEncoder.encode(location.getAddress(), "UTF-8");
 
-        return false;
+        String result = httpPost(SERVER_URL + "AddLocation.php", urlParameters);
+
+        return result.equals("success\n");
     }
 }
