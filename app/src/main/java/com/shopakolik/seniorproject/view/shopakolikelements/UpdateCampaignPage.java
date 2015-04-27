@@ -98,19 +98,19 @@ public class UpdateCampaignPage extends ActionBarActivity {
         }).start();
 
 
-        saveButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v)
-            {
-                if(isImageChanged)
-                {
-
-                }
-                else
-                {
-
-                }
-            }
-        });
+//        saveButton.setOnClickListener(new View.OnClickListener(){
+//            public void onClick(View v)
+//            {
+//                if(isImageChanged)
+//                {
+//
+//                }
+//                else
+//                {
+//
+//                }
+//            }
+//        });
     }
 
     public void pickImageClicked(View view) {
