@@ -17,28 +17,26 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.shopakolik.seniorproject.R;
+import com.shopakolik.seniorproject.model.shopakolikelements.Location;
 
 import java.util.ArrayList;
 
 public class map extends Activity {
-    int locCount;
-    float longitude,latitude;
     private GoogleMap googleMap;
-    ArrayList<MarkerOptions> markerList = new ArrayList<>();
+    private float[] latitudes;
+    private float[] longitudes;
+    private String[] locations;
+    private String[] addresses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map);
         Intent intent = getIntent();
-        locCount = intent.getIntExtra("location_count", 0);
-        for(int i = 0; i < locCount; i++){
-            longitude = intent.getFloatExtra("longitude_" + i, 0);
-            latitude = intent.getFloatExtra("latitude_" + i, 0);
-            // create marker
-            MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Hello Maps ");
-            markerList.add(marker);
-        }
+        latitudes = intent.getFloatArrayExtra("latitudes");
+        longitudes = intent.getFloatArrayExtra("longitudes");
+        locations = intent.getStringArrayExtra("locations");
+        addresses = intent.getStringArrayExtra("addresses");
 
         try {
             // Loading map
@@ -62,21 +60,29 @@ public class map extends Activity {
                         .show();
             }
             else{
-                // create marker
-                MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Hello Maps ");
                 // adding marker
-                googleMap.addMarker(marker);
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latitude, longitude)).zoom(12).build();
+                for(int i=0; i<latitudes.length; i++) {
+                    // create marker
+                    MarkerOptions marker = new MarkerOptions().position(new LatLng(latitudes[i],
+                            longitudes[i])).title(locations[i]).snippet(addresses[i]);
+                    googleMap.addMarker(marker);
+                }
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(
+                        new LatLng(latitudes[0], longitudes[0])).zoom(12).build();
 
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         }
         else{
             // adding marker
-            for(int i=0; i<markerList.size(); i++)
-                googleMap.addMarker(markerList.get(i));
-
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latitude, longitude)).zoom(12).build();
+            for(int i=0; i<latitudes.length; i++) {
+                // create marker
+                MarkerOptions marker = new MarkerOptions().position(new LatLng(latitudes[i],
+                        longitudes[i])).title(locations[i]).snippet(addresses[i]);
+                googleMap.addMarker(marker);
+            }
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(
+                    new LatLng(latitudes[0], longitudes[0])).zoom(12).build();
 
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }

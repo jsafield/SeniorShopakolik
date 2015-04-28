@@ -34,13 +34,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by zeyno on 2/5/2015.
  */
 public class SignUpForShop extends ActionBarActivity {
 
-    private static final int SELECTED_PICTURE=1;
+    private static final int SELECTED_PICTURE = 1;
     private ImageView iv;
     public static String lastpath;
     private TextView email, password, name, re_password, location, address;
@@ -55,10 +56,10 @@ public class SignUpForShop extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signupshop);
-        iv=(ImageView)findViewById(R.id.currentImageView);
+        iv = (ImageView) findViewById(R.id.currentImageView);
     }
 
-    public void categoriesClick(View view){
+    public void categoriesClick(View view) {
 
         // Show DialogFragment
         CategoryPage categoryPage = new CategoryPage();
@@ -66,7 +67,8 @@ public class SignUpForShop extends ActionBarActivity {
 
 
     }
-//    public void showSelectedCategories(){
+
+    //    public void showSelectedCategories(){
 //        TextView textView = (TextView) findViewById(R.id.textView);
 //        String sentence = " ";
 //        String sent =" ";
@@ -80,7 +82,7 @@ public class SignUpForShop extends ActionBarActivity {
 //        textView.setVisibility(View.VISIBLE);
 //
 //    }
-    public void pickimageclicked(View view){
+    public void pickimageclicked(View view) {
 
         // To open up a gallery browser
         Intent intent = new Intent();
@@ -102,24 +104,23 @@ public class SignUpForShop extends ActionBarActivity {
                     byte[] inputData = getBytes(is);
 
                     String path = getRealPathFromURI(currImageURI);
-                    File imgFile = new  File(path);
+                    File imgFile = new File(path);
 
-                    if(imgFile.exists()){
+                    if (imgFile.exists()) {
                         Bitmap myBitmap = decodeSampledBitmapFromResource(inputData, 100, 100);
                         saveToCacheFile(myBitmap);
                         iv.setImageBitmap(myBitmap);
                         iv.setVisibility(View.VISIBLE);
                     }
 
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
     }
 
-    private byte[] getBytes(InputStream inputStream) throws IOException{
+    private byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];
@@ -136,7 +137,7 @@ public class SignUpForShop extends ActionBarActivity {
             path = new File(Environment.getExternalStorageDirectory() + "/shopakolik/");
             //path = new File("/storage/extSdCard/" + "shopakolik/");
             boolean b = path.mkdirs();
-            Log.e("boolean if file created"," " + b);
+            Log.e("boolean if file created", " " + b);
         } else {
             path = Environment.getDataDirectory();
         }
@@ -151,16 +152,17 @@ public class SignUpForShop extends ActionBarActivity {
     }
 
     public static void saveToCacheFile(Bitmap bmp) {
-        saveToFile(getCacheFilename(),bmp);
+        saveToFile(getCacheFilename(), bmp);
     }
 
-    public static void saveToFile(String filename,Bitmap bmp) {
+    public static void saveToFile(String filename, Bitmap bmp) {
         try {
             FileOutputStream out = new FileOutputStream(filename);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.flush();
             out.close();
-        } catch(Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     public static boolean hasSDCard() { // SD????????
@@ -191,7 +193,7 @@ public class SignUpForShop extends ActionBarActivity {
         return inSampleSize;
     }
 
-    public static Bitmap decodeSampledBitmapFromResource( byte[] inputData,int reqWidth, int reqHeight) {
+    public static Bitmap decodeSampledBitmapFromResource(byte[] inputData, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -227,7 +229,7 @@ public class SignUpForShop extends ActionBarActivity {
         re_password = (TextView) findViewById(R.id.customer_re_password_value);
         location = (TextView) findViewById(R.id.shop_location_value);
         address = (TextView) findViewById(R.id.shop_address_value);
-        Location loc = new Location(location.getText().toString(),latitude,longitude,address.getText().toString());
+        Location loc = new Location(location.getText().toString(), latitude, longitude, address.getText().toString());
         locations.add(loc);
 
         ProgressDialog.show(SignUpForShop.this, "", "Loading", true);
@@ -240,23 +242,20 @@ public class SignUpForShop extends ActionBarActivity {
                     int index = email.getText().toString().indexOf('@');
                     int index2 = email.getText().toString().indexOf(".com");
                     if (index > 0 && index2 > 0) {
-                        Log.e("bgjv",email.getText().toString());
-                        if (password.getText().toString().equals(re_password.getText().toString()) && password.length() > 8 && password.length() < 16 ) {
-                            if (lastpath == null){
+                        Log.e("bgjv", email.getText().toString());
+                        if (password.getText().toString().equals(re_password.getText().toString()) && password.length() > 8 && password.length() < 16) {
+                            if (lastpath == null) {
                                 text = "Please select a logo";
                                 valid = false;
-                            }
-                            else {
-                                if (selectedCategories.size() == 0){
+                            } else {
+                                if (selectedCategories.size() == 0) {
                                     text = "Please select at least one category";
                                     valid = false;
-                                }
-                                else {
-                                    if (location.getText().toString().matches("") || address.getText().toString().matches("")){
+                                } else {
+                                    if (location.getText().toString().matches("") || address.getText().toString().matches("")) {
                                         text = "Please set the location of shop";
                                         valid = false;
-                                    }
-                                    else {
+                                    } else {
                                         Store store = new Store(email.getText().toString(), password.getText().toString(), name.getText().toString(), lastpath, selectedCategories, locations);
                                         result = DatabaseManager.addStore(store);
                                         if (result) {
@@ -327,16 +326,17 @@ public class SignUpForShop extends ActionBarActivity {
         gps = new gpsController(SignUpForShop.this);
 
         // check if GPS enabled
-        if(gps.canGetLocation()){
+        if (gps.canGetLocation()) {
 
-            latitude = (float)gps.getLatitude();
-            longitude =(float)gps.getLongitude();
-            Log.e("latitude"," " + latitude);
+            latitude = (float) gps.getLatitude();
+            longitude = (float) gps.getLongitude();
+            Log.e("latitude", " " + latitude);
             Log.e("longitude", " " + longitude);
 
             // \n is for new line
-            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-        }else{
+            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: "
+                    + longitude, Toast.LENGTH_LONG).show();
+        } else {
             // can't get location
             // GPS or Network is not enabled
             // Ask user to enable GPS/network in settings
@@ -346,9 +346,10 @@ public class SignUpForShop extends ActionBarActivity {
 
     public void mapOnClick(View view) {
         Intent intent = new Intent(this, map.class);
-        intent.putExtra("location_count",1);
-        intent.putExtra("longitude_0",longitude);
-        intent.putExtra("latitude_0",latitude);
+        intent.putExtra("latitudes", new float[] {latitude});
+        intent.putExtra("longitudes", new float[] {longitude});
+        intent.putExtra("locations", new String[] {"Your Current Location!"});
+        intent.putExtra("addresses", new String[] {""});
         startActivity(intent);
     }
 }

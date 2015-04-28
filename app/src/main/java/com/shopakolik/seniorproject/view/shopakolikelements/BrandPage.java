@@ -63,7 +63,7 @@ public class BrandPage extends BaseActivity {
                         public void run() {
                             try {
 
-                                ImageView logo = (ImageView) brandView.findViewById(R.id.brand_logo);
+                                final ImageView logo = (ImageView) brandView.findViewById(R.id.brand_logo);
                                 TextView title = (TextView) brandView.findViewById(R.id.brand_name);
                                 ImageView locationsButton = (ImageView) brandView.findViewById(R.id.storeLocationsButton);
 
@@ -74,13 +74,23 @@ public class BrandPage extends BaseActivity {
                                     @Override
                                     public void onClick(View v) {
 
-                                        Intent intent = new Intent(BrandPage.this, map.class);
-                                        intent.putExtra("location_count", store.getLocations().size());
+                                        float[] latitudes = new float[store.getLocations().size()];
+                                        float[] longitudes = new float[store.getLocations().size()];
+                                        String[] locations = new String[store.getLocations().size()];
+                                        String[] addresses = new String[store.getLocations().size()];
 
-                                        for(int i = 0; i < store.getLocations().size(); i++) {
-                                            intent.putExtra("latitude_" + i, store.getLocations().get(i).getLatitude());
-                                            intent.putExtra("longitude_" + i, store.getLocations().get(i).getLongitude());
+                                        for(int i = 0; i < store.getLocations().size(); i++){
+                                            latitudes[i] = store.getLocations().get(i).getLatitude();
+                                            longitudes[i] = store.getLocations().get(i).getLongitude();
+                                            locations[i] = store.getLocations().get(i).getLocation();
+                                            addresses[i] = store.getLocations().get(i).getAddress();
                                         }
+
+                                        Intent intent = new Intent(BrandPage.this, map.class);
+                                        intent.putExtra("latitudes", latitudes);
+                                        intent.putExtra("longitudes", longitudes);
+                                        intent.putExtra("locations", locations);
+                                        intent.putExtra("addresses", addresses);
                                         startActivity(intent);
                                     }
                                 });
