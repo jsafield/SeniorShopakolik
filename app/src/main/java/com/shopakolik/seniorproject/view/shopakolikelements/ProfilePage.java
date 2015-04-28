@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.shopakolik.seniorproject.R;
+import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
+import com.shopakolik.seniorproject.model.shopakolikelements.Customer;
+import com.shopakolik.seniorproject.model.shopakolikelements.Store;
 
 /**
  * Created by Zehra on 23.4.2015.
@@ -17,7 +20,8 @@ import com.shopakolik.seniorproject.R;
 public class ProfilePage extends ActionBarActivity {
 
     private TextView name, surname, user_email,old_password,new_password, renew_password ;
-    private String email, password;
+    private String email, password, userType;
+    Customer customer;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -26,6 +30,7 @@ public class ProfilePage extends ActionBarActivity {
         Intent intent = getIntent();
         email = intent.getStringExtra("user_email");
         password = intent.getStringExtra("user_password");
+        userType = intent.getStringExtra("user_type");
 
         name = (TextView) findViewById(R.id.user_name_value);
         surname = (TextView) findViewById(R.id.user_surname_value);
@@ -34,16 +39,38 @@ public class ProfilePage extends ActionBarActivity {
         new_password = (TextView) findViewById(R.id.user_new_password_value);
         renew_password = (TextView) findViewById(R.id.user_renew_password_value);
 
-        //TODO
-        //set text views inside
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //TODO
+                //set text views inside
+                try {
+                    customer = DatabaseManager.getCustomer(email, password);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            name.setText(customer.getName());
+                            surname.setText(customer.getSurname());
+                            user_email.setText(email);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
 
     }
 
 
-    public void updateChangeOnClick(View view) {
-        //TODO
-        //set new password
+    public void editButtonOnClick(View view) {
+        Intent intent1 = new Intent(ProfilePage.this, ProfileEditPage.class);
+        intent1.putExtra("user_email",email);
+        intent1.putExtra("user_password",password);
+        intent1.putExtra("user_name",customer.getName());
+        intent1.putExtra("user_surname",customer.getSurname());
+        startActivity(intent1);
     }
 
 //    @Override

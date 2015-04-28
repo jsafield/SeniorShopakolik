@@ -73,4 +73,3 @@
         android:onClick="updateSettingsOnClick"/>
 
 </RelativeLayout>
-

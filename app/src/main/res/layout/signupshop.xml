@@ -148,10 +148,8 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/categories_clickable"
-            android:layout_alignLeft="@+id/categories_clickable"
-            android:layout_alignRight="@+id/categories_clickable"
-            android:layout_alignStart="@+id/categories_clickable"
+            android:drawableLeft="@drawable/ic_action_camera"
+            android:layout_centerHorizontal="true"
             android:layout_below="@+id/textView"
             android:onClick="pickimageclicked"
             android:text="Pick a logo" />
@@ -228,28 +226,24 @@
             android:layout_centerHorizontal="true"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 style="?android:attr/buttonStyleSmall"
+                android:background="@drawable/ic_action_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Map"
                 android:id="@+id/button"
                 android:layout_below="@+id/linearLayoutAddress"
-                android:layout_toRightOf="@+id/currentImageView"
-                android:layout_toEndOf="@+id/currentImageView"
+                android:layout_centerHorizontal="true"
                 android:onClick="mapOnClick"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/location_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Get Current Location"
-                android:layout_alignEnd="@+id/linearLayoutAddress"
-                android:layout_alignLeft="@+id/linearLayoutAddress"
-                android:layout_alignRight="@+id/linearLayoutAddress"
-                android:layout_alignStart="@+id/linearLayoutAddress"
-                android:layout_below="@+id/linearLayoutAddress"
-                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_action_place"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="7dp"
                 android:onClick="locationButtonOnClick"/>
 
         </LinearLayout>

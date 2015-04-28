@@ -74,7 +74,7 @@
             android:id="@+id/favorite_button"
             android:checked="false"
             android:textOn="LIKED"
-            android:textOff="LIKE" />
+            android:textOff="LIKE"/>
 
         <TextView
             android:layout_width="0dp"
