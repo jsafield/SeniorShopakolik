@@ -44,7 +44,9 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="Name: " />
+            android:text="Name: "
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/user_name_value"
@@ -52,7 +54,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="text"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
@@ -70,7 +73,9 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="Surname: " />
+            android:text="Surname: "
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/user_surname_value"
@@ -78,7 +83,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="text"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
@@ -96,7 +102,9 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="Email: " />
+            android:text="Email: "
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/user_email_value"
@@ -104,7 +112,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="text"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 

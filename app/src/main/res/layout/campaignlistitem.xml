@@ -15,7 +15,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="%00"
-            android:id="@+id/peramo" />
+            android:id="@+id/peramo"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -23,7 +24,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="00:00:00"
             android:id="@+id/dateRemainer"
-            android:gravity="end"/>
+            android:gravity="end"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
@@ -83,8 +85,10 @@
             android:text="Small Text"
             android:id="@+id/features"
             android:layout_weight="1"
-            android:textStyle="italic"
-            android:gravity="center_vertical" />
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            />
 
         <ImageView
             android:layout_width="wrap_content"

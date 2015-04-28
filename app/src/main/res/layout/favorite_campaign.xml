@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+   android:padding="10dp"
     android:id="@+id/favorite_campaign_layout">
     <LinearLayout
         android:orientation="horizontal"
@@ -40,7 +40,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="%00"
-            android:id="@+id/peramo" />
+            android:id="@+id/peramo"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -48,12 +49,13 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="00:00:00"
             android:id="@+id/dateRemainer"
-            android:gravity="end" />
+            android:gravity="end"
+            android:textColor="@color/black"/>
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:id="@+id/pictureLayout"
@@ -63,7 +65,7 @@
         android:layout_centerVertical="true">
 
         <ImageView
-            android:layout_width="307dp"
+            android:layout_width="match_parent"
             android:layout_height="307dp"
             android:id="@+id/campimage"
 
@@ -105,7 +107,8 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
             android:id="@+id/features"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:textColor="@color/black"/>
 
 
     </LinearLayout>

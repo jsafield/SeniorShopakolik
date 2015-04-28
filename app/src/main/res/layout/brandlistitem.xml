@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/brand_name"
-            android:padding="15dp" />
+            android:padding="15dp"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 

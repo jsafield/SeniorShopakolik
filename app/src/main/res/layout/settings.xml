@@ -18,7 +18,9 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:layout_marginTop="10dp"
-            android:text="Enable Notifications: " />
+            android:text="Enable Notifications: "
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
         <Switch
             android:layout_width="100dp"
@@ -46,7 +48,9 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:layout_marginTop="10dp"
-            android:text="Enable GPS Notifications: " />
+            android:text="Enable GPS Notifications: "
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
         <Switch
             android:layout_width="100dp"

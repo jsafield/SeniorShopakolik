@@ -34,7 +34,10 @@
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="Email: " />
+                android:text="Email: "
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                />
 
             <EditText
                 android:id="@+id/customer_email_value"
@@ -62,7 +65,9 @@
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="Password: " />
+                android:text="Password: "
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/customer_password_value"
@@ -90,7 +95,9 @@
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="Re-Password: " />
+                android:text="Re-Password: "
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/customer_re_password_value"
@@ -116,7 +123,9 @@
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="Shop Name: " />
+                android:text="Shop Name: "
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/shop_name_value"
@@ -179,7 +188,9 @@
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="Branch: " />
+                android:text="Branch: "
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/shop_location_value"
@@ -205,7 +216,9 @@
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="Address: " />
+                android:text="Address: "
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <EditText
                 android:id="@+id/shop_address_value"
@@ -259,7 +272,8 @@
             android:layout_alignStart="@+id/linearLayoutAddress"
             android:layout_below="@+id/linearLayoutMap"
             android:text="Submit"
-            android:onClick="submitShopButtonClick"/>
+            android:onClick="submitShopButtonClick"
+            android:shadowColor="@color/accentColor"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -35,7 +35,9 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="Name: " />
+            android:text="Name: "
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/customer_name_value"
@@ -63,7 +65,9 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="Surname: " />
+            android:text="Surname: "
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
         <EditText
             android:id="@+id/customer_surname_value"
@@ -92,7 +96,9 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="Email: " />
+            android:text="Email: "
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/customer_email_value"
@@ -120,7 +126,9 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="Password: " />
+            android:text="Password: "
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/customer_password_value"
@@ -148,7 +156,9 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="Re-Password: " />
+            android:text="Re-Password: "
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
         <EditText
             android:id="@+id/customer_re_password_value"
