@@ -346,8 +346,9 @@ public class SignUpForShop extends ActionBarActivity {
 
     public void mapOnClick(View view) {
         Intent intent = new Intent(this, map.class);
-        intent.putExtra("longitude",longitude);
-        intent.putExtra("latitude",latitude);
+        intent.putExtra("location_count",1);
+        intent.putExtra("longitude_0",longitude);
+        intent.putExtra("latitude_0",latitude);
         startActivity(intent);
     }
 }

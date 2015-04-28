@@ -65,8 +65,25 @@ public class BrandPage extends BaseActivity {
 
                                 ImageView logo = (ImageView) brandView.findViewById(R.id.brand_logo);
                                 TextView title = (TextView) brandView.findViewById(R.id.brand_name);
+                                ImageView locationsButton = (ImageView) brandView.findViewById(R.id.storeLocationsButton);
+
                                 logo.setImageBitmap(image);
                                 title.setText(store.getName());
+
+                                locationsButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        Intent intent = new Intent(BrandPage.this, map.class);
+                                        intent.putExtra("location_count", store.getLocations().size());
+
+                                        for(int i = 0; i < store.getLocations().size(); i++) {
+                                            intent.putExtra("latitude_" + i, store.getLocations().get(i).getLatitude());
+                                            intent.putExtra("longitude_" + i, store.getLocations().get(i).getLongitude());
+                                        }
+                                        startActivity(intent);
+                                    }
+                                });
 
                                 for (int i = 0; i < store.getCampaigns().size(); i++) {
 
@@ -75,9 +92,12 @@ public class BrandPage extends BaseActivity {
                                         @Override
                                         public void run() {
                                             try {
-                                                String campImageURL = DatabaseManager.getServerUrl() + "Images/CampaignImages/" + store.getCampaigns().get(finalI).getImage();
+                                                String campImageURL = DatabaseManager.getServerUrl()
+                                                        + "Images/CampaignImages/"
+                                                        + store.getCampaigns().get(finalI).getImage();
                                                 URL imageURL = new URL(campImageURL);
-                                                final Bitmap imageCamp = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                                                final Bitmap imageCamp = BitmapFactory.decodeStream(
+                                                        imageURL.openConnection().getInputStream());
 
                                                 runOnUiThread(new Runnable() {
                                                     @Override
@@ -85,12 +105,17 @@ public class BrandPage extends BaseActivity {
                                                         //TODO pull campaign according to date and list them
 
                                                         //decleare
-                                                        View itemView = getLayoutInflater().inflate(R.layout.campaignlistitem, campaignList, false);
+                                                        View itemView = getLayoutInflater().inflate(
+                                                                R.layout.campaignlistitem, campaignList, false);
                                                         //initialize
-                                                        ImageView campaignImage = (ImageView) itemView.findViewById(R.id.campimage);
-                                                        TextView features = (TextView) itemView.findViewById(R.id.features);
-                                                        TextView peramo = (TextView) itemView.findViewById(R.id.peramo);
-                                                        TextView date = (TextView) itemView.findViewById(R.id.dateRemainer);
+                                                        ImageView campaignImage = (ImageView)
+                                                                itemView.findViewById(R.id.campimage);
+                                                        TextView features = (TextView)
+                                                                itemView.findViewById(R.id.features);
+                                                        TextView peramo = (TextView)
+                                                                itemView.findViewById(R.id.peramo);
+                                                        TextView date = (TextView)
+                                                                itemView.findViewById(R.id.dateRemainer);
                                                         //set
                                                         campaignImage.setImageBitmap(imageCamp);
                                                         String feats = "";
@@ -116,10 +141,12 @@ public class BrandPage extends BaseActivity {
                                                         }
                                                         peramo.setText(percamo);
 
-                                                        long diff = Math.abs(store.getCampaigns().get(finalI).getEndDate().getTime() - System.currentTimeMillis());
+                                                        long diff = Math.abs(store.getCampaigns().get(
+                                                                finalI).getEndDate().getTime() - System.currentTimeMillis());
                                                         date.setText("" + (diff / (24 * 60 * 60 * 1000)) + " days");
 
-                                                        ToggleButton button = (ToggleButton) itemView.findViewById(R.id.favorite_button);
+                                                        ToggleButton button = (ToggleButton) itemView.
+                                                                findViewById(R.id.favorite_button);
                                                         button.setOnClickListener(new View.OnClickListener() {
                                                             @Override
                                                             public void onClick(View v) {
@@ -127,7 +154,10 @@ public class BrandPage extends BaseActivity {
                                                                     @Override
                                                                     public void run() {
                                                                         try {
-                                                                            DatabaseManager.addFavoriteCampaign(email, password, store.getCampaigns().get(finalI).getCampaignId());
+                                                                            DatabaseManager.
+                                                                                    addFavoriteCampaign(email, password,
+                                                                                            store.getCampaigns().get(finalI)
+                                                                                                    .getCampaignId());
                                                                         } catch (Exception e) {
                                                                             e.printStackTrace();
                                                                         }

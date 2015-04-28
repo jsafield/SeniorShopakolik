@@ -18,17 +18,27 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.shopakolik.seniorproject.R;
 
+import java.util.ArrayList;
+
 public class map extends Activity {
+    int locCount;
     float longitude,latitude;
     private GoogleMap googleMap;
+    ArrayList<MarkerOptions> markerList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map);
         Intent intent = getIntent();
-        longitude = intent.getFloatExtra("longitude",longitude);
-        latitude = intent.getFloatExtra("latitude",latitude);
+        locCount = intent.getIntExtra("location_count", 0);
+        for(int i = 0; i < locCount; i++){
+            longitude = intent.getFloatExtra("longitude_" + i, 0);
+            latitude = intent.getFloatExtra("latitude_" + i, 0);
+            // create marker
+            MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Hello Maps ");
+            markerList.add(marker);
+        }
 
         try {
             // Loading map
@@ -62,10 +72,10 @@ public class map extends Activity {
             }
         }
         else{
-            // create marker
-            MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Hello Maps ");
             // adding marker
-            googleMap.addMarker(marker);
+            for(int i=0; i<markerList.size(); i++)
+                googleMap.addMarker(markerList.get(i));
+
             CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latitude, longitude)).zoom(12).build();
 
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));

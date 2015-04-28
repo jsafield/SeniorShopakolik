@@ -35,9 +35,9 @@ public class ProfilePage extends ActionBarActivity {
         name = (TextView) findViewById(R.id.user_name_value);
         surname = (TextView) findViewById(R.id.user_surname_value);
         user_email = (TextView) findViewById(R.id.user_email_value);
-        old_password = (TextView) findViewById(R.id.user_old_password_value);
-        new_password = (TextView) findViewById(R.id.user_new_password_value);
-        renew_password = (TextView) findViewById(R.id.user_renew_password_value);
+//        old_password = (TextView) findViewById(R.id.user_old_password_value);
+//        new_password = (TextView) findViewById(R.id.user_new_password_value);
+//        renew_password = (TextView) findViewById(R.id.user_renew_password_value);
 
         new Thread(new Runnable() {
             @Override

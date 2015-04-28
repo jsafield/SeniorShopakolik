@@ -81,6 +81,7 @@ public class Wall extends BaseActivity {
                                             intent.putExtra("store_id", favoriteStores.get(finalI).getStoreId());
                                             intent.putExtra("user_email", email);
                                             intent.putExtra("user_password", password);
+                                            intent.putExtra("user_type", userType);
                                             startActivity(intent);
                                         }
                                     });
