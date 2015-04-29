@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
+import com.shopakolik.seniorproject.controller.databasecontroller.UserType;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
 import com.shopakolik.seniorproject.model.shopakolikelements.User;
 import com.shopakolik.seniorproject.view.shopakolikelements.BrandPage;
@@ -41,6 +42,7 @@ import java.util.Date;
 public class NotificationService extends Service {
     LocationManager locationManager;
     LocationListener locationListener;
+    private String email, password;
     private ArrayList<Store> stores = new ArrayList<>();
 
     public NotificationService() {
@@ -51,12 +53,14 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         final Intent thisIntent = intent;
+        email = thisIntent.getStringExtra("email");
+        password = thisIntent.getStringExtra("password");
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    stores = DatabaseManager.getFavoriteStores(thisIntent.getStringExtra("email"), thisIntent.getStringExtra("password"));
+                    stores = DatabaseManager.getFavoriteStores(email, password);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -82,7 +86,7 @@ public class NotificationService extends Service {
                                 storeLoc.setLongitude(locs.get(j).getLongitude());
                                 storeLoc.setLatitude(locs.get(j).getLatitude());
                                 if (location.distanceTo(storeLoc) < 200) {
-                                    createNotification(stores.get(i).getName(), locs.get(j).getLocation(), stores.get(i).getLogo(), i * j);
+                                    createNotification(stores.get(i).getName(), locs.get(j).getLocation(), stores.get(i).getLogo(), i * j, stores.get(i).getStoreId());
                                     Log.e("notification", "created");
                                 }
                             }
@@ -120,13 +124,18 @@ public class NotificationService extends Service {
         return null;
     }
 
-    private void createNotification(final String storeName, final String branch, final String logo, final int id) {
+    private void createNotification(final String storeName, final String branch, final String logo, final int id, final int storeID) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(NotificationService.this);
+                builder.setOnlyAlertOnce(true);
                 String mlogo = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + logo;
                 Intent i = new Intent(NotificationService.this, BrandPage.class);
+                i.putExtra("user_email", email);
+                i.putExtra("user_password", password);
+                i.putExtra("store_id", storeID);
+                i.putExtra("user_type", UserType.Customer.toString());
                 i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 PendingIntent intent = PendingIntent.getActivity(NotificationService.this, 0, i,
                         PendingIntent.FLAG_UPDATE_CURRENT);

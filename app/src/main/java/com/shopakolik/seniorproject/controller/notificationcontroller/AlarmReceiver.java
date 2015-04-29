@@ -15,6 +15,7 @@ import android.widget.RemoteViews;
 
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
+import com.shopakolik.seniorproject.controller.databasecontroller.UserType;
 import com.shopakolik.seniorproject.model.shopakolikelements.Campaign;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
 import com.shopakolik.seniorproject.view.shopakolikelements.BrandPage;
@@ -32,18 +33,21 @@ import java.util.Date;
  */
 public class AlarmReceiver extends BroadcastReceiver {
     ArrayList<Store> stores = new ArrayList<>();
+    private String email, password;
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
         final Date date = new Date();
         final String dateString = date.toString();
-        String year = dateString.substring(dateString.length()-4, dateString.length());
+        String year = dateString.substring(dateString.length() - 4, dateString.length());
         //Log.e("year", year);
         String month = dateString.substring(4,7);
         //Log.e("month", month);
         final String day = dateString.substring(8,10);
         Log.e("AlarmReciver", "Alarmstarted");
         final Intent mintent = intent;
+        email = mintent.getStringExtra("email");
+        password = mintent.getStringExtra("password");
 
         final Date currentDateandTime = new Date();
 
@@ -51,7 +55,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             @Override
             public void run() {
                 try {
-                    stores = DatabaseManager.getFavoriteStores(mintent.getStringExtra("email"), mintent.getStringExtra("password"));
+                    stores = DatabaseManager.getFavoriteStores(email, password);
 
                     for (int i = 0; i < stores.size(); i++) {
                         ArrayList<Campaign> camps = stores.get(i).getCampaigns();
@@ -62,7 +66,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                                 String startDay = startDate.substring(8, 10);
                                 int sDay = Integer.parseInt(startDay);
                                 if (Integer.parseInt(day) == sDay) {
-                                    createNotification(stores.get(i).getName(), camps.get(j).getDetails(), stores.get(i).getLogo(), 8, context);
+                                    createNotification(stores.get(i).getName(), camps.get(j).getDetails(), stores.get(i).getLogo(), 8, context, stores.get(i).getStoreId());
                                 }
                                 //createNotification(stores.get(i).getName(), camps.get(j).getDetails(), stores.get(i).getLogo(), 1, context);
                             }
@@ -77,7 +81,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                         {
                             if(Integer.parseInt((favCamps.get(i).getEndDate().toString().substring(8,10)))-Integer.parseInt(day) < 1)
                             {
-                                createNotification2(stores.get(i).getName(), "test", stores.get(i).getLogo(), 10, context);
+                                createNotification2(stores.get(i).getName(), "test", stores.get(i).getLogo(), 10, context, stores.get(i).getStoreId());
                             }
                         }
                     }
@@ -88,13 +92,17 @@ public class AlarmReceiver extends BroadcastReceiver {
         });
         t.start();
     }
-    private void createNotification(final String storeName, final String campText, final String logo, final int id, final Context context) {
+    private void createNotification(final String storeName, final String campText, final String logo, final int id, final Context context, final int storeID) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
                 String mlogo = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + logo;
                 Intent i = new Intent(context, BrandPage.class);
+                i.putExtra("user_email", email);
+                i.putExtra("user_password", password);
+                i.putExtra("store_id", storeID);
+                i.putExtra("user_type", UserType.Customer.toString());
                 i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 PendingIntent intent = PendingIntent.getActivity(context, 0, i,
                         PendingIntent.FLAG_UPDATE_CURRENT);
@@ -133,19 +141,23 @@ public class AlarmReceiver extends BroadcastReceiver {
         }).start();
     }
 
-    private void createNotification2(final String storeName, final String campText, final String logo, final int id, final Context context) {
+    private void createNotification2(final String storeName, final String campText, final String logo, final int id, final Context context, final int storeID) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
                 String mlogo = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + logo;
                 Intent i = new Intent(context, BrandPage.class);
+                i.putExtra("user_email", email);
+                i.putExtra("user_password", password);
+                i.putExtra("store_id", storeID);
+                i.putExtra("user_type", UserType.Customer.toString());
                 i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 PendingIntent intent = PendingIntent.getActivity(context, 0, i,
                         PendingIntent.FLAG_UPDATE_CURRENT);
                 builder.setContentIntent(intent);
 
-                builder.setTicker(storeName + "has a special offer for you!");
+                builder.setTicker(storeName + "1 day left!");
 
                 builder.setSmallIcon(R.drawable.ic_launcher);
 

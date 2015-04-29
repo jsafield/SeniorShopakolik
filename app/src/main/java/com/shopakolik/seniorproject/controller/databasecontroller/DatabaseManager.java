@@ -787,7 +787,6 @@ public class DatabaseManager {
                 + "&campaign_id=" + URLEncoder.encode("" + campaignID, "UTF-8");
 
         String result = httpPost(SERVER_URL + "GetCampaign.php", urlParameters);
-        Log.e("result", result);
 
         if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
@@ -958,7 +957,6 @@ public class DatabaseManager {
                 + "&locationNotification=" + URLEncoder.encode(locationNotification ? "1" : "0", "UTF-8");
 
         String result = httpPost(SERVER_URL + "EnableLocationNotification.php", urlParameters);
-        Log.e("location", "enabled? "+urlParameters);
         return result.equals("success\n");
     }
 
