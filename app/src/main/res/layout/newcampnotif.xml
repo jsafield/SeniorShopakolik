@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    android:background="#8c000000">
+    android:background="#96000000">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -13,7 +13,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/notifimage1"
+            android:id="@+id/newcampnotifimage1"
             android:src="@drawable/ic_launcher" />
 
         <RelativeLayout
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Notification Text Campaign Information Here"
-                android:id="@+id/notiftext1"
+                android:id="@+id/newcampnotiftext1"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
         </RelativeLayout>

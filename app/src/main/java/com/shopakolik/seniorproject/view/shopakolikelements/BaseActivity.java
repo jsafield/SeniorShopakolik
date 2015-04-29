@@ -128,7 +128,7 @@ public class BaseActivity extends ActionBarActivity {
                     intent = new Intent(this, FavoriteCampaignPage.class);
                     break;
                 case 2:
-                    intent = new Intent(this, SignUpForShop.class);
+                    intent = new Intent(this, SettingsPage.class);
                     break;
                 case 3:
                     intent = new Intent(this, BrandPage.class);

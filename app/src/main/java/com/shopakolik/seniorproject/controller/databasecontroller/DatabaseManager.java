@@ -958,7 +958,7 @@ public class DatabaseManager {
                 + "&locationNotification=" + URLEncoder.encode(locationNotification ? "1" : "0", "UTF-8");
 
         String result = httpPost(SERVER_URL + "EnableLocationNotification.php", urlParameters);
-
+        Log.e("location", "enabled? "+urlParameters);
         return result.equals("success\n");
     }
 
@@ -970,7 +970,7 @@ public class DatabaseManager {
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&campaignNotification=" + URLEncoder.encode(campaignNotification ? "1" : "0", "UTF-8");
 
-        String result = httpPost(SERVER_URL + "EnableLocationNotification.php", urlParameters);
+        String result = httpPost(SERVER_URL + "EnableCampaignNotification.php", urlParameters);
 
         return result.equals("success\n");
     }

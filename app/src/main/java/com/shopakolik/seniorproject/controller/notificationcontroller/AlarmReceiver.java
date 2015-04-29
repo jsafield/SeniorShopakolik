@@ -38,11 +38,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         final Date date = new Date();
         final String dateString = date.toString();
         String year = dateString.substring(dateString.length()-4, dateString.length());
-        Log.e("year", year);
+        //Log.e("year", year);
         String month = dateString.substring(4,7);
-        Log.e("month", month);
-        String day = dateString.substring(8,10);
-        Log.e("day", day);
+        //Log.e("month", month);
+        final String day = dateString.substring(8,10);
+        Log.e("AlarmReciver", "Alarmstarted");
         final Intent mintent = intent;
 
         final Date currentDateandTime = new Date();
@@ -52,7 +52,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             public void run() {
                 try {
                     stores = DatabaseManager.getFavoriteStores(mintent.getStringExtra("email"), mintent.getStringExtra("password"));
-                    //Log.e("size",""+stores.size());
+
                     for (int i = 0; i < stores.size(); i++) {
                         ArrayList<Campaign> camps = stores.get(i).getCampaigns();
                         if (camps != null) {
@@ -61,20 +61,24 @@ public class AlarmReceiver extends BroadcastReceiver {
                                 String startDate = "" + camps.get(j).getStartDate();
                                 String startDay = startDate.substring(8, 10);
                                 int sDay = Integer.parseInt(startDay);
-                                /*if (Integer.parseInt(day) == sDay) {
-                                    createNotification(stores.get(i).getName(), camps.get(j).getDetails(), stores.get(i).getLogo(), i*j, context);
-                                }*/
-                                //createNotification(stores.get(i).getName(), camps.get(j).getDetails(), stores.get(i).getLogo(), i*j, context);
+                                if (Integer.parseInt(day) == sDay) {
+                                    createNotification(stores.get(i).getName(), camps.get(j).getDetails(), stores.get(i).getLogo(), 8, context);
+                                }
+                                //createNotification(stores.get(i).getName(), camps.get(j).getDetails(), stores.get(i).getLogo(), 1, context);
                             }
                         }
                     }
 
+                    Log.e("cur day", ""+day);
                     ArrayList<Campaign> favCamps = DatabaseManager.getFavoriteCampaigns(mintent.getStringExtra("email"), mintent.getStringExtra("password"));
                     if(favCamps!= null)
                     {
                         for(int i=0; i<favCamps.size(); i++)
                         {
-                            Log.e("dateee",""+currentDateandTime);
+                            if(Integer.parseInt((favCamps.get(i).getEndDate().toString().substring(8,10)))-Integer.parseInt(day) < 1)
+                            {
+                                createNotification2(stores.get(i).getName(), "test", stores.get(i).getLogo(), 10, context);
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -104,7 +108,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 Notification notification = builder.build();
 
-                RemoteViews contentView = new RemoteViews(MainActivity.PACKAGE_NAME, R.layout.notifcollapsed);
+                RemoteViews contentView = new RemoteViews(MainActivity.PACKAGE_NAME, R.layout.newcampnotif);
 
                 URL url = null;
                 Bitmap image = null;
@@ -117,8 +121,53 @@ public class AlarmReceiver extends BroadcastReceiver {
                     e.printStackTrace();
                 }
 
-                contentView.setTextViewText(R.id.notiftext1, storeName + " has a new campaign!");
-                contentView.setImageViewBitmap(R.id.notifimage1, image);
+                contentView.setTextViewText(R.id.newcampnotiftext1, storeName + " has a new campaign!");
+                contentView.setImageViewBitmap(R.id.newcampnotifimage1, image);
+                // set content view
+                notification.contentView = contentView;
+
+                NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                nm.notify(id, notification);
+            };
+
+        }).start();
+    }
+
+    private void createNotification2(final String storeName, final String campText, final String logo, final int id, final Context context) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+                String mlogo = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + logo;
+                Intent i = new Intent(context, BrandPage.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                PendingIntent intent = PendingIntent.getActivity(context, 0, i,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(intent);
+
+                builder.setTicker(storeName + "has a special offer for you!");
+
+                builder.setSmallIcon(R.drawable.ic_launcher);
+
+                builder.setAutoCancel(true);
+
+                Notification notification = builder.build();
+
+                RemoteViews contentView = new RemoteViews(MainActivity.PACKAGE_NAME, R.layout.newcampnotif);
+
+                URL url = null;
+                Bitmap image = null;
+                try {
+                    url = new URL(mlogo);
+                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                contentView.setTextViewText(R.id.newcampnotiftext1, "1 day left!");
+                contentView.setImageViewBitmap(R.id.newcampnotifimage1, image);
                 // set content view
                 notification.contentView = contentView;
 

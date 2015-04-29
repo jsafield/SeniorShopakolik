@@ -1,6 +1,9 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
+import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +24,8 @@ import android.widget.Toast;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.controller.databasecontroller.UserType;
+import com.shopakolik.seniorproject.controller.notificationcontroller.AlarmReceiver;
+import com.shopakolik.seniorproject.controller.notificationcontroller.NotificationService;
 import com.shopakolik.seniorproject.model.shopakolikelements.User;
 
 import org.w3c.dom.Text;
@@ -35,6 +40,8 @@ public class MainActivity extends ActionBarActivity {
     public static final String Email = "emailKey";
     public static final String Password = "passwordKey";
     public static String PACKAGE_NAME;
+
+    private PendingIntent pendingIntent;
 
     SharedPreferences sharedpreferences;
 
@@ -171,6 +178,16 @@ public class MainActivity extends ActionBarActivity {
                 {
                     userLogin();
                 }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
