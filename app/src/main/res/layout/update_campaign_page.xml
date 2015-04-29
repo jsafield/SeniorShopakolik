@@ -279,6 +279,33 @@
 
         <LinearLayout
             android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/campaignRule"
+            android:layout_alignEnd="@+id/campaign2_layout"
+            android:layout_alignLeft="@+id/campaign2_layout"
+            android:layout_alignRight="@+id/campaign2_layout"
+            android:layout_alignStart="@+id/campaign2_layout"
+            android:layout_below="@+id/txt_layout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precondition :"
+                android:id="@+id/precondition"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/precondition_text"
+                android:ems="7"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txt_layout"
@@ -309,7 +336,7 @@
             android:layout_alignLeft="@+id/txt_layout"
             android:layout_alignRight="@+id/txt_layout"
             android:layout_alignStart="@+id/txt_layout"
-            android:layout_below="@+id/txt_layout"
+            android:layout_below="@+id/campaignRule"
             android:onClick="pickImageClicked"
             android:text="Change the Image" />
 

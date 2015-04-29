@@ -67,7 +67,7 @@ public class AddCampaignPage extends ActionBarActivity {
         Intent intent = getIntent();
         email = intent.getStringExtra("user_email");
         Log.e("email",email);
-        password = intent.getStringExtra("password");
+        password = intent.getStringExtra("user_password");
 
         setCurrentDateOnView();
 
@@ -144,6 +144,7 @@ public class AddCampaignPage extends ActionBarActivity {
 
                             try {
                                 DatabaseManager.addCampaign(email,password,campaign);
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

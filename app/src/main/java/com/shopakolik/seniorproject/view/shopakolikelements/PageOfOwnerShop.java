@@ -206,8 +206,8 @@ public class PageOfOwnerShop extends BaseActivity {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         Intent intent = new Intent(PageOfOwnerShop.this, UpdateCampaignPage.class);
-                                                        intent.putExtra("email",email);
-                                                        intent.putExtra("password",password);
+                                                        intent.putExtra("user_email",email);
+                                                        intent.putExtra("user_password",password);
                                                         intent.putExtra("campaignID",list.get(finalI).getCampaignId());
                                                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                                         startActivity(intent);
