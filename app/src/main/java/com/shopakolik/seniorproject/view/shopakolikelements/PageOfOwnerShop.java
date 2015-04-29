@@ -86,8 +86,35 @@ public class PageOfOwnerShop extends BaseActivity {
                         public void run() {
                             ImageView logo = (ImageView) shopView.findViewById(R.id.brand_logo);
                             TextView title = (TextView) shopView.findViewById(R.id.brand_name);
+                            ImageView locationsButton = (ImageView) shopView.findViewById(R.id.storeLocationsButton);
+
                             logo.setImageBitmap(image);
                             title.setText(store.getName());
+
+                            locationsButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    float[] latitudes = new float[store.getLocations().size()];
+                                    float[] longitudes = new float[store.getLocations().size()];
+                                    String[] locations = new String[store.getLocations().size()];
+                                    String[] addresses = new String[store.getLocations().size()];
+
+                                    for(int i = 0; i < store.getLocations().size(); i++){
+                                        latitudes[i] = store.getLocations().get(i).getLatitude();
+                                        longitudes[i] = store.getLocations().get(i).getLongitude();
+                                        locations[i] = store.getLocations().get(i).getLocation();
+                                        addresses[i] = store.getLocations().get(i).getAddress();
+                                    }
+
+                                    Intent intent = new Intent(PageOfOwnerShop.this, map.class);
+                                    intent.putExtra("latitudes", latitudes);
+                                    intent.putExtra("longitudes", longitudes);
+                                    intent.putExtra("locations", locations);
+                                    intent.putExtra("addresses", addresses);
+                                    startActivity(intent);
+                                }
+                            });
 
                             for (int i = 0; i < list.size(); i++) {
                                 //  Log.e("Store", "" + list.get(i).getStoreId());

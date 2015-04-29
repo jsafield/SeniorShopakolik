@@ -574,7 +574,7 @@ public class DatabaseManager {
                 + URLEncoder.encode(SQLDateFormat.format(campaign.getStartDate()), "UTF-8")
                 + "&end_date="
                 + URLEncoder.encode(SQLDateFormat.format(campaign.getEndDate()), "UTF-8")
-                + "&isImageChanged=1"
+                + "&isImageChanged=" + URLEncoder.encode("1", "UTF-8")
                 + "&image=" + URLEncoder.encode(image, "UTF-8")
                 + "&previmage=" + URLEncoder.encode(previousImage, "UTF-8")
                 + "&type=" + URLEncoder.encode("" + campaign.getType().ordinal(), "UTF-8")
@@ -598,7 +598,7 @@ public class DatabaseManager {
                 + URLEncoder.encode(SQLDateFormat.format(campaign.getStartDate()), "UTF-8")
                 + "&end_date="
                 + URLEncoder.encode(SQLDateFormat.format(campaign.getEndDate()), "UTF-8")
-                + "&isImageChanged=0"
+                + "&isImageChanged=" + URLEncoder.encode("0", "UTF-8")
                 + "&type=" + URLEncoder.encode("" + campaign.getType().ordinal(), "UTF-8")
                 + "&precondition=" + URLEncoder.encode(campaign.getCondition(), "UTF-8")
                 + "&details=" + URLEncoder.encode(campaign.getDetails(), "UTF-8")

@@ -3,7 +3,9 @@ package com.shopakolik.seniorproject.view.shopakolikelements;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
@@ -57,11 +59,17 @@ public class BrandPage extends BaseActivity {
                     String logourl = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + store.getLogo();
                     URL url = new URL(logourl);
                     final Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//                    final BitmapDrawable imageDrawable = new BitmapDrawable(BrandPage.this.getResources(), image);
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             try {
+//                                BrandPage.this.setTitle(store.getName());
+//                                BrandPage.this.getSupportActionBar().setIcon(imageDrawable);
+//                                BrandPage.this.getSupportActionBar().setDisplayShowCustomEnabled(true);
+//                                BrandPage.this.getSupportActionBar().setDisplayUseLogoEnabled(true);
+//                                BrandPage.this.getSupportActionBar().setDisplayShowHomeEnabled(true);
 
                                 final ImageView logo = (ImageView) brandView.findViewById(R.id.brand_logo);
                                 TextView title = (TextView) brandView.findViewById(R.id.brand_name);
@@ -120,6 +128,7 @@ public class BrandPage extends BaseActivity {
                                                         //initialize
                                                         ImageView campaignImage = (ImageView)
                                                                 itemView.findViewById(R.id.campimage);
+
                                                         TextView features = (TextView)
                                                                 itemView.findViewById(R.id.features);
                                                         TextView peramo = (TextView)
@@ -128,6 +137,16 @@ public class BrandPage extends BaseActivity {
                                                                 itemView.findViewById(R.id.dateRemainer);
                                                         //set
                                                         campaignImage.setImageBitmap(imageCamp);
+
+                                                        // set campaign image with to fit screen and keep aspect ratio
+                                                        float screenWidth = BrandPage.this.getWindowManager()
+                                                                .getDefaultDisplay().getWidth();
+                                                        float ratio = campaignImage.getLayoutParams().height
+                                                                / campaignImage.getLayoutParams().width;
+                                                        campaignImage.getLayoutParams().width = (int)screenWidth;
+                                                        campaignImage.getLayoutParams().height = (int)
+                                                                (screenWidth * ratio);
+
                                                         String feats = "";
                                                         String cond = store.getCampaigns().get(finalI).getCondition();
                                                         if (cond != null && cond != "") {
@@ -135,7 +154,7 @@ public class BrandPage extends BaseActivity {
                                                         }
                                                         String details = store.getCampaigns().get(finalI).getDetails();
                                                         if (details != null && details != "") {
-                                                            feats += "\n" + details;
+                                                            feats += ((!feats.equals("")) ? "\n" : "") + details;
                                                         }
                                                         features.setText(feats);
 
