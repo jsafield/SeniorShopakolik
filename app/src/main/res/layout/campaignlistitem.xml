@@ -75,10 +75,16 @@
         <!--android:layout_alignStart="@+id/pictureLayout" />-->
 
         <ToggleButton
-            android:layout_width="wrap_content"
+            style="?android:attr/buttonStyleSmall"
+            android:drawableLeft="@android:drawable/btn_star_big_off"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:id="@+id/favorite_button"
             android:checked="false"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
             android:textOn="LIKED"
             android:textOff="LIKE"/>
 
@@ -88,7 +94,6 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/features"
             android:layout_weight="1"
-            android:textStyle="bold"
             android:textColor="@color/black"
             android:padding="5dp"/>
 

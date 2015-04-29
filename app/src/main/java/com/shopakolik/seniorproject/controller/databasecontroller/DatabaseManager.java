@@ -290,7 +290,7 @@ public class DatabaseManager {
             store.setCampaigns(campaigns);
         } catch (Exception e) {
             Log.w("No campaign", "No campaign found for store with store id: " + store.getStoreId());
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 
         return store;
@@ -555,6 +555,18 @@ public class DatabaseManager {
                 + "&campaign_id=" + URLEncoder.encode("" + campaignID, "UTF-8");
 
         String result = httpPost(SERVER_URL + "RemoveCampaign.php", urlParameters);
+
+        return result.equals("success\n");
+    }
+
+    // Check whether a campaign is added to favorites of a customer
+    public static boolean isFavoriteCampaign(String email, String password, int campaignID) throws Exception {
+
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&campaign_id=" + URLEncoder.encode("" + campaignID, "UTF-8");
+
+        String result = httpPost(SERVER_URL + "IsCampaignFavorite.php", urlParameters);
 
         return result.equals("success\n");
     }

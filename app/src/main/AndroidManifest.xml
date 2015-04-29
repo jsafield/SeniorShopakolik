@@ -1,11 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.shopakolik.seniorproject">
+          package="com.shopakolik.seniorproject">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-library android:name="com.google.android.maps" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-library android:name="com.google.android.maps"/>
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -19,97 +21,124 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.BaseActivity"
-            android:label="Shopakolik"
-            android:theme="@style/AppTheme" />
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.map"
-            android:label="Shopakolik"
-            android:theme="@style/AppTheme" />
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.SignUpForCustomer"
             android:label="Sign up Customer"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.SignUpForShop"
             android:label="Sign up Shop"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.SettingsPage"
             android:label="Settings"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.ProfilePage"
-            android:label="Profile Page"
-            android:theme="@style/AppTheme" />
+            android:label="Profile"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.FavoriteCampaignPage"
             android:label="Favorite Campaigns"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.ForgetPassword"
-            android:label="Sign up Shop"
-            android:theme="@style/AppTheme" />
+            android:label="Forget Password"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.CustomerSuscribe"
-            android:label="Customer Suscribe Page"
-            android:theme="@style/AppTheme" />
+            android:label="Customer Suscribe"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.BrandPage"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.AddCampaignPage"
-            android:label= "Add Campaign Page"
-            android:theme="@style/AppTheme">
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.AddCampaignPage"
+            android:label="Add Campaign"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.Wall"
-            android:label= "Wall"
-            android:theme="@style/AppTheme">
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.Wall"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.ProfileEditPage"
-            android:label= "Edit Profile"
-            android:theme="@style/AppTheme">
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.ProfileEditPage"
+            android:label="Edit Profile"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity
             android:name="com.shopakolik.seniorproject.view.shopakolikelements.PageOfOwnerShop"
-            android:label="Page Of Shop Owner"
-            android:theme="@style/AppTheme">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+        </activity>
 
+        <activity
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.UpdateCampaignPage"
+            android:label="Update Campaign Page"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.UpdateCampaignPage"
-            android:label= "Update Campaign Page"
-            android:theme="@style/AppTheme">
-        </activity>
+
         <service
             android:name=".controller.notificationcontroller.NotificationService"
-            android:exported="false" />
-        <receiver android:name=".controller.notificationcontroller.AlarmReceiver"><intent-filter><action android:name="android.intent.action.BOOT_COMPLETED"/></intent-filter></receiver>
+            android:exported="false"/>
+
+        <receiver android:name=".controller.notificationcontroller.AlarmReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDFpxGJ88VeRUINed9sLjUKa_3gIar1pY8" />
+            android:value="AIzaSyDFpxGJ88VeRUINed9sLjUKa_3gIar1pY8"/>
 
     </application>
 

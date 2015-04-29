@@ -10,6 +10,7 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -110,6 +111,9 @@ public class BrandPage extends BaseActivity {
                                         @Override
                                         public void run() {
                                             try {
+                                                final boolean isLiked = DatabaseManager.isFavoriteCampaign(email, password,
+                                                        store.getCampaigns().get(finalI).getCampaignId());
+
                                                 String campImageURL = DatabaseManager.getServerUrl()
                                                         + "Images/CampaignImages/"
                                                         + store.getCampaigns().get(finalI).getImage();
@@ -174,27 +178,61 @@ public class BrandPage extends BaseActivity {
                                                                 finalI).getEndDate().getTime() - System.currentTimeMillis());
                                                         date.setText("" + (diff / (24 * 60 * 60 * 1000)) + " days");
 
-                                                        ToggleButton button = (ToggleButton) itemView.
+                                                        final ToggleButton button = (ToggleButton) itemView.
                                                                 findViewById(R.id.favorite_button);
-                                                        button.setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View v) {
-                                                                new Thread(new Runnable() {
+
+                                                        if(isLiked){
+                                                            button.setChecked(true);
+                                                            button.setCompoundDrawablesWithIntrinsicBounds(
+                                                                    android.R.drawable.btn_star_big_on, 0, 0, 0);
+                                                        } else {button.setChecked(false);
+                                                            button.setCompoundDrawablesWithIntrinsicBounds(
+                                                                    android.R.drawable.btn_star_big_off, 0, 0, 0);
+                                                        }
+                                                        button.setOnCheckedChangeListener(
+                                                                new CompoundButton.OnCheckedChangeListener() {
                                                                     @Override
-                                                                    public void run() {
-                                                                        try {
-                                                                            DatabaseManager.
-                                                                                    addFavoriteCampaign(email, password,
-                                                                                            store.getCampaigns().get(finalI)
-                                                                                                    .getCampaignId());
-                                                                        } catch (Exception e) {
-                                                                            e.printStackTrace();
+                                                                    public void onCheckedChanged
+                                                                            (CompoundButton buttonView, boolean isChecked) {
+
+                                                                        if (isChecked){
+                                                                            button.setCompoundDrawablesWithIntrinsicBounds(
+                                                                                    android.R.drawable.btn_star_big_on, 0, 0, 0);
+                                                                            new Thread(new Runnable() {
+                                                                                @Override
+                                                                                public void run() {
+                                                                                    try {
+                                                                                        DatabaseManager.
+                                                                                                addFavoriteCampaign(email, password,
+                                                                                                        store.getCampaigns()
+                                                                                                                .get(finalI)
+                                                                                                                .getCampaignId());
+                                                                                    } catch (Exception e) {
+                                                                                        e.printStackTrace();
+                                                                                    }
+                                                                                }
+                                                                            }).start();
+                                                                        } else {
+                                                                            button.setCompoundDrawablesWithIntrinsicBounds(
+                                                                                    android.R.drawable.btn_star_big_off, 0, 0, 0);
+                                                                            new Thread(new Runnable() {
+                                                                                @Override
+                                                                                public void run() {
+                                                                                    try {
+                                                                                        DatabaseManager.
+                                                                                                removeFavoriteCampaign(
+                                                                                                        email, password,
+                                                                                                        store.getCampaigns()
+                                                                                                                .get(finalI)
+                                                                                                                .getCampaignId());
+                                                                                    } catch (Exception e) {
+                                                                                        e.printStackTrace();
+                                                                                    }
+                                                                                }
+                                                                            }).start();
                                                                         }
                                                                     }
-                                                                }).start();
-
-                                                            }
-                                                        });
+                                                                });
                                                         campaignList.addView(itemView);
 
                                                     }
