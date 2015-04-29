@@ -574,7 +574,7 @@ public class DatabaseManager {
                 + URLEncoder.encode(SQLDateFormat.format(campaign.getStartDate()), "UTF-8")
                 + "&end_date="
                 + URLEncoder.encode(SQLDateFormat.format(campaign.getEndDate()), "UTF-8")
-                + "&isImageChanged=" + URLEncoder.encode("1", "UTF-8")
+                + "&isImageChanged=1"
                 + "&image=" + URLEncoder.encode(image, "UTF-8")
                 + "&previmage=" + URLEncoder.encode(previousImage, "UTF-8")
                 + "&type=" + URLEncoder.encode("" + campaign.getType().ordinal(), "UTF-8")
@@ -591,8 +591,6 @@ public class DatabaseManager {
     public static boolean updateCampaign(String email, String password, Campaign campaign)
             throws Exception {
 
-        Log.e("campaign.getType", campaign.getType().toString());
-
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&campaign_id=" + URLEncoder.encode("" + campaign.getCampaignId(), "UTF-8")
@@ -600,18 +598,14 @@ public class DatabaseManager {
                 + URLEncoder.encode(SQLDateFormat.format(campaign.getStartDate()), "UTF-8")
                 + "&end_date="
                 + URLEncoder.encode(SQLDateFormat.format(campaign.getEndDate()), "UTF-8")
-                + "&isImageChanged=" + URLEncoder.encode("0", "UTF-8")
+                + "&isImageChanged=0"
                 + "&type=" + URLEncoder.encode("" + campaign.getType().ordinal(), "UTF-8")
                 + "&precondition=" + URLEncoder.encode(campaign.getCondition(), "UTF-8")
                 + "&details=" + URLEncoder.encode(campaign.getDetails(), "UTF-8")
                 + "&percentage=" + URLEncoder.encode("" + campaign.getPercentage(), "UTF-8")
                 + "&amount=" + URLEncoder.encode("" + campaign.getAmount(), "UTF-8");
 
-        Log.e("Parameters",urlParameters);
-
         String result = httpPost(SERVER_URL + "UpdateCampaign.php", urlParameters);
-
-        Log.e("updtae campaign rsult",result);
 
         return result.equals("success\n");
     }
@@ -793,7 +787,7 @@ public class DatabaseManager {
                 + "&campaign_id=" + URLEncoder.encode("" + campaignID, "UTF-8");
 
         String result = httpPost(SERVER_URL + "GetCampaign.php", urlParameters);
-//        Log.e("result", result);
+        Log.e("result", result);
 
         if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
