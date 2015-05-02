@@ -1,6 +1,11 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
+import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -18,6 +23,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.shopakolik.seniorproject.R;
+import com.shopakolik.seniorproject.controller.notificationcontroller.AlarmReceiver;
+import com.shopakolik.seniorproject.controller.notificationcontroller.NotificationService;
 
 /**
  * Created by namely on 21.04.2015.
@@ -29,17 +36,23 @@ public class BaseActivity extends ActionBarActivity {
     private String[] menuTitles;
     private ActionBarDrawerToggle mDrawerToggle;
     private String email,password,userType;
+    SharedPreferences sharedpreferences;
+    Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.baselayout);
+        context = this;
 
         Intent intent = getIntent();
         email = intent.getStringExtra("user_email");
         password = intent.getStringExtra("user_password");
         userType = intent.getStringExtra("user_type");
         Log.e("usertype Base Activity",userType);
+
+        sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         if(userType.equals("Customer"))
            menuTitles = getResources().getStringArray(R.array.menu_array);
@@ -138,9 +151,18 @@ public class BaseActivity extends ActionBarActivity {
                     break;
                 case 5:
                     intent = new Intent(this, MainActivity.class);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.remove("emailKey");
+                    editor.remove("passwordKey");
+                    editor.apply();
+                    final Intent gpsIntent = new Intent(context, NotificationService.class);
+                    context.stopService(gpsIntent);
+                    Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+                    final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
+                    final AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    manager.cancel(pendingIntent);
                     break;
                 default:
-                    Log.e("dçmdsc", " yanliiiiis" + position );
             }
         }
         else if (userType.equals("Store"))
@@ -160,6 +182,10 @@ public class BaseActivity extends ActionBarActivity {
                     break;
                 case 4:
                     intent = new Intent(this, MainActivity.class);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.remove("emailKey");
+                    editor.remove("passwordKey");
+                    editor.commit();
                     break;
                 default:
                     Log.e("dçmdsc", " yanliiiiis" + position );
@@ -189,4 +215,15 @@ public class BaseActivity extends ActionBarActivity {
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

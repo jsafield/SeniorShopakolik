@@ -40,7 +40,7 @@ public class SettingsPage extends ActionBarActivity{
                 try {
                     final boolean notifchecked = DatabaseManager.getCustomer(email, password).isCampaignNotification();
                     final boolean gpschecked = DatabaseManager.getCustomer(email, password).isLocationNotification();
-                    Log.e("chek", ""+notifchecked+" "+gpschecked);
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

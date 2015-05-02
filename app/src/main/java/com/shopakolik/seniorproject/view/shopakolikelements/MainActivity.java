@@ -40,8 +40,7 @@ public class MainActivity extends ActionBarActivity {
     public static final String Email = "emailKey";
     public static final String Password = "passwordKey";
     public static String PACKAGE_NAME;
-
-    private PendingIntent pendingIntent;
+    private Context context;
 
     SharedPreferences sharedpreferences;
 
@@ -61,10 +60,10 @@ public class MainActivity extends ActionBarActivity {
         password = (TextView) findViewById(R.id.password);
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        context = this;
 
         if (sharedpreferences.contains(Email)) {
             email.setText(sharedpreferences.getString(Email, ""));
-
         }
         if (sharedpreferences.contains(Password)) {
             password.setText(sharedpreferences.getString(Password, ""));
@@ -98,6 +97,26 @@ public class MainActivity extends ActionBarActivity {
                         getNameScreenIntent.putExtra("user_password", password.getText().toString());
                         getNameScreenIntent.putExtra("user_type", userType.toString());
                         startActivity(getNameScreenIntent);
+
+                        final boolean notifchecked = DatabaseManager.getCustomer(sharedpreferences.getString(Email, ""), sharedpreferences.getString(Password, "")).isCampaignNotification();
+                        final boolean gpschecked = DatabaseManager.getCustomer(sharedpreferences.getString(Email, ""), sharedpreferences.getString(Password, "")).isLocationNotification();
+
+                        if(notifchecked)
+                        {
+                            Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+                            final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
+                            final AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                            final int interval = 15000;
+                            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+                        }
+
+                        if(gpschecked)
+                        {
+                            final Intent gpsIntent = new Intent(context, NotificationService.class);
+                            context.startService(gpsIntent);
+                        }
+
+
                     } else if (userType == UserType.Store) {
                         Intent getNameScreenIntent = new Intent(MainActivity.this, PageOfOwnerShop.class);
                         getNameScreenIntent.putExtra("user_email", email.getText().toString());

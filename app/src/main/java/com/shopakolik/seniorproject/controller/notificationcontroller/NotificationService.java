@@ -11,6 +11,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -44,24 +45,24 @@ public class NotificationService extends Service {
     LocationListener locationListener;
     private String email, password;
     private ArrayList<Store> stores = new ArrayList<>();
+    SharedPreferences sharedpreferences;
 
     public NotificationService() {
 
     }
 
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         final Intent thisIntent = intent;
-        email = thisIntent.getStringExtra("email");
-        password = thisIntent.getStringExtra("password");
+        sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        email = sharedpreferences.getString("emailKey", "");
+        password = sharedpreferences.getString("passwordKey", "");
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     stores = DatabaseManager.getFavoriteStores(email, password);
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
@@ -34,6 +35,7 @@ import java.util.Date;
 public class AlarmReceiver extends BroadcastReceiver {
     ArrayList<Store> stores = new ArrayList<>();
     private String email, password;
+    SharedPreferences sharedpreferences;
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
@@ -46,8 +48,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         final String day = dateString.substring(8,10);
         Log.e("AlarmReciver", "Alarmstarted");
         final Intent mintent = intent;
-        email = mintent.getStringExtra("email");
-        password = mintent.getStringExtra("password");
+        sharedpreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        email = sharedpreferences.getString("emailKey", "");
+        password = sharedpreferences.getString("passwordKey", "");
 
         final Date currentDateandTime = new Date();
 
@@ -73,13 +76,14 @@ public class AlarmReceiver extends BroadcastReceiver {
                         }
                     }
 
-                    Log.e("cur day", ""+day);
+                    /*Log.e("cur day", ""+day);
+                    * */
                     ArrayList<Campaign> favCamps = DatabaseManager.getFavoriteCampaigns(mintent.getStringExtra("email"), mintent.getStringExtra("password"));
                     if(favCamps!= null)
                     {
                         for(int i=0; i<favCamps.size(); i++)
                         {
-                            if(Integer.parseInt((favCamps.get(i).getEndDate().toString().substring(8,10)))-Integer.parseInt(day) < 1)
+                            if(Integer.parseInt((favCamps.get(i).getEndDate().toString().substring(8,10)))-Integer.parseInt(day) <= 1)
                             {
                                 createNotification2(stores.get(i).getName(), "test", stores.get(i).getLogo(), 10, context, stores.get(i).getStoreId());
                             }
