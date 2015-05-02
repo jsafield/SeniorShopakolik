@@ -54,8 +54,8 @@ public class MainActivity extends ActionBarActivity {
 
         Button signInButton = (Button) findViewById(R.id.signInButton);
         //TextView forgetPassword = (TextView) findViewById(R.id.forgetPassword);
-        TextView signUpCustomer = (TextView) findViewById(R.id.signUpCustomer);
-        TextView signUpShop = (TextView) findViewById(R.id.signUpShop);
+        TextView signUpCustomer = (TextView) findViewById(R.id.SignUpAsCustomer);
+        TextView signUpShop = (TextView) findViewById(R.id.SignUpAsShop);
 
         email = (TextView) findViewById(R.id.email);
         password = (TextView) findViewById(R.id.password);

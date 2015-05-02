@@ -1,99 +1,142 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:background="@color/background_main">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
+        android:id="@+id/logo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        tools:context=".MainActivity">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="50dp">
 
-        <!--<include-->
-            <!--android:id="@+id/app_bar"-->
-            <!--layout="@layout/app_bar" />-->
-
-        <!--<TextView android:text="@string/app_name"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/LogoWriting"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:textSize="40sp"
-            android:textColor="#445894"
-            android:id="@+id/app_name" />
-        -->
+            android:src="@drawable/logo_name" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/email_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo"
+        android:orientation="horizontal">
 
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:ems="10"
             android:id="@+id/email"
-            android:layout_below="@+id/app_name"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="48dp"
-            android:hint="enter your email adress" />
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/white"
+            android:ems="10"
+            android:hint="Email"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintColor"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/password_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_layout">
 
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
             android:id="@+id/password"
-            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/white"
             android:ems="10"
-            android:layout_below="@id/email"
-            android:hint="password" />
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintColor"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/logIn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password_layout"
+        android:paddingTop="3dp">
 
         <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignRight="@+id/password"
-            android:layout_alignLeft="@+id/password"
-            android:layout_below="@+id/password"
-            android:text="@string/signInButton"
             android:id="@+id/signInButton"
-            android:onClick="signInButtonClick" />
-
-
-        <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/forgetPassword"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_toRightOf="@+id/signInButton"-->
-        <!--android:layout_toEndOf="@+id/signInButton"-->
-        <!--android:onClick="forgetPasswordClick"-->
-        <!--android:id="@+id/forgetPassword" />-->
-
-        <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/signUpCustomer"
-            android:layout_below="@+id/signInButton"
-            android:id="@+id/signUpCustomer"
-            android:layout_centerHorizontal="true"
-            android:layout_alignRight="@+id/signInButton"
-            android:layout_alignLeft="@+id/signInButton"
-            android:layout_marginTop="66dp"
-            android:onClick="signUpCustomerClick" />
+            android:onClick="signInButtonClick"
+            android:text="@string/signInButton"
+            android:background="@color/buttonColor2"
+            android:textColor="@color/white"/>
+    </LinearLayout>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/signUpLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/signUpShop_layout">
+
+        <TextView
+            android:id="@+id/SignUpAsCustomer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/signUpStore"
-            android:id="@+id/signUpShop"
-            android:layout_below="@+id/signUpCustomer"
-            android:layout_alignStart="@+id/signUpCustomer"
-            android:layout_alignRight="@+id/signUpCustomer"
-            android:layout_alignLeft="@+id/signUpCustomer"
+            android:text="Sign Up as Customer"
+            android:textColor="@color/white"
+            android:onClick="signUpCustomerClick"
+            android:clickable="true"
+            android:textStyle="italic"
+            android:gravity="center_horizontal" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/signUpShop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="20dp"
+        android:paddingTop="3dp">
 
-            android:onClick="signUpShopClick" />
+        <TextView
+            android:id="@+id/SignUpAsShop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign Up as Shop"
+            android:onClick="signUpShopClick"
+            android:textColor="@color/white"
+            android:clickable="true"
+            android:textStyle="italic"
+            android:gravity="center_horizontal" />
+    </LinearLayout>
+    <!--<include-->
+    <!--android:id="@+id/app_bar"-->
+    <!--layout="@layout/app_bar" />-->
 
-    </RelativeLayout>
-</ScrollView>
+    <!--<TextView android:text="@string/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="40sp"
+        android:textColor="#445894"
+        android:id="@+id/app_name" />
+    -->
+
+
+    <!--<Button-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="@string/forgetPassword"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_toRightOf="@+id/signInButton"-->
+    <!--android:layout_toEndOf="@+id/signInButton"-->
+    <!--android:onClick="forgetPasswordClick"-->
+    <!--android:id="@+id/forgetPassword" />-->
+
+
+</RelativeLayout>
