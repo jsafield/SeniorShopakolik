@@ -43,7 +43,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/campaignlist"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/brandNameLayout">
 
     </LinearLayout>

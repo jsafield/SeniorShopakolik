@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,37 +23,36 @@ import android.widget.TextView;
 
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
-import com.shopakolik.seniorproject.controller.notificationcontroller.NotificationService;
 import com.shopakolik.seniorproject.model.shopakolikelements.Campaign;
 import com.shopakolik.seniorproject.model.shopakolikelements.CampaignType;
 
 import java.io.File;
 import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by IREM on 4/26/2015.
  */
 public class UpdateCampaignPage extends ActionBarActivity {
 
-    private TextView startdate, enddate,campaignS, campaignF, percentage, amount,voucher,descrip,preconditionTxt;
-    private TextView description;
-    private String path;
-    private Button saveButton;
+    private TextView startdate, enddate;
+    private EditText percentage, amount, amountVoucher, descrip, preconditionTxt;
+    private String path, previousImagePath;
     private ImageView img;
-    private String email = "";
+    private String email;
     private String password;
     private int campaignId;
     private boolean isImageChanged = false;
-    private RadioGroup radiobuttonType,radiogroupbutton2;
-    private int year;
-    private int month;
-    private int day;
+    private RadioGroup radioGroup1, radioGroup2;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+    private Calendar startCal, endCal;
     private Button savebtn;
     private LinearLayout amountPercentage, shoppingVoucher;
-    private  RadioButton radio1, radio2, radio3;
+    private RadioButton radio1, radio2, radio3, radio4, radio5;
     static final int DATE_DIALOG_ID = 999;
     static final int DATE_DIALOG_ID_2 = 666;
 
@@ -66,36 +64,38 @@ public class UpdateCampaignPage extends ActionBarActivity {
         Intent intent = getIntent();
         email = intent.getStringExtra("user_email");
         password = intent.getStringExtra("user_password");
-        Log.e(email, email);
+        campaignId = intent.getIntExtra("campaignID", 0);
+//        Log.e(email, email);
 
+//        final ImageView brandLogo = (ImageView) findViewById(R.id.brand_logo);
+//        final TextView brandName = (TextView) findViewById(R.id.brand_name);
         startdate = (TextView) findViewById(R.id.campaign_sdate);
         enddate = (TextView) findViewById(R.id.campaign_fdate);
-        description = (TextView) findViewById(R.id.description);
         img = (ImageView) findViewById(R.id.currentImageView);
-        saveButton = (Button) findViewById(R.id.save);
-        radiobuttonType = (RadioGroup) findViewById(R.id.groupRadio);
-        radiogroupbutton2 = (RadioGroup) findViewById(R.id.radio_group);
-        radio1 = (RadioButton)findViewById(R.id.sales);
-        radio2 = (RadioButton)findViewById(R.id.shoppingvoucher);
-        radio3 = (RadioButton)findViewById(R.id.otherbutton);
-        campaignS = (TextView) findViewById(R.id.campaign_sdate);
-        campaignF = (TextView) findViewById(R.id.campaign_fdate);
+
+        radioGroup1 = (RadioGroup) findViewById(R.id.groupRadio);
+        radio1 = (RadioButton) findViewById(R.id.sales);
+        radio2 = (RadioButton) findViewById(R.id.shoppingvoucher);
+        radio3 = (RadioButton) findViewById(R.id.otherbutton);
+
+        radioGroup2 = (RadioGroup) findViewById(R.id.radio_group);
+        radio4 = (RadioButton) findViewById(R.id.percentageRadioButton);
+        radio5 = (RadioButton) findViewById(R.id.amountRadioButton);
+
         preconditionTxt = (EditText) findViewById(R.id.precondition_text);
-        percentage = (TextView) findViewById(R.id.percentage);
-        amount = (TextView)findViewById(R.id.amount);
-        voucher = (TextView) findViewById(R.id.voucher);
-        descrip = (TextView) findViewById(R.id.description_txt);
+        percentage = (EditText) findViewById(R.id.percentage);
+        amount = (EditText) findViewById(R.id.amount);
+        amountVoucher = (EditText) findViewById(R.id.voucher);
+        descrip = (EditText) findViewById(R.id.description_txt);
 
         amountPercentage = (LinearLayout) findViewById(R.id.amount_percentage);
         shoppingVoucher = (LinearLayout) findViewById(R.id.shopping_voucher);
         savebtn = (Button) findViewById(R.id.save);
 
-        campaignId = intent.getIntExtra("campaignID", 0);
-
-        radiobuttonType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Log.e("onCheckedChanged", "onCheckedChanged");
+//                Log.e("onCheckedChanged", "onCheckedChanged");
                 if (checkedId == R.id.sales) {
                     amountPercentage.setVisibility(View.VISIBLE);
                     shoppingVoucher.setVisibility(View.GONE);
@@ -103,11 +103,41 @@ public class UpdateCampaignPage extends ActionBarActivity {
                 } else if (checkedId == R.id.shoppingvoucher) {
                     amountPercentage.setVisibility(View.GONE);
                     shoppingVoucher.setVisibility(View.VISIBLE);
+
                 } else if (checkedId == R.id.otherbutton) {
                     shoppingVoucher.setVisibility(View.GONE);
                     amountPercentage.setVisibility(View.GONE);
                 }
 
+            }
+        });
+
+        radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                Log.e("onCheckedChanged", "onCheckedChanged");
+                if (checkedId == R.id.percentageRadioButton) {
+
+                    amount.setFocusable(false);
+                    amount.setFocusableInTouchMode(false);
+                    amount.setClickable(false);
+                    amount.setEnabled(false);
+                    percentage.setFocusable(true);
+                    percentage.setFocusableInTouchMode(true);
+                    percentage.setClickable(true);
+                    percentage.setEnabled(true);
+
+                } else if (checkedId == R.id.amountRadioButton) {
+
+                    percentage.setFocusable(false);
+                    percentage.setFocusableInTouchMode(false);
+                    percentage.setClickable(false);
+                    percentage.setEnabled(false);
+                    amount.setFocusable(true);
+                    amount.setFocusableInTouchMode(true);
+                    amount.setClickable(true);
+                    amount.setEnabled(true);
+                }
             }
         });
 
@@ -118,47 +148,57 @@ public class UpdateCampaignPage extends ActionBarActivity {
                     @Override
                     public void run() {
                         CampaignType type = null;
-                        if (radiobuttonType.getCheckedRadioButtonId() == R.id.sales) {
-                            if (radiogroupbutton2.getCheckedRadioButtonId() == R.id.percentageButton) {
+                        if (radioGroup1.getCheckedRadioButtonId() == R.id.sales) {
+
+                            if (radioGroup2.getCheckedRadioButtonId() == R.id.percentageRadioButton) {
                                 type = CampaignType.DiscountPercentage;
 
-                            } else if (radiogroupbutton2.getCheckedRadioButtonId() == R.id.amountButton) {
+                            } else if (radioGroup2.getCheckedRadioButtonId() == R.id.amountRadioButton) {
                                 type = CampaignType.DiscountAmount;
                             }
-                        } else if (radiobuttonType.getCheckedRadioButtonId() == R.id.shoppingvoucher) {
+                        } else if (radioGroup1.getCheckedRadioButtonId() == R.id.shoppingvoucher) {
                             type = CampaignType.ShoppingVoucher;
-                        } else if (radiobuttonType.getCheckedRadioButtonId() == R.id.otherbutton) {
+
+                        } else if (radioGroup1.getCheckedRadioButtonId() == R.id.otherbutton) {
                             type = CampaignType.Other;
                         }
 
                         try {
-                            Date startDate = DatabaseManager.SQLDateFormat.parse(campaignS.getText().toString());
-                            Date endDate = DatabaseManager.SQLDateFormat.parse(campaignF.getText().toString());
+                            Date startDate = dateFormat.parse(startdate.getText().toString());
+                            Date endDate = dateFormat.parse(enddate.getText().toString());
 
                             float fl = 0;
-                            try {
+                            int pr = 0;
+                            if (type == CampaignType.DiscountAmount)
                                 fl = Float.parseFloat(amount.getText().toString());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            else if (type == CampaignType.ShoppingVoucher)
+                                fl = Float.parseFloat(amountVoucher.getText().toString());
+                            else if (type == CampaignType.DiscountPercentage)
+                                pr = Integer.parseInt(percentage.getText().toString());
 
-                            Campaign campaign = new Campaign(campaignId, startDate,endDate, path, type, preconditionTxt.getText().toString(), descrip.getText().toString(), Integer.parseInt(percentage.getText().toString()),fl);
+//                            Log.e("", type.toString());
+                            Campaign campaign = new Campaign(campaignId, startDate, endDate, path, type,
+                                    preconditionTxt.getText().toString(), descrip.getText().toString(),
+                                    pr, fl);
 
 //                            Campaign campaign = new Campaign(campaignId, startDate, endDate, path, type, preconditionTxt.getText().toString(), description.getText().toString()
 //                                    , Integer.parseInt(percentage.getText().toString()), fl);
 
                             try {
-                                DatabaseManager.updateCampaign(email, password, campaign);
-                                Log.e("type", type.toString());
-                                Log.e("campaign start", campaignS.getText().toString());
-                                Log.e("campaign finish",campaignF.getText().toString() );
-                                Log.e("amount",campaign.getAmount() + " " );
-                                Log.e("percentage",campaign.getPercentage() + " " );
-                                Log.e("description",descrip.getText().toString());
+                                if (isImageChanged)
+                                    DatabaseManager.updateCampaign(email, password, campaign, previousImagePath);
+                                else
+                                    DatabaseManager.updateCampaign(email, password, campaign);
+//                                Log.e("type", type.toString());
+//                                Log.e("campaign start", startdate.getText().toString());
+//                                Log.e("campaign finish", startdate.getText().toString());
+//                                Log.e("amount", campaign.getAmount() + " ");
+//                                Log.e("percentage", campaign.getPercentage() + " ");
+//                                Log.e("description", descrip.getText().toString());
                                 Intent new_intent = new Intent(UpdateCampaignPage.this, PageOfOwnerShop.class);
-                                new_intent.putExtra("user_email",email);
-                                new_intent.putExtra("user_password",password);
-                                new_intent.putExtra("user_type","Store");
+                                new_intent.putExtra("user_email", email);
+                                new_intent.putExtra("user_password", password);
+                                new_intent.putExtra("user_type", "Store");
 
                                 startActivity(new_intent);
                             } catch (Exception e) {
@@ -173,13 +213,26 @@ public class UpdateCampaignPage extends ActionBarActivity {
             }
         });
 
+        // Set current information to ui elements
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Log.e("campaignID : ","" +  campaignId);
+//                    Log.e("campaignID : ", "" + campaignId);
                     final Campaign campaign = DatabaseManager.getCampaign(email, password, campaignId);
-                    final CampaignType campaignType= campaign.getType();
+                    final CampaignType campaignType = campaign.getType();
+                    previousImagePath = campaign.getImage();
+
+                    // to set date picker
+                    startCal = new GregorianCalendar();
+                    endCal = new GregorianCalendar();
+                    startCal.setTime(campaign.getStartDate());
+                    endCal.setTime(campaign.getEndDate());
+
+//                    String logoStr = DatabaseManager.getServerUrl() + "Images/StoreLogosCampaignImages/" + campaign.getLogo();
+//                    URL logoURL = new URL(logoStr);
+//                    final Bitmap logoBitmap = BitmapFactory.decodeStream(logoURL.openConnection().getInputStream());
+
                     String campImageURL = DatabaseManager.getServerUrl() + "Images/CampaignImages/" + campaign.getImage();
                     URL imageURL = new URL(campImageURL);
                     final Bitmap imageCamp = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
@@ -187,38 +240,47 @@ public class UpdateCampaignPage extends ActionBarActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Log.e("startdate",DatabaseManager.SQLDateFormat.format(campaign.getStartDate()));
+//                            brandLogo.setImageBitmap(logoBitmap);
+//                            brandName.setText(campaign.getName());
 
-                            startdate.setText(DatabaseManager.SQLDateFormat.format(campaign.getStartDate()));
-                            enddate.setText(DatabaseManager.SQLDateFormat.format(campaign.getEndDate()));
+//                            Log.e("startdate", DatabaseManager.SQLDateFormat.format(campaign.getStartDate()));
+                            startdate.setText(dateFormat.format(campaign.getStartDate()));
+                            enddate.setText(dateFormat.format(campaign.getEndDate()));
 
                             img.setImageBitmap(imageCamp);
                             img.setVisibility(View.VISIBLE);
 
-                            if(campaignType.equals(CampaignType.DiscountAmount) || campaignType.equals(CampaignType.DiscountPercentage)){
+                            if (campaignType.equals(CampaignType.DiscountAmount)) {
+
                                 radio1.setChecked(true);
-                                Log.e("",campaignType.toString());
+                                radio5.setChecked(true);
+//                                Log.e("", campaignType.toString());
                                 amountPercentage.setVisibility(View.VISIBLE);
                                 shoppingVoucher.setVisibility(View.GONE);
-                            }
-                            else if(campaignType.equals(CampaignType.ShoppingVoucher)){
+                                amount.setText("" + campaign.getAmount());
+
+                            } else if (campaignType.equals(CampaignType.DiscountPercentage)) {
+
+                                radio1.setChecked(true);
+                                radio4.setChecked(true);
+                                amountPercentage.setVisibility(View.VISIBLE);
+                                shoppingVoucher.setVisibility(View.GONE);
+                                percentage.setText("" + campaign.getPercentage());
+
+                            } else if (campaignType.equals(CampaignType.ShoppingVoucher)) {
+
                                 radio2.setChecked(true);
                                 amountPercentage.setVisibility(View.GONE);
                                 shoppingVoucher.setVisibility(View.VISIBLE);
+                                amountVoucher.setText("" + campaign.getAmount());
+                            } else if (campaignType.equals(CampaignType.Other)) {
 
-                            }else if(campaignType.equals(CampaignType.Other)){
                                 radio3.setChecked(true);
                                 shoppingVoucher.setVisibility(View.GONE);
                                 amountPercentage.setVisibility(View.GONE);
                             }
-                            if(campaignType.equals(CampaignType.DiscountAmount))
-                                amount.setText( "" + campaign.getAmount());
-                            else if(campaignType.equals(CampaignType.DiscountPercentage))
-                                percentage.setText(""+ campaign.getPercentage());
-                            else if(campaignType.equals(CampaignType.ShoppingVoucher)){
-                                voucher.setText("" + campaign.getAmount());
-                            }
                             descrip.setText(campaign.getDetails());
+                            preconditionTxt.setText(campaign.getCondition());
                         }
                     });
 
@@ -245,6 +307,7 @@ public class UpdateCampaignPage extends ActionBarActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
+            isImageChanged = true;
             if (requestCode == 1) {
                 // currImageURI is the global variable I'm using to hold the content:// URI of the image
                 Uri currImageURI = data.getData();
@@ -275,33 +338,6 @@ public class UpdateCampaignPage extends ActionBarActivity {
         return res;
     }
 
-
-    public void setCurrentDateOnView() {
-
-        startdate = (TextView) findViewById(R.id.campaign_sdate);
-        enddate = (TextView) findViewById(R.id.campaign_fdate);
-
-
-        final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
-
-        // set current date into textview
-        startdate.setText(new StringBuilder()
-                // Month is 0 based, just add 1
-                .append(month + 1).append("-").append(day).append("-")
-                .append(year).append(" "));
-        enddate.setText(new StringBuilder()
-                // Month is 0 based, just add 1
-                .append(month + 1).append("-").append(day).append("-")
-                .append(year).append(" "));
-        // set current date into datepicker
-        //dpResult.init(year, month, day, null);
-
-    }
-
-
     public void showDatePickerDialog(View v) {
         showDialog(DATE_DIALOG_ID);
     }
@@ -315,12 +351,12 @@ public class UpdateCampaignPage extends ActionBarActivity {
         switch (id) {
             case DATE_DIALOG_ID:
                 // set date picker as current date
-                return new DatePickerDialog(this, datePickerListener,
-                        year, month, day);
+                return new DatePickerDialog(this, datePickerListener, startCal.get(Calendar.YEAR),
+                        startCal.get(Calendar.MONTH), startCal.get(Calendar.DAY_OF_MONTH));
             case DATE_DIALOG_ID_2:
                 // set date picker as current date
-                return new DatePickerDialog(this, datePickerListener2,
-                        year, month, day);
+                return new DatePickerDialog(this, datePickerListener2, endCal.get(Calendar.YEAR),
+                        endCal.get(Calendar.MONTH), endCal.get(Calendar.DAY_OF_MONTH));
         }
         return null;
     }
@@ -331,13 +367,10 @@ public class UpdateCampaignPage extends ActionBarActivity {
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
 
             // set selected date into textview
-            startdate.setText(new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year)
+            startdate.setText(new StringBuilder().append(selectedMonth + 1)
+                    .append("-").append(selectedDay).append("-").append(selectedYear)
                     .append(" "));
         }
     };
@@ -347,13 +380,9 @@ public class UpdateCampaignPage extends ActionBarActivity {
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
 
-
-            enddate.setText(new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year)
+            enddate.setText(new StringBuilder().append(selectedMonth + 1)
+                    .append("-").append(selectedDay).append("-").append(selectedYear)
                     .append(" "));
 
         }

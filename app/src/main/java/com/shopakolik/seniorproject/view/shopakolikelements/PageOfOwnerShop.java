@@ -146,6 +146,15 @@ public class PageOfOwnerShop extends BaseActivity {
                                                 @Override
                                                 public void run() {
                                                     campaignImage.setImageBitmap(imageCamp);
+
+                                                    // set campaign image with to fit screen and keep aspect ratio
+                                                    float screenWidth = PageOfOwnerShop.this.getWindowManager()
+                                                            .getDefaultDisplay().getWidth();
+                                                    float ratio = campaignImage.getLayoutParams().height
+                                                            / campaignImage.getLayoutParams().width;
+                                                    campaignImage.getLayoutParams().width = (int)screenWidth;
+                                                    campaignImage.getLayoutParams().height = (int)
+                                                            (screenWidth * ratio);
                                                 }
                                             });
                                         } catch (Exception e) {
@@ -223,36 +232,12 @@ public class PageOfOwnerShop extends BaseActivity {
                                         updateimage.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-
-                                                // 1. Instantiate an AlertDialog.Builder with its constructor
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(PageOfOwnerShop.this);
-                                                // 2. Chain together various setter methods to set the dialog characteristics
-                                                builder.setMessage(R.string.updateCampaignInfo);
-
-                                                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        Intent intent = new Intent(PageOfOwnerShop.this, UpdateCampaignPage.class);
-                                                        intent.putExtra("user_email",email);
-                                                        intent.putExtra("user_password",password);
-                                                        intent.putExtra("campaignID",list.get(finalI).getCampaignId());
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                                        startActivity(intent);
-
-                                                    }
-                                                });
-
-
-                                                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-
-                                                    }
-                                                });
-
-                                                // 3. Get the AlertDialog from create()
-                                                AlertDialog dialog = builder.create();
-                                                dialog.show();
+                                                Intent intent = new Intent(PageOfOwnerShop.this, UpdateCampaignPage.class);
+                                                intent.putExtra("user_email",email);
+                                                intent.putExtra("user_password",password);
+                                                intent.putExtra("campaignID",list.get(finalI).getCampaignId());
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                                startActivity(intent);
                                             }
                                         });
                                         String feats = "";

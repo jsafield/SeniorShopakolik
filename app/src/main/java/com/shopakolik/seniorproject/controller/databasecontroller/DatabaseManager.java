@@ -813,7 +813,9 @@ public class DatabaseManager {
         CampaignType type = CampaignType.values()[jsonObject.getInt("type")];
         String condition = jsonObject.getString("precondition");
         String details = jsonObject.getString("details");
-        int storeId = jsonObject.getInt("store_id");
+        int storeID = jsonObject.getInt("store_id");
+        String name = jsonObject.getString("name");
+        String logo = jsonObject.getString("logo");
 
         int percentage = 0;
         if (type == CampaignType.DiscountPercentage)
@@ -824,7 +826,7 @@ public class DatabaseManager {
             amount = Float.parseFloat(jsonObject.getString("amount"));
 
         return new Campaign(campaignId, startDate, endDate, image, type, condition,
-                details, percentage, amount, storeId);
+                details, percentage, amount, storeID, name, logo);
     }
 
     // For Customers, to add stores as favorite

@@ -1,155 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/update_campaign_layout">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/update_campaign_layout">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+       <!-- <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/brand_layout">
+            android:id="@+id/brand_layout"
+            android:background="#ffffff"
+            android:padding="10dp"
+            android:weightSum="1">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/brand_logo"
-                android:src="@mipmap/esteelaudericon" />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/brand_logo"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Stravardious"
-                android:padding="15dp"
+                android:paddingLeft="15dp"
                 android:id="@+id/brand_name"
                 android:textColor="@color/black"
+                android:gravity="center_vertical"
                 android:textStyle="bold"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/dividerForUpdateCamp"
+            android:layout_below="@+id/brand_layout"
+            android:background="#E2DADB"/>-->
+
         <LinearLayout
             android:id="@+id/campaign_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/brand_layout"
             android:orientation="horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_alignLeft="@+id/brand_layout"
-            android:layout_alignStart="@+id/brand_layout"
-            android:layout_alignRight="@+id/brand_layout"
-            android:layout_alignEnd="@+id/brand_layout">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+            <!--android:layout_below="@+id/dividerForUpdateCamp"-->
 
 
             <TextView
                 android:id="@+id/campaign_start"
-                android:layout_width="120dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Campaign Start : "
+                android:text="Start Date:"
                 android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
+                android:textColor="@color/black"/>
 
 
             <TextView
-                android:layout_width="120dp"
+                android:id="@+id/campaign_sdate"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:id="@+id/campaign_sdate"
-                android:gravity="center_vertical"
-                />
+                android:paddingRight="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:textColor="@color/black"/>
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/datePickerS"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="3dp"
                 android:src="@android:drawable/ic_menu_today"
-                android:onClick="showDatePickerDialog" />
+                android:onClick="showDatePickerDialog"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:id="@+id/campaign2_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/campaign_layout"
-            android:layout_alignRight="@+id/campaign_layout"
-            android:layout_alignEnd="@+id/campaign_layout"
-            android:layout_alignLeft="@+id/campaign_layout"
-            android:layout_alignStart="@+id/campaign_layout"
-            android:id="@+id/campaign2_layout">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:id="@+id/campaign_finish"
-                android:layout_width="120dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Campaign Finish : "
+                android:text="End Date:"
                 android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
+                android:textColor="@color/black"/>
 
             <TextView
-                android:layout_width="120dp"
+                android:id="@+id/campaign_fdate"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:id="@+id/campaign_fdate"
-                android:gravity="center_vertical" />
+                android:paddingRight="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:textColor="@color/black"/>
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/datePickerF"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="3dp"
                 android:src="@android:drawable/ic_menu_today"
-                android:onClick="showDatePickerDialog2" />
+                android:onClick="showDatePickerDialog2"/>
 
 
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/campaignType"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/txt_layout"
-            android:layout_alignLeft="@+id/txt_layout"
-            android:layout_alignRight="@+id/txt_layout"
-            android:layout_alignStart="@+id/txt_layout"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/campaign2_layout"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
             <RadioGroup
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:id="@+id/groupRadio">
 
                 <RadioButton
                     android:id="@+id/sales"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Discount"
-                    android:checked="false"
-                    android:textSize="12dp" />
+                    android:layout_height="match_parent"
+                    android:text="Discount"/>
 
                 <RadioButton
                     android:id="@+id/shoppingvoucher"
+                    android:layout_marginLeft="15dp"
+                    android:maxWidth="100dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ShoppingVoucher"
-                    android:textSize="12dp" />
+                    android:layout_height="match_parent"
+                    android:text="Shopping Voucher"/>
 
                 <RadioButton
                     android:id="@+id/otherbutton"
+                    android:layout_marginLeft="15dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="other"
-                    android:textSize="12dp" />
+                    android:layout_height="match_parent"
+                    android:text="Other"/>
             </RadioGroup>
 
 
@@ -158,31 +168,36 @@
         <LinearLayout
             android:id="@+id/amount_percentage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/campaign2_layout"
-            android:layout_alignLeft="@+id/campaign2_layout"
-            android:layout_alignRight="@+id/campaign2_layout"
-            android:layout_alignStart="@+id/campaign2_layout"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/campaignType"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
             <RadioGroup
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:id="@+id/radio_group">
 
                 <RadioButton
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:id="@+id/percentageRadioButton"/>
 
                 <EditText
                     android:id="@+id/percentage"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="4"
-                    android:gravity="right" />
+                    android:layout_height="match_parent"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:ems="3"
+                    android:maxLines="1"
+                    android:gravity="end"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -190,20 +205,25 @@
                     android:gravity="center_vertical"
                     android:text="%"
                     android:textIsSelectable="false"
-                    android:textSize="25dp"
                     android:textColor="@color/black"/>
 
                 <RadioButton
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
                     android:id="@+id/amountRadioButton"/>
 
                 <EditText
                     android:id="@+id/amount"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="4"
-                    android:gravity="right" />
+                    android:layout_height="match_parent"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:maxLines="1"
+                    android:ems="3"
+                    android:gravity="end"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -211,59 +231,56 @@
                     android:gravity="center_vertical"
                     android:text="TL"
                     android:textIsSelectable="false"
-                    android:textSize="18dp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold">
+                    android:textColor="@color/black">
                 </TextView>
             </RadioGroup>
 
         </LinearLayout>
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/campaign2_layout"
-            android:layout_alignLeft="@+id/campaign2_layout"
-            android:layout_alignRight="@+id/campaign2_layout"
-            android:layout_alignStart="@+id/campaign2_layout"
             android:layout_below="@+id/amount_percentage"
             android:id="@+id/shopping_voucher"
             android:orientation="horizontal"
-            android:weightSum="1">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Amount : "
                 android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
+                android:textColor="@color/black"/>
+
             <EditText
                 android:id="@+id/voucher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="4" />
+                android:ems="3"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="TL : "
                 android:gravity="center_vertical"
-                android:textSize="18dp"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
+                android:text="TL"
+                android:textIsSelectable="false"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/description_Layout"
             android:layout_below="@+id/shopping_voucher"
-            android:layout_alignRight="@+id/campaign2_layout"
-            android:layout_alignEnd="@+id/campaign2_layout"
-            android:layout_alignLeft="@+id/campaign2_layout"
-            android:layout_alignStart="@+id/campaign2_layout"
-            >
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:id="@+id/description"
@@ -271,8 +288,7 @@
                 android:layout_height="match_parent"
                 android:text="Description : "
                 android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
+                android:textColor="@color/black"/>
 
 
         </LinearLayout>
@@ -280,41 +296,13 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/campaignRule"
-            android:layout_alignEnd="@+id/campaign2_layout"
-            android:layout_alignLeft="@+id/campaign2_layout"
-            android:layout_alignRight="@+id/campaign2_layout"
-            android:layout_alignStart="@+id/campaign2_layout"
-            android:layout_below="@+id/txt_layout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Precondition :"
-                android:id="@+id/precondition"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/precondition_text"
-                android:ems="7"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txt_layout"
             android:layout_below="@+id/description_Layout"
-            android:layout_alignRight="@+id/description_Layout"
-            android:layout_alignEnd="@+id/description_Layout"
-            android:layout_alignLeft="@+id/campaign2_layout"
-            android:layout_alignStart="@+id/campaign2_layout"
-            android:weightSum="1">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
             <EditText
                 android:layout_width="match_parent"
@@ -324,54 +312,75 @@
                 android:id="@+id/description_txt"
                 android:gravity="center_vertical"
                 android:maxLines="2"
-                android:maxLength="72" />
+                android:maxLength="72"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/campaignRule"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_below="@+id/txt_layout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precondition :"
+                android:id="@+id/precondition"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/precondition_text"
+                android:ems="7"/>
         </LinearLayout>
 
 
         <Button
             android:id="@+id/changeimage"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/txt_layout"
-            android:layout_alignLeft="@+id/txt_layout"
-            android:layout_alignRight="@+id/txt_layout"
-            android:layout_alignStart="@+id/txt_layout"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_below="@+id/campaignRule"
             android:onClick="pickImageClicked"
-            android:text="Change the Image" />
+            android:text="Change the Image"/>
 
 
         <ImageView
             android:id="@+id/currentImageView"
-            android:layout_width="288dp"
-            android:layout_height="288dp"
-            android:layout_alignEnd="@+id/changeimage"
-            android:layout_alignLeft="@+id/changeimage"
-            android:layout_alignRight="@+id/changeimage"
-            android:layout_alignStart="@+id/changeimage"
-            android:layout_below="@+id/changeimage" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_gravity="center_vertical"
+            android:layout_below="@+id/changeimage"/>
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/txt_layout"
-            android:layout_alignLeft="@+id/txt_layout"
-            android:layout_alignRight="@+id/txt_layout"
-            android:layout_alignStart="@+id/txt_layout"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:layout_below="@+id/currentImageView">
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="SAVE"
-                android:id="@+id/save"
-                android:layout_alignEnd="@+id/txt_layout"
-                android:layout_alignLeft="@+id/txt_layout"
-                android:layout_alignRight="@+id/txt_layout"
-                android:layout_alignStart="@+id/txt_layout"
-                android:layout_below="@+id/currentImageView"
-                android:layout_marginBottom="16dp"/>
+                android:id="@+id/save"/>
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>
