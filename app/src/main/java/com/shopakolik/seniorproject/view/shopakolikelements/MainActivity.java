@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,11 +64,32 @@ public class MainActivity extends ActionBarActivity {
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         context = this;
 
+        boolean emailFlag = false, passFlag = false;
         if (sharedpreferences.contains(Email)) {
             email.setText(sharedpreferences.getString(Email, ""));
+            emailFlag = true;
         }
         if (sharedpreferences.contains(Password)) {
             password.setText(sharedpreferences.getString(Password, ""));
+            passFlag = true;
+        }
+
+        if(emailFlag && passFlag)
+        {
+            final ProgressDialog ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Logging in ...", true);
+            //ringProgressDialog.setCancelable(true);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+
+                        userLogin();
+                    } catch (Exception e) {
+
+                    }
+                    ringProgressDialog.dismiss();
+                }
+            }).start();
         }
 
         oldemail = email.getText().toString();
@@ -81,7 +104,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void userLogin(){
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 UserType userType = UserType.NonUser;
@@ -142,7 +165,13 @@ public class MainActivity extends ActionBarActivity {
                 }
 
             }
-        }).start();
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void signUpCustomerClick(View view) {
