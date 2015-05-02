@@ -1,29 +1,40 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
     android:background="@color/background_main">
+
+    <View
+        android:id="@+id/space1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.2"/>
 
     <LinearLayout
         android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="50dp">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/LogoWriting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/logo_name" />
+            android:src="@drawable/narrow_logo" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/space2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.2"/>
 
     <LinearLayout
         android:id="@+id/email_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/logo"
         android:orientation="horizontal">
 
         <EditText
@@ -43,8 +54,7 @@
     <LinearLayout
         android:id="@+id/password_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/email_layout">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/password"
@@ -64,7 +74,6 @@
         android:id="@+id/logIn_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/password_layout"
         android:paddingTop="3dp">
 
         <Button
@@ -78,42 +87,52 @@
             android:textColor="@color/white"/>
     </LinearLayout>
 
-    <LinearLayout
+    <View
+        android:id="@+id/space3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"/>
+
+    <RelativeLayout
         android:id="@+id/signUpLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/signUpShop_layout">
+        android:gravity="center_horizontal">
 
         <TextView
             android:id="@+id/SignUpAsCustomer"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign Up as Customer"
             android:textColor="@color/white"
             android:onClick="signUpCustomerClick"
             android:clickable="true"
             android:textStyle="italic"
-            android:gravity="center_horizontal" />
-    </LinearLayout>
-    <LinearLayout
+            android:gravity="center_horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"/>
+    </RelativeLayout>
+    <RelativeLayout
         android:id="@+id/signUpShop_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:paddingBottom="30dp"
-        android:paddingTop="5dp">
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="25dp">
 
         <TextView
             android:id="@+id/SignUpAsShop"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign Up as Shop"
             android:onClick="signUpShopClick"
             android:textColor="@color/white"
             android:clickable="true"
             android:textStyle="italic"
-            android:gravity="center_horizontal" />
-    </LinearLayout>
+            android:gravity="center_horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+    </RelativeLayout>
     <!--<include-->
     <!--android:id="@+id/app_bar"-->
     <!--layout="@layout/app_bar" />-->
@@ -139,4 +158,4 @@
     <!--android:id="@+id/forgetPassword" />-->
 
 
-</RelativeLayout>
+</LinearLayout>
