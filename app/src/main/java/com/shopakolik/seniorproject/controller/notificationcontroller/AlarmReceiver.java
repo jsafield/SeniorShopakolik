@@ -47,7 +47,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         //Log.e("month", month);
         final String day = dateString.substring(8,10);
         Log.e("AlarmReciver", "Alarmstarted");
-        final Intent mintent = intent;
         sharedpreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         email = sharedpreferences.getString("emailKey", "");
         password = sharedpreferences.getString("passwordKey", "");
@@ -78,7 +77,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                     /*Log.e("cur day", ""+day);
                     * */
-                    ArrayList<Campaign> favCamps = DatabaseManager.getFavoriteCampaigns(mintent.getStringExtra("email"), mintent.getStringExtra("password"));
+                    ArrayList<Campaign> favCamps = DatabaseManager.getFavoriteCampaigns(email, password);
                     if(favCamps!= null)
                     {
                         for(int i=0; i<favCamps.size(); i++)
@@ -114,13 +113,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 builder.setTicker(storeName + "has a special offer for you!");
 
-                builder.setSmallIcon(R.drawable.ic_launcher);
+                builder.setSmallIcon(R.drawable.logo_name);
 
                 builder.setAutoCancel(true);
 
                 Notification notification = builder.build();
 
-                RemoteViews contentView = new RemoteViews(MainActivity.PACKAGE_NAME, R.layout.newcampnotif);
+                RemoteViews contentView = new RemoteViews("com.shopakolik.seniorproject", R.layout.newcampnotif);
 
                 URL url = null;
                 Bitmap image = null;
@@ -169,7 +168,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 Notification notification = builder.build();
 
-                RemoteViews contentView = new RemoteViews(MainActivity.PACKAGE_NAME, R.layout.newcampnotif);
+                RemoteViews contentView = new RemoteViews("com.shopakolik.seniorproject", R.layout.newcampnotif);
 
                 URL url = null;
                 Bitmap image = null;

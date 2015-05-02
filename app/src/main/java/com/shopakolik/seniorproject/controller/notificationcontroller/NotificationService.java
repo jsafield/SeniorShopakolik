@@ -53,7 +53,6 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        final Intent thisIntent = intent;
         sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         email = sharedpreferences.getString("emailKey", "");
         password = sharedpreferences.getString("passwordKey", "");
