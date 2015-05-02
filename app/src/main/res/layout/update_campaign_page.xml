@@ -123,15 +123,34 @@
 
         </LinearLayout>
 
+
         <LinearLayout
-            android:id="@+id/campaignType"
+            android:id="@+id/campaign_types"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/campaign2_layout"
             android:orientation="horizontal"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="5dp"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:id="@+id/addCampaignType_header"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Pick Campaign Type"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/campaignType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/campaign_types"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:paddingBottom="5dp">
 
             <RadioGroup
@@ -280,11 +299,11 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp">
+            >
 
             <TextView
                 android:id="@+id/description"
-                android:layout_width="110dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Description : "
                 android:gravity="center_vertical"
@@ -301,7 +320,6 @@
             android:layout_below="@+id/description_Layout"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="5dp"
             android:paddingBottom="5dp">
 
             <EditText

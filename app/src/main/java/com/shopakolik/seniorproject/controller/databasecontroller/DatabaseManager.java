@@ -1099,4 +1099,17 @@ public class DatabaseManager {
 
         return result.equals("success\n");
     }
+
+    // Remove a location from store
+    public static boolean customSearch(String email, String password, int searchKey)
+            throws Exception {
+
+        String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
+                + "&password=" + URLEncoder.encode(password, "UTF-8")
+                + "&search_key=" + URLEncoder.encode(""+searchKey, "UTF-8");
+
+        String result = httpPost(SERVER_URL + "CustomSearch.php", urlParameters);
+
+        return result.equals("success\n");
+    }
 }
