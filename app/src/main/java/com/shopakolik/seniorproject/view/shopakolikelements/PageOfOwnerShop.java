@@ -132,6 +132,7 @@ public class PageOfOwnerShop extends BaseActivity {
                                 final ImageView deleteimage = (ImageView) itemView.findViewById(R.id.deleteimage);
                                 final ImageView updateimage = (ImageView) itemView.findViewById(R.id.update);
                                 final ToggleButton button = (ToggleButton) itemView.findViewById(R.id.favorite_button);
+                                final ImageView cloud = (ImageView) itemView.findViewById(R.id.image);
 
 
                                 new Thread(new Runnable() {

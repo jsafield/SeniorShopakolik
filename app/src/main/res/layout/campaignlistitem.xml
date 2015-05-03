@@ -75,6 +75,7 @@
         <!--android:layout_alignLeft="@+id/pictureLayout"-->
         <!--android:layout_alignStart="@+id/pictureLayout" />-->
 
+
         <ToggleButton
             style="?android:attr/buttonStyleSmall"
             android:drawableLeft="@android:drawable/btn_star_big_off"

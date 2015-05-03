@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#E6E6E6">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:id="@+id/view1"
+        android:layout_alignParentTop="true"
+        android:background="#FFFFFF"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
+
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchView1"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listView_search"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/view1"
+        android:layout_marginTop="25dp"
+        android:dividerHeight="2dp"
+        android:divider="#116e7b"
+        ></ListView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:id="@+id/searchButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/searchView1"
+        android:layout_alignEnd="@+id/searchView1" />
+
+</RelativeLayout>

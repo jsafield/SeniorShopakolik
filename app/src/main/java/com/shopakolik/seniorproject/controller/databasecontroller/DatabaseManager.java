@@ -1101,7 +1101,7 @@ public class DatabaseManager {
     }
 
     // Remove a location from store
-    public static boolean customSearch(String email, String password, int searchKey)
+    public static ArrayList<Store> customSearch(String email, String password, String searchKey)
             throws Exception {
 
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
@@ -1109,7 +1109,9 @@ public class DatabaseManager {
                 + "&search_key=" + URLEncoder.encode(""+searchKey, "UTF-8");
 
         String result = httpPost(SERVER_URL + "CustomSearch.php", urlParameters);
-
-        return result.equals("success\n");
+        Log.e("custom search result",result);
+        if(result.startsWith("failure"))
+            return new ArrayList<Store>();
+        return parseSimpleStoresFromJSON(result);
     }
 }
