@@ -76,7 +76,7 @@ public class MainActivity extends ActionBarActivity {
 
         if(emailFlag && passFlag)
         {
-            final ProgressDialog ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Logging in ...", true);
+//            final ProgressDialog ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Logging in ...", true);
             //ringProgressDialog.setCancelable(true);
             new Thread(new Runnable() {
                 @Override
@@ -87,7 +87,7 @@ public class MainActivity extends ActionBarActivity {
                     } catch (Exception e) {
 
                     }
-                    ringProgressDialog.dismiss();
+//                    ringProgressDialog.dismiss();
                 }
             }).start();
         }
