@@ -10,8 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardPreventCornerOverlap="false">
+        card_view:cardUseCompatPadding="true"
+        card_view:cardBackgroundColor="@color/buttonColor2"
+        card_view:cardCornerRadius="3dp"
+        card_view:cardElevation="4dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -20,7 +22,7 @@
             <ImageView
                 android:id="@+id/denemeResmi"
                 android:layout_width="fill_parent"
-                android:layout_height="250dp"
+                android:layout_height="225dp"
                 android:scaleType="centerCrop"
                 android:background="@drawable/bck_rounded"
 
