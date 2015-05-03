@@ -86,6 +86,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                             {
                                 createNotification2(stores.get(i).getName(), "test", stores.get(i).getLogo(), 10, context, stores.get(i).getStoreId());
                             }
+                            //createNotification2(stores.get(i).getName(), "test", stores.get(i).getLogo(), 10, context, stores.get(i).getStoreId());
                         }
                     }
                 } catch (Exception e) {
@@ -113,7 +114,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 builder.setTicker(storeName + "has a special offer for you!");
 
-                builder.setSmallIcon(R.drawable.logo_name);
+                builder.setSmallIcon(R.drawable.logo);
 
                 builder.setAutoCancel(true);
 
@@ -162,7 +163,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 builder.setTicker(storeName + "1 day left!");
 
-                builder.setSmallIcon(R.drawable.ic_launcher);
+                builder.setSmallIcon(R.drawable.logo);
 
                 builder.setAutoCancel(true);
 

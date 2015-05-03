@@ -143,7 +143,7 @@ public class NotificationService extends Service {
 
                 builder.setTicker(storeName + " " + branch + " is around you!");
 
-                builder.setSmallIcon(R.drawable.ic_launcher);
+                builder.setSmallIcon(R.drawable.logo);
 
                 builder.setAutoCancel(true);
 
