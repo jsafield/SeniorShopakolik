@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.view.GravityCompat;
@@ -30,6 +31,9 @@ import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.notificationcontroller.AlarmReceiver;
 import com.shopakolik.seniorproject.controller.notificationcontroller.NotificationService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by namely on 21.04.2015.
  */
@@ -40,9 +44,12 @@ public class BaseActivity extends ActionBarActivity {
     private String[] menuTitles;
     private ActionBarDrawerToggle mDrawerToggle;
     private String email,password,userType;
+    private TypedArray navMenuIcons;
     SharedPreferences sharedpreferences;
     Context context;
     SearchView searchView;
+    private List<RowItem> rowItems;
+    private NavigatorAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,25 +64,42 @@ public class BaseActivity extends ActionBarActivity {
         userType = intent.getStringExtra("user_type");
         Log.e("usertype Base Activity",userType);
 
-        sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-
-        if(userType.equals("Customer"))
-           menuTitles = getResources().getStringArray(R.array.menu_array);
-        else if(userType.equals("Store")){
-            menuTitles = getResources().getStringArray(R.array.menu_shop_array);
-        }
-
-       Log.e(email,password);
-
+        rowItems = new ArrayList<RowItem>();
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
+
+        sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+
+
+        if(userType.equals("Customer"))
+        {
+            menuTitles = getResources().getStringArray(R.array.menu_array);
+            navMenuIcons = getResources().obtainTypedArray(R.array.menu_array_icon);
+        }
+
+        else if(userType.equals("Store")){
+            menuTitles = getResources().getStringArray(R.array.menu_shop_array);
+            navMenuIcons = getResources().obtainTypedArray(R.array.menu_shopOwner_icon_array);
+        }
+        for (int i = 0; i < menuTitles.length; i++) {
+            RowItem items = new RowItem(menuTitles[i], navMenuIcons.getResourceId(i, -1));
+            rowItems.add(items);
+        }
+        navMenuIcons.recycle();
+
+        adapter = new NavigatorAdapter(getApplicationContext(), rowItems);
+        mDrawerList.setAdapter(adapter);
+
+
+
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
-        mDrawerList.setAdapter(new ArrayAdapter<>(this,
-                R.layout.drawer_list_item, menuTitles));
+//        mDrawerList.setAdapter(new ArrayAdapter<>(this,
+//                R.layout.drawer_list_item,menuTitles,navMenuIcons));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
