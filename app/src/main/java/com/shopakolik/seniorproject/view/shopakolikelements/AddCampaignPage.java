@@ -76,7 +76,7 @@ public class AddCampaignPage extends ActionBarActivity {
         description = (TextView) findViewById(R.id.description);
         img = (ImageView) findViewById(R.id.currentImageView);
         radiobuttonType = (RadioGroup) findViewById(R.id.radioGroupType);
-        radiogroupbutton2 = (RadioGroup) findViewById(R.id.radioButton);
+        radiogroupbutton2 = (RadioGroup) findViewById(R.id.radio_group);
         amount = (EditText) findViewById(R.id.amount);
         percentage = (EditText) findViewById(R.id.percentage);
         amountPercentage = (LinearLayout) findViewById(R.id.amount_percentage);
@@ -118,7 +118,7 @@ public class AddCampaignPage extends ActionBarActivity {
                             if (radiogroupbutton2.getCheckedRadioButtonId() == R.id.percentageButton) {
                                 type = CampaignType.DiscountPercentage;
 
-                            } else if (radiogroupbutton2.getCheckedRadioButtonId() == R.id.amountButton) {
+                            } else if (radiogroupbutton2.getCheckedRadioButtonId() == R.id.amountRadioButton) {
                                 type = CampaignType.DiscountAmount;
                             }
                         } else if (radiobuttonType.getCheckedRadioButtonId() == R.id.shoppingvoucher) {

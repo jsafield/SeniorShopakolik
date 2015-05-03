@@ -5,6 +5,7 @@
                 android:layout_marginBottom="10dp"
                 android:id="@+id/itemLayout">
 
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
