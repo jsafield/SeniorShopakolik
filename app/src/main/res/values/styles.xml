@@ -6,7 +6,9 @@
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryColorDark</item>
         <item name="colorAccent">@color/accentColor</item>
-        <item name="android:windowBackground">@color/background1</item>
+        <item name="android:windowBackground">@color/white</item>
+
+        
 
     </style>
     
@@ -30,6 +32,13 @@
         <item name="android:shadowRadius">0.6</item>
         <item name="android:background">@drawable/custom_button</item>
         <item name="android:padding">10dip</item>
+    </style>
+
+    <style name="DialogFragment" parent="">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:textColor">@color/hintColor</item>
+        <item name="android:listDivider">@color/buttonColor2</item>
     </style>
 
 </resources>

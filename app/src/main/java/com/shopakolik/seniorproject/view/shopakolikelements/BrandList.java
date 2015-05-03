@@ -8,6 +8,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -36,6 +37,9 @@ public class BrandList extends DialogFragment {
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.DialogFragment);
 
         user = new User(Wall.getEmail(),Wall.getPassword());
 

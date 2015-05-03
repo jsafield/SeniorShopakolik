@@ -1,5 +1,6 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
+import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.view.GravityCompat;

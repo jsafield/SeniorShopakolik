@@ -12,6 +12,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,6 +40,10 @@ public class CategoryPage extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                 Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        getDialog().setTitle(categoryType.toString());
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.DialogFragment);
         View rootView = inflater.inflate(R.layout.categorypage, container,
                 false);
 

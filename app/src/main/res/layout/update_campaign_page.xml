@@ -370,7 +370,8 @@
             android:layout_marginBottom="5dp"
             android:layout_below="@+id/campaignRule"
             android:onClick="pickImageClicked"
-            android:text="Change the Image"/>
+            android:text="Change the Image"
+            style="@style/customizeButton"/>
 
 
         <ImageView
@@ -398,7 +399,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="SAVE"
-                android:id="@+id/save"/>
+                android:id="@+id/save"
+                style="@style/customizeButton"/>
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

@@ -189,7 +189,6 @@ android:layout_height="match_parent">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="?android:attr/buttonStyleSmall"
         android:layout_alignEnd="@+id/linearLayoutReNewPassword"
         android:layout_alignRight="@+id/linearLayoutReNewPassword"
         android:layout_below="@+id/linearLayoutReNewPassword"
@@ -197,7 +196,8 @@ android:layout_height="match_parent">
         android:text="Update Changes"
         android:layout_alignLeft="@+id/linearLayoutReNewPassword"
         android:layout_alignStart="@+id/linearLayoutReNewPassword"
-        android:onClick="updateChangeOnClick"/>
+        android:onClick="updateChangeOnClick"
+        style="@style/customizeButton"/>
 
 </RelativeLayout>
 </ScrollView>
