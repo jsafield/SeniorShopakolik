@@ -23,6 +23,7 @@ import java.util.ArrayList;
  */
 public class FavoriteCampaignPage extends BaseActivity {
 
+    boolean isLiked;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +32,6 @@ public class FavoriteCampaignPage extends BaseActivity {
         final String email = extras.getString("user_email");
         final String password = extras.getString("user_password");
         final String user_type = extras.getString("user_type");
-
 
         RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
         final View favView = getLayoutInflater().inflate(R.layout.favorite_campaign_page, baseLayout, false);
@@ -52,6 +52,8 @@ public class FavoriteCampaignPage extends BaseActivity {
                         String campImageURL = DatabaseManager.getServerUrl() + "Images/CampaignImages/" + list.get(i).getImage();
                         URL imageURL = new URL(campImageURL);
                         final Bitmap imageCamp = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                        isLiked = DatabaseManager.isFavoriteCampaign(email, password,
+                                list.get(i).getCampaignId());
 
                         final int finalI = i;
                         runOnUiThread(new Runnable() {
@@ -59,13 +61,13 @@ public class FavoriteCampaignPage extends BaseActivity {
                             public void run() {
                                 View itemView = getLayoutInflater().inflate(R.layout.favorite_campaign, campaignList, false);
 
-//                                ImageView logo = (ImageView) itemView.findViewById(R.id.brand_logo);
-//                                TextView title = (TextView) itemView.findViewById(R.id.brand_name);
+//                                ImageView logo = (ImageView) itemView.findViewById(R.storeID.brand_logo);
+//                                TextView title = (TextView) itemView.findViewById(R.storeID.brand_name);
                                 ImageView campaignImage = (ImageView) itemView.findViewById(R.id.campimage);
                                 TextView features = (TextView) itemView.findViewById(R.id.features);
                                 TextView peramo = (TextView) itemView.findViewById(R.id.peramo);
                                 TextView date = (TextView) itemView.findViewById(R.id.dateRemainer);
-
+                                final ToggleButton toggleButton = (ToggleButton) itemView.findViewById(R.id.addFavoriteIcon);
                                 //set
 
 //                                logo.setImageBitmap(image);
@@ -94,31 +96,61 @@ public class FavoriteCampaignPage extends BaseActivity {
                                 }
                                 peramo.setText(percamo);
 
+
                                 long diff = Math.abs(list.get(finalI).getEndDate().getTime() - System.currentTimeMillis());
-                                date.setText("" + (diff / (24 * 60 * 60 * 1000)) + " days");
 
-                                ToggleButton button = (ToggleButton) itemView.findViewById(R.id.favorite_button);
-                                button.setChecked(true);
-                                button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                long result = ((diff / (24 * 60 * 60 * 1000)) + 1);
+                                date.setText("" +  result  + " day" + (result >1? "s": "") );
+
+                                if(isLiked){
+                                    toggleButton.setChecked(true);
+                                    toggleButton.setBackgroundResource(
+                                            R.drawable.ic_action_name2);
+                                } else {toggleButton.setChecked(false);
+                                    toggleButton.setBackgroundResource(
+                                            R.drawable.ic_action_name);
+                                }
+
+                                toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                     @Override
-                                    public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    if (isChecked) {
-                                                        DatabaseManager.addFavoriteCampaign(email, password, list.get(finalI).getCampaignId());
-                                                    } else {
-                                                        DatabaseManager.removeFavoriteCampaign(email, password, list.get(finalI).getCampaignId());
+                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                        if (isChecked) {
+                                           toggleButton.setBackgroundResource(
+                                                    R.drawable.ic_action_name2);
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        DatabaseManager.
+                                                                addFavoriteCampaign(CardView.email, CardView.password,
+                                                                        list.get(finalI)
+                                                                                .getCampaignId());
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
                                                     }
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
                                                 }
-                                            }
-                                        }).start();
+                                            }).start();
+                                        }else {
+                                            toggleButton.setBackgroundResource(
+                                                    R.drawable.ic_action_name);
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        DatabaseManager.
+                                                                removeFavoriteCampaign(
+                                                                        CardView.email, CardView.password,
+                                                                        list.get(finalI)
+                                                                                .getCampaignId());
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            }).start();
+                                        }
                                     }
                                 });
+
                                 campaignList.addView(itemView);
 
 

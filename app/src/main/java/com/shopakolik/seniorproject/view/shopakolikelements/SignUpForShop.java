@@ -67,7 +67,7 @@ public class SignUpForShop extends ActionBarActivity {
     }
 
     //    public void showSelectedCategories(){
-//        TextView textView = (TextView) findViewById(R.id.textView);
+//        TextView textView = (TextView) findViewById(R.storeID.textView);
 //        String sentence = " ";
 //        String sent =" ";
 //        for(int i=0; i < selectedCategories.size(); i++)

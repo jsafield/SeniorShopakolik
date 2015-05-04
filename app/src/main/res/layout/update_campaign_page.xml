@@ -14,7 +14,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/brand_layout"
+            android:storeID="@+storeID/brand_layout"
             android:background="#ffffff"
             android:padding="10dp"
             android:weightSum="1">
@@ -22,14 +22,14 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:id="@+id/brand_logo"/>
+                android:storeID="@+storeID/brand_logo"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:paddingLeft="15dp"
-                android:id="@+id/brand_name"
+                android:storeID="@+storeID/brand_name"
                 android:textColor="@color/black"
                 android:gravity="center_vertical"
                 android:textStyle="bold"/>
@@ -38,8 +38,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:id="@+id/dividerForUpdateCamp"
-            android:layout_below="@+id/brand_layout"
+            android:storeID="@+storeID/dividerForUpdateCamp"
+            android:layout_below="@+storeID/brand_layout"
             android:background="#E2DADB"/>-->
 
         <LinearLayout
@@ -51,7 +51,7 @@
             android:paddingRight="10dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp">
-            <!--android:layout_below="@+id/dividerForUpdateCamp"-->
+            <!--android:layout_below="@+storeID/dividerForUpdateCamp"-->
 
 
             <TextView

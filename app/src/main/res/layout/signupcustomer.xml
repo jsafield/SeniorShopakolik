@@ -18,7 +18,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="40sp"
         android:textColor="#445894"
-        android:id="@+id/app_name"/>-->
+        android:storeID="@+storeID/app_name"/>-->
 
 
     <LinearLayout

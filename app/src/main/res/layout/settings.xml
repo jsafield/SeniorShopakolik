@@ -61,13 +61,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="?android:attr/buttonStyleSmall"
-        android:layout_alignEnd="@+id/linearLayoutLocationNotification"
-        android:layout_alignRight="@+id/linearLayoutLocationNotification"
-        android:layout_below="@+id/linearLayoutLocationNotification"
+        android:layout_alignEnd="@+storeID/linearLayoutLocationNotification"
+        android:layout_alignRight="@+storeID/linearLayoutLocationNotification"
+        android:layout_below="@+storeID/linearLayoutLocationNotification"
         android:layout_marginTop="15dp"
         android:text="Update Settings"
-        android:layout_alignLeft="@+id/linearLayoutLocationNotification"
-        android:layout_alignStart="@+id/linearLayoutLocationNotification"
+        android:layout_alignLeft="@+storeID/linearLayoutLocationNotification"
+        android:layout_alignStart="@+storeID/linearLayoutLocationNotification"
         android:onClick="updateSettingsOnClick"/>-->
 
 </RelativeLayout>

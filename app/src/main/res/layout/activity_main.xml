@@ -134,7 +134,7 @@
             android:paddingBottom="5dp"/>
     </RelativeLayout>
     <!--<include-->
-    <!--android:id="@+id/app_bar"-->
+    <!--android:storeID="@+storeID/app_bar"-->
     <!--layout="@layout/app_bar" />-->
 
     <!--<TextView android:text="@string/app_name"
@@ -143,7 +143,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="40sp"
         android:textColor="#445894"
-        android:id="@+id/app_name" />
+        android:storeID="@+storeID/app_name" />
     -->
 
 
@@ -152,10 +152,10 @@
     <!--android:layout_height="wrap_content"-->
     <!--android:text="@string/forgetPassword"-->
     <!--android:layout_centerVertical="true"-->
-    <!--android:layout_toRightOf="@+id/signInButton"-->
-    <!--android:layout_toEndOf="@+id/signInButton"-->
+    <!--android:layout_toRightOf="@+storeID/signInButton"-->
+    <!--android:layout_toEndOf="@+storeID/signInButton"-->
     <!--android:onClick="forgetPasswordClick"-->
-    <!--android:id="@+id/forgetPassword" />-->
+    <!--android:storeID="@+storeID/forgetPassword" />-->
 
 
 </LinearLayout>

@@ -19,8 +19,8 @@ import com.shopakolik.seniorproject.model.shopakolikelements.Store;
  */
 public class ProfilePage extends ActionBarActivity {
 
-    private TextView name, surname, user_email;
-    private String email, password;
+    private TextView name, surname, user_email,old_password,new_password, renew_password ;
+    private String email, password, userType;
     Customer customer;
 
     public void onCreate(Bundle savedInstanceState){
@@ -30,14 +30,19 @@ public class ProfilePage extends ActionBarActivity {
         Intent intent = getIntent();
         email = intent.getStringExtra("user_email");
         password = intent.getStringExtra("user_password");
+        userType = intent.getStringExtra("user_type");
 
         name = (TextView) findViewById(R.id.user_name_value);
         surname = (TextView) findViewById(R.id.user_surname_value);
         user_email = (TextView) findViewById(R.id.user_email_value);
+//        old_password = (TextView) findViewById(R.id.user_old_password_value);
+//        new_password = (TextView) findViewById(R.id.user_new_password_value);
+//        renew_password = (TextView) findViewById(R.id.user_renew_password_value);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
+                //TODO
                 //set text views inside
                 try {
                     customer = DatabaseManager.getCustomer(email, password);

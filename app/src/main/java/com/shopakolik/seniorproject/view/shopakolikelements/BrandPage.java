@@ -174,65 +174,67 @@ public class BrandPage extends BaseActivity {
                                                         }
                                                         peramo.setText(percamo);
 
-                                                        long diff = Math.abs(store.getCampaigns().get(
-                                                                finalI).getEndDate().getTime() - System.currentTimeMillis());
-                                                        date.setText("" + (diff / (24 * 60 * 60 * 1000)) + " days");
 
-                                                        final ToggleButton button = (ToggleButton) itemView.
-                                                                findViewById(R.id.favorite_button);
+
+                                                        long diff = Math.abs(store.getCampaigns().get(finalI).getEndDate().getTime() - System.currentTimeMillis());
+
+                                                        long result = ((diff / (24 * 60 * 60 * 1000)) + 1);
+                                                        date.setText("" +  result  + " day" + (result >1? "s": "") );
+
+                                                        final ToggleButton toggleButton = (ToggleButton) itemView.
+                                                                findViewById(R.id.addFavoriteIcon);
+
 
                                                         if(isLiked){
-                                                            button.setChecked(true);
-                                                            button.setCompoundDrawablesWithIntrinsicBounds(
-                                                                    android.R.drawable.btn_star_big_on, 0, 0, 0);
-                                                        } else {button.setChecked(false);
-                                                            button.setCompoundDrawablesWithIntrinsicBounds(
-                                                                    android.R.drawable.btn_star_big_off, 0, 0, 0);
+                                                            toggleButton.setChecked(true);
+                                                            toggleButton.setBackgroundResource(
+                                                                    R.drawable.ic_action_name2);
+                                                        } else {toggleButton.setChecked(false);
+                                                            toggleButton.setBackgroundResource(
+                                                                    R.drawable.ic_action_name);
                                                         }
-                                                        button.setOnCheckedChangeListener(
-                                                                new CompoundButton.OnCheckedChangeListener() {
-                                                                    @Override
-                                                                    public void onCheckedChanged
-                                                                            (CompoundButton buttonView, boolean isChecked) {
 
-                                                                        if (isChecked){
-                                                                            button.setCompoundDrawablesWithIntrinsicBounds(
-                                                                                    android.R.drawable.btn_star_big_on, 0, 0, 0);
-                                                                            new Thread(new Runnable() {
-                                                                                @Override
-                                                                                public void run() {
-                                                                                    try {
-                                                                                        DatabaseManager.
-                                                                                                addFavoriteCampaign(email, password,
-                                                                                                        store.getCampaigns()
-                                                                                                                .get(finalI)
-                                                                                                                .getCampaignId());
-                                                                                    } catch (Exception e) {
-                                                                                        e.printStackTrace();
-                                                                                    }
-                                                                                }
-                                                                            }).start();
-                                                                        } else {
-                                                                            button.setCompoundDrawablesWithIntrinsicBounds(
-                                                                                    android.R.drawable.btn_star_big_off, 0, 0, 0);
-                                                                            new Thread(new Runnable() {
-                                                                                @Override
-                                                                                public void run() {
-                                                                                    try {
-                                                                                        DatabaseManager.
-                                                                                                removeFavoriteCampaign(
-                                                                                                        email, password,
-                                                                                                        store.getCampaigns()
-                                                                                                                .get(finalI)
-                                                                                                                .getCampaignId());
-                                                                                    } catch (Exception e) {
-                                                                                        e.printStackTrace();
-                                                                                    }
-                                                                                }
-                                                                            }).start();
+                                                        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                                            @Override
+                                                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                                                if (isChecked) {
+                                                                    toggleButton.setBackgroundResource(
+                                                                            R.drawable.ic_action_name2);
+                                                                    new Thread(new Runnable() {
+                                                                        @Override
+                                                                        public void run() {
+                                                                            try {
+                                                                                DatabaseManager.
+                                                                                        addFavoriteCampaign(email, password,
+                                                                                                store.getCampaigns()
+                                                                                                        .get(finalI)
+                                                                                                        .getCampaignId());
+                                                                            } catch (Exception e) {
+                                                                                e.printStackTrace();
+                                                                            }
                                                                         }
-                                                                    }
-                                                                });
+                                                                    }).start();
+                                                                }else {
+                                                                    toggleButton.setBackgroundResource(
+                                                                            R.drawable.ic_action_name);
+                                                                    new Thread(new Runnable() {
+                                                                        @Override
+                                                                        public void run() {
+                                                                            try {
+                                                                                DatabaseManager.
+                                                                                        removeFavoriteCampaign(
+                                                                                                email, password,
+                                                                                                store.getCampaigns()
+                                                                                                        .get(finalI)
+                                                                                                        .getCampaignId());
+                                                                            } catch (Exception e) {
+                                                                                e.printStackTrace();
+                                                                            }
+                                                                        }
+                                                                    }).start();
+                                                                }
+                                                            }
+                                                        });
                                                         campaignList.addView(itemView);
 
                                                     }

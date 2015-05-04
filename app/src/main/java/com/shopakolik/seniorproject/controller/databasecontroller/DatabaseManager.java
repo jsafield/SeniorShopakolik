@@ -235,7 +235,7 @@ public class DatabaseManager {
 
                     categories.add(new Category(mCategoryId, categoryName));
                 } catch (Exception e) {
-                    Log.e("Category parse fail", "A category of the store with store id: " + storeId
+                    Log.e("Category parse fail", "A category of the store with store storeID: " + storeId
                             + ", could not be parsed.");
                     e.printStackTrace();
                 }
@@ -243,7 +243,7 @@ public class DatabaseManager {
             store.setCategories(categories);
 
         } catch (Exception e) {
-            Log.e("No category", "No category found for store with store id: " + storeId);
+            Log.e("No category", "No category found for store with store storeID: " + storeId);
             e.printStackTrace();
         }
 
@@ -263,7 +263,7 @@ public class DatabaseManager {
 
                     locations.add(new Location(locationId, location, latitude, longitude, address));
                 } catch (Exception e) {
-                    Log.e("Location parse fail", "A location of the store with store id: " + storeId
+                    Log.e("Location parse fail", "A location of the store with store storeID: " + storeId
                             + ", could not be parsed.");
                     e.printStackTrace();
                 }
@@ -271,7 +271,7 @@ public class DatabaseManager {
             store.setLocations(locations);
 
         } catch (Exception e) {
-            Log.e("No location", "No location found for store with store id: " + storeId);
+            Log.e("No location", "No location found for store with store storeID: " + storeId);
             e.printStackTrace();
         }
 
@@ -289,7 +289,7 @@ public class DatabaseManager {
             ArrayList<Campaign> campaigns = parseCampaignsFromJSON(camp);
             store.setCampaigns(campaigns);
         } catch (Exception e) {
-            Log.w("No campaign", "No campaign found for store with store id: " + store.getStoreId());
+            Log.w("No campaign", "No campaign found for store with store storeID: " + store.getStoreId());
 //            e.printStackTrace();
         }
 
@@ -665,7 +665,7 @@ public class DatabaseManager {
                 campaignNotification);
     }
 
-    // To get a store's all info by its id
+    // To get a store's all info by its storeID
     public static Store getStore(String email, String password, int store_id) throws Exception {
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")

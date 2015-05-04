@@ -11,33 +11,83 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp"
+        card_view:cardBackgroundColor="@color/white"
         card_view:cardPreventCornerOverlap="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/cardRelative">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:id="@+id/update_date">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="%00"
+                    android:id="@+id/peramo"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="00:00:00"
+                    android:id="@+id/dateRemainer"
+                    android:gravity="end"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"/>
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/denemeResmi"
                 android:layout_width="fill_parent"
                 android:layout_height="250dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:background="@drawable/bck_rounded"
-
-                />
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/update_date"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/denemeResmi"
-                android:paddingTop="4dp">
+                android:paddingTop="4dp"
+                android:orientation="horizontal">
+
+                <ToggleButton
+                    style="?android:attr/buttonStyleSmall"
+                    android:background="@drawable/ic_action_name"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="0dp"
+                    android:id="@+id/addFavoriteIcon"
+                    android:textOn=""
+                    android:textOff=""
+                    android:checked="false"/>
 
                 <TextView
                     android:id="@+id/imageText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Deneme Deneme" />
+                    android:text="Deneme Deneme"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical" />
+
             </LinearLayout>
+
+
+
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

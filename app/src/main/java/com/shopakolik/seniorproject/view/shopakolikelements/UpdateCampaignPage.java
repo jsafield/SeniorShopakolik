@@ -67,8 +67,8 @@ public class UpdateCampaignPage extends ActionBarActivity {
         campaignId = intent.getIntExtra("campaignID", 0);
 //        Log.e(email, email);
 
-//        final ImageView brandLogo = (ImageView) findViewById(R.id.brand_logo);
-//        final TextView brandName = (TextView) findViewById(R.id.brand_name);
+//        final ImageView brandLogo = (ImageView) findViewById(R.storeID.brand_logo);
+//        final TextView brandName = (TextView) findViewById(R.storeID.brand_name);
         startdate = (TextView) findViewById(R.id.campaign_sdate);
         enddate = (TextView) findViewById(R.id.campaign_fdate);
         img = (ImageView) findViewById(R.id.currentImageView);

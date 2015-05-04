@@ -27,6 +27,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -146,6 +147,7 @@
             android:label="Card View"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
+
         </activity>
 
         <activity android:name="com.shopakolik.seniorproject.view.shopakolikelements.SearchResultsActivity" >
