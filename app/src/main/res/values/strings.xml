@@ -48,7 +48,6 @@
     <array name="menu_shopOwner_icon_array">
 
         <item>@drawable/campaigns_icon</item>
-        <item>@drawable/settings_icon</item>
         <item>@drawable/add_campaign_icon</item>
         <item>@drawable/profile_icon</item>
         <item>@drawable/logout_icon</item>
