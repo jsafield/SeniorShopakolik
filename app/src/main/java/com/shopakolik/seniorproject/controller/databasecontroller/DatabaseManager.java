@@ -990,7 +990,7 @@ public class DatabaseManager {
     }
 
     // Update profile information of customer
-    public boolean updateCustomer(String email, String password, Customer customer)
+    public static boolean updateCustomer(String email, String password, Customer customer)
             throws Exception {
 
         String urlParameters = "currentemail=" + URLEncoder.encode(email, "UTF-8")
@@ -1010,7 +1010,7 @@ public class DatabaseManager {
 
         String urlParameters = "currentemail=" + URLEncoder.encode(email, "UTF-8")
                 + "&currentpassword=" + URLEncoder.encode(password, "UTF-8")
-                + "$email=" + URLEncoder.encode(store.getEmail(), "UTF-8")
+                + "&email=" + URLEncoder.encode(store.getEmail(), "UTF-8")
                 + "&password=" + URLEncoder.encode(store.getPassword(), "UTF-8")
                 + "&name=" + URLEncoder.encode(store.getName(), "UTF-8")
                 + "&isLogoChanged=0"
@@ -1020,9 +1020,9 @@ public class DatabaseManager {
             urlParameters += "&category_id_" + i + "=" +
                     URLEncoder.encode("" + store.getCategories().get(i).getCategoryId(), "UTF-8");
         }
-
+        Log.e("parameters",urlParameters);
         String result = httpPost(SERVER_URL + "UpdateStore.php", urlParameters);
-
+        Log.e("result", result);
         return result.equals("success\n");
     }
 

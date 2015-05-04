@@ -219,7 +219,7 @@ public class BaseActivity extends ActionBarActivity {
                     intent = new Intent(this, AddCampaignPage.class);
                     break;
                 case 3:
-                    intent = new Intent(this, ProfilePage.class);
+                    intent = new Intent(this, StoreProfilePage.class);
                     break;
                 case 4:
                     intent = new Intent(this, MainActivity.class);

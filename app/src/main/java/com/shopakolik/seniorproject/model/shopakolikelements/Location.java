@@ -1,6 +1,8 @@
 package com.shopakolik.seniorproject.model.shopakolikelements;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
     private int locationId;
     private String location;
     private float latitude;

@@ -224,7 +224,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="15dp"
-                    android:id="@+id/amountRadioButton"/>
+                    android:id="@+id/amountRadioButton"
+                    android:checked="false" />
 
                 <EditText
                     android:id="@+id/amount"
