@@ -43,9 +43,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         final String dateString = date.toString();
         String year = dateString.substring(dateString.length() - 4, dateString.length());
         //Log.e("year", year);
-        String month = dateString.substring(4,7);
+        String month = dateString.substring(4, 7);
         //Log.e("month", month);
-        final String day = dateString.substring(8,10);
+        final String day = dateString.substring(8, 10);
         Log.e("AlarmReciver", "Alarmstarted");
         sharedpreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         email = sharedpreferences.getString("emailKey", "");
@@ -58,33 +58,43 @@ public class AlarmReceiver extends BroadcastReceiver {
             public void run() {
                 try {
                     stores = DatabaseManager.getFavoriteStores(email, password);
-
-                    for (int i = 0; i < stores.size(); i++) {
-                        ArrayList<Campaign> camps = stores.get(i).getCampaigns();
-                        if (camps != null) {
-                            //Log.e("campsize", ""+camps.size());
-                            for (int j = 0; j < camps.size(); j++) {
-                                String startDate = "" + camps.get(j).getStartDate();
-                                String startDay = startDate.substring(8, 10);
-                                int sDay = Integer.parseInt(startDay);
-                                if (Integer.parseInt(day) == sDay) {
-                                    createNotification(stores.get(i).getName(), camps.get(j).getDetails(), stores.get(i).getLogo(), 8, context, stores.get(i).getStoreId());
+                    if (stores != null) {
+                        for (int i = 0; i < stores.size(); i++) {
+                            ArrayList<Campaign> camps = stores.get(i).getCampaigns();
+                            if (camps != null) {
+                                //Log.e("campsize", ""+camps.size());
+                                for (int j = 0; j < camps.size(); j++) {
+                                    String startDate = "" + camps.get(j).getStartDate();
+                                    String startDay = startDate.substring(8, 10);
+                                    int sDay = Integer.parseInt(startDay);
+                                    if (Integer.parseInt(day) == sDay) {
+                                        createNotification(stores.get(i).getName(), camps.get(j).getDetails(), stores.get(i).getLogo(), 8, context, stores.get(i).getStoreId());
+                                    }
+                                    //createNotification(stores.get(i).getName(), camps.get(j).getDetails(), stores.get(i).getLogo(), 1, context);
                                 }
-                                //createNotification(stores.get(i).getName(), camps.get(j).getDetails(), stores.get(i).getLogo(), 1, context);
                             }
                         }
                     }
 
-                    /*Log.e("cur day", ""+day);
-                    * */
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t.start();
+
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
                     ArrayList<Campaign> favCamps = DatabaseManager.getFavoriteCampaigns(email, password);
-                    if(favCamps!= null)
-                    {
-                        for(int i=0; i<favCamps.size(); i++)
-                        {
-                            if(Integer.parseInt((favCamps.get(i).getEndDate().toString().substring(8,10)))-Integer.parseInt(day) <= 1)
-                            {
-                                createNotification2(stores.get(i).getName(), "test", stores.get(i).getLogo(), 10, context, stores.get(i).getStoreId());
+                    if (favCamps != null ) {
+                        for (int i = 0; i < favCamps.size(); i++) {
+                            Log.e("eee", "e " + (Integer.parseInt((favCamps.get(i).getEndDate().toString().substring(8, 10))) - Integer.parseInt(day)));
+                            if (Integer.parseInt((favCamps.get(i).getEndDate().toString().substring(8, 10))) - Integer.parseInt(day) <= 3) {
+                                int storeID = favCamps.get(i).getStoreId();
+                                createNotification2("test", favCamps.get(i).getDetails(), DatabaseManager.getStore(email, password, storeID).getLogo(), 10, context, storeID);
                             }
                             //createNotification2(stores.get(i).getName(), "test", stores.get(i).getLogo(), 10, context, stores.get(i).getStoreId());
                         }
@@ -94,8 +104,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                 }
             }
         });
-        t.start();
+        t2.start();
     }
+
     private void createNotification(final String storeName, final String campText, final String logo, final int id, final Context context, final int storeID) {
         new Thread(new Runnable() {
             @Override

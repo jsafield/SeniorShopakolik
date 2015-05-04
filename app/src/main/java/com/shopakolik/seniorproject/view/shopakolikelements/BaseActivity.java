@@ -264,13 +264,14 @@ public class BaseActivity extends ActionBarActivity {
         }
         return false;
     }
-    @Override
+   /* @Override
     public void onBackPressed() {
+
         Log.e("CDA", "onBackPressed Called");
-        /*Intent setIntent = new Intent(Intent.ACTION_MAIN);
+        Intent setIntent = new Intent(Intent.ACTION_MAIN);
         setIntent.addCategory(Intent.CATEGORY_HOME);
         setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(setIntent);*/
+        startActivity(setIntent);
         AlertDialog.Builder builder = new AlertDialog.Builder(BaseActivity.this);
         Log.e("AlertDialog.Builder", "AlertDialog.Builder");
         builder.setMessage("Are you sure you want to leave?");
@@ -292,6 +293,6 @@ public class BaseActivity extends ActionBarActivity {
         AlertDialog dialog = builder.create();
         Log.e("builder.create", "builder.create");
         dialog.show();
-    }
+    }*/
 
 }
