@@ -65,7 +65,8 @@ public class BaseActivity extends ActionBarActivity {
         Intent intent = getIntent();
         email = intent.getStringExtra("user_email");
         password = intent.getStringExtra("user_password");
-        userType = intent.getStringExtra("user_type");
+        sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        userType = sharedpreferences.getString("usertype", "");
         Log.e("usertype Base Activity",userType);
 
         rowItems = new ArrayList<RowItem>();

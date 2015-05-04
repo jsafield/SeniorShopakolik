@@ -114,9 +114,11 @@ public class MainActivity extends ActionBarActivity {
                 try {
 
                     userType = DatabaseManager.login(email.getText().toString(), password.getText().toString());
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString("usertype", userType.toString());
+                    editor.commit();
 
                     if (userType == UserType.Customer) {
-                        Log.e("user", userType.toString());
                         Intent getNameScreenIntent = new Intent(MainActivity.this, Wall.class);
                         getNameScreenIntent.putExtra("user_email", email.getText().toString());
                         getNameScreenIntent.putExtra("user_password", password.getText().toString());
@@ -159,7 +161,6 @@ public class MainActivity extends ActionBarActivity {
                                 toast.show();
                             }
                         });
-
                     }
 
                 } catch (Exception e) {

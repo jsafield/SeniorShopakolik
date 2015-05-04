@@ -76,6 +76,7 @@ public class Wall extends BaseActivity {
                                 intent.putExtra("user_email", email);
                                 intent.putExtra("user_password", password);
                                 intent.putExtra("user_type", userType);
+                                Log.e("wall user", ""+(userType==null));
                                 startActivity(intent);
                             }
                         });
