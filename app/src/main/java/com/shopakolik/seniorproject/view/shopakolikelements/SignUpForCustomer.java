@@ -41,7 +41,7 @@ public class SignUpForCustomer extends ActionBarActivity {
         password = (TextView) findViewById(R.id.customer_password_value);
         re_password = (TextView) findViewById(R.id.customer_re_password_value);
 
-        ProgressDialog.show(SignUpForCustomer.this,"","Loading",true);
+
 
         new Thread(new Runnable() {
             @Override
@@ -54,7 +54,8 @@ public class SignUpForCustomer extends ActionBarActivity {
                     int index = email.getText().toString().indexOf('@');
                     int index2 = email.getText().toString().indexOf(".com");
                     if (index > 0 && index2 > 0) {
-                        if (password.getText().toString().equals(re_password.getText().toString()) && password.length() > 8 && password.length() < 16) {
+                        if (password.getText().toString().equals(re_password.getText().toString()) && password.length() >= 8 && password.length() < 16) {
+//                            ProgressDialog.show(SignUpForCustomer.this,"","Loading",true);
                             Customer customer = new Customer(email.getText().toString(), password.getText().toString(), name.getText().toString(), surname.getText().toString());
                             result = DatabaseManager.addCustomer(customer);
                             if (result) {

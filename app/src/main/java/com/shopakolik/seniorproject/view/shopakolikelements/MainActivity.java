@@ -103,35 +103,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        Log.e("CDA", "onBackPressed Called");
-        /*Intent setIntent = new Intent(Intent.ACTION_MAIN);
-        setIntent.addCategory(Intent.CATEGORY_HOME);
-        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(setIntent);*/
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        Log.e("AlertDialog.Builder", "AlertDialog.Builder");
-        builder.setMessage("Are you sure you want to leave?");
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        Log.e("builder.create", "builder.create");
-        dialog.show();
-    }
 
     public void userLogin(){
         Thread thread = new Thread(new Runnable() {
@@ -228,7 +200,6 @@ public class MainActivity extends ActionBarActivity {
 
                     // 2. Chain together various setter methods to set the dialog characteristics
                     builder.setMessage(R.string.updateUserInfo);
-                    Log.e("builder.setMessage", "builder.setMessage");
                     builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -249,7 +220,6 @@ public class MainActivity extends ActionBarActivity {
 
                     // 3. Get the AlertDialog from create()
                     AlertDialog dialog = builder.create();
-                    Log.e("builder.create", "builder.create");
                     dialog.show();
                 }
                 else

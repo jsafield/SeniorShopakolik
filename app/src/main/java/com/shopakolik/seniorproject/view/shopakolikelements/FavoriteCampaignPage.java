@@ -122,7 +122,7 @@ public class FavoriteCampaignPage extends BaseActivity {
                                                 public void run() {
                                                     try {
                                                         DatabaseManager.
-                                                                addFavoriteCampaign(CardView.email, CardView.password,
+                                                                addFavoriteCampaign(email, password,
                                                                         list.get(finalI)
                                                                                 .getCampaignId());
                                                     } catch (Exception e) {
@@ -139,7 +139,7 @@ public class FavoriteCampaignPage extends BaseActivity {
                                                     try {
                                                         DatabaseManager.
                                                                 removeFavoriteCampaign(
-                                                                        CardView.email, CardView.password,
+                                                                        email, password,
                                                                         list.get(finalI)
                                                                                 .getCampaignId());
                                                     } catch (Exception e) {

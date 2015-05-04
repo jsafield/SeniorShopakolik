@@ -230,7 +230,7 @@ public class SignUpForShop extends ActionBarActivity {
         Location loc = new Location(location.getText().toString(), latitude, longitude, address.getText().toString());
         locations.add(loc);
 
-        ProgressDialog.show(SignUpForShop.this, "", "Loading", true);
+
 
         new Thread(new Runnable() {
             @Override
@@ -254,6 +254,7 @@ public class SignUpForShop extends ActionBarActivity {
                                         text = "Please set the location of shop";
                                         valid = false;
                                     } else {
+                                        ProgressDialog.show(SignUpForShop.this, "", "Loading", true);
                                         Store store = new Store(email.getText().toString(), password.getText().toString(), name.getText().toString(), lastpath, selectedCategories, locations);
                                         result = DatabaseManager.addStore(store);
                                         if (result) {

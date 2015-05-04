@@ -24,7 +24,6 @@
         <item>Wall</item>
         <item>Favorites</item>
         <item>Settings</item>
-        <item>Search</item>
         <item>Profile</item>
         <item>Logout</item>
     </string-array>
@@ -33,7 +32,6 @@
         <item>@drawable/wall_icon</item>
         <item>@drawable/favorites_icon</item>
         <item>@drawable/settings_icon</item>
-        <item>@drawable/search_icon</item>
         <item>@drawable/profile_icon</item>
         <item>@drawable/logout_icon</item>
     </array>

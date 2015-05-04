@@ -3,9 +3,11 @@ package com.shopakolik.seniorproject.view.shopakolikelements;
 import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -264,6 +266,35 @@ public class BaseActivity extends ActionBarActivity {
             }
         }
         return false;
+    }
+    @Override
+    public void onBackPressed() {
+        Log.e("CDA", "onBackPressed Called");
+        /*Intent setIntent = new Intent(Intent.ACTION_MAIN);
+        setIntent.addCategory(Intent.CATEGORY_HOME);
+        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(setIntent);*/
+        AlertDialog.Builder builder = new AlertDialog.Builder(BaseActivity.this);
+        Log.e("AlertDialog.Builder", "AlertDialog.Builder");
+        builder.setMessage("Are you sure you want to leave?");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        Log.e("builder.create", "builder.create");
+        dialog.show();
     }
 
 }
