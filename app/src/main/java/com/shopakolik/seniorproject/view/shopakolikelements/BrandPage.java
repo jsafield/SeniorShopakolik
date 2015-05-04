@@ -188,7 +188,7 @@ public class BrandPage extends BaseActivity {
                                                         if(isLiked){
                                                             toggleButton.setChecked(true);
                                                             toggleButton.setBackgroundResource(
-                                                                    R.drawable.ic_action_name2);
+                                                                    R.drawable.ic_action_name);
                                                         } else {toggleButton.setChecked(false);
                                                             toggleButton.setBackgroundResource(
                                                                     R.drawable.ic_action_name);
