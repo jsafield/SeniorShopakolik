@@ -5,6 +5,7 @@
 
     <item android:id="@+id/filter"
         android:title="@string/addFavoriteBrand"
+        android:actionLayout="@android:color/white"
         app:showAsAction="never"/>
 
 </menu>

@@ -129,7 +129,7 @@ android:layout_height="match_parent">
             android:layout_width="168dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:padding="5dp" />
 
     </LinearLayout>
@@ -155,7 +155,7 @@ android:layout_height="match_parent">
             android:layout_width="168dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:padding="5dp" />
 
     </LinearLayout>
@@ -181,7 +181,7 @@ android:layout_height="match_parent">
             android:layout_width="168dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:padding="5dp" />
 
     </LinearLayout>
@@ -189,7 +189,7 @@ android:layout_height="match_parent">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/customizeButton"
+        style="?android:attr/buttonStyleSmall"
         android:layout_alignEnd="@+id/linearLayoutReNewPassword"
         android:layout_alignRight="@+id/linearLayoutReNewPassword"
         android:layout_below="@+id/linearLayoutReNewPassword"

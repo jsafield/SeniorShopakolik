@@ -8,9 +8,9 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:id="@+id/dividerForCampList"
-        android:background="#E2DADB"/>
+        android:background="@color/buttonColor2"/>
 
     <LinearLayout
         android:orientation="horizontal"

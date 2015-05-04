@@ -187,7 +187,8 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+            android:visibility="gone">
 
             <RadioGroup
                 android:layout_width="wrap_content"
@@ -261,7 +262,8 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -295,7 +297,8 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+           >
 
             <TextView
                 android:id="@+id/description"
@@ -359,6 +362,7 @@
 
         <Button
             android:id="@+id/changeimage"
+            style="@style/customizeButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -372,14 +376,15 @@
 
         <ImageView
             android:id="@+id/currentImageView"
+            android:layout_below="@+id/changeimage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
             android:layout_gravity="center_vertical"
-            android:layout_below="@+id/changeimage"/>
+            />
 
         <LinearLayout
             android:orientation="vertical"
@@ -395,6 +400,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="SAVE"
+                style="@style/customizeButton"
                 android:id="@+id/save"/>
         </LinearLayout>
 

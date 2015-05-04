@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
@@ -29,6 +28,7 @@ import com.shopakolik.seniorproject.model.shopakolikelements.CampaignType;
 
 import java.io.File;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -39,18 +39,18 @@ public class AddCampaignPage extends ActionBarActivity {
 
     /// Bitis tarihi ve start tarihi arasindaki iliski belirlenecek biri digerinden once sonra olamaz
 
-    private TextView campaignS, campaignF, description;
+    private TextView campaignS, campaignF;
     private static final int SELECTED_PICTURE = 1;
     private ImageView img;
     private String path;
     private Button savebtn;
-    private RadioGroup radiobuttonType, radiogroupbutton2;
-    private EditText amount, percentage, preconditionTxt;
+    private RadioGroup radioGroup1, radioGroup2;
+    private EditText amount, amountVoucher, percentage, preconditionTxt, description;
     private LinearLayout amountPercentage, shoppingVoucher;
-    private RadioButton sales, shopvoc, other;
+    private RadioButton radio1, radio2, radio3, radio4, radio5;
     private String email = "";
     private String password;
-
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
 
     private int year;
     private int month;
@@ -73,23 +73,29 @@ public class AddCampaignPage extends ActionBarActivity {
 
         campaignS = (TextView) findViewById(R.id.campaign_sdate);
         campaignF = (TextView) findViewById(R.id.campaign_fdate);
-        description = (TextView) findViewById(R.id.description);
         img = (ImageView) findViewById(R.id.currentImageView);
-        radiobuttonType = (RadioGroup) findViewById(R.id.radioGroupType);
-        radiogroupbutton2 = (RadioGroup) findViewById(R.id.radio_group);
-        amount = (EditText) findViewById(R.id.amount);
+
+        radioGroup1 = (RadioGroup) findViewById(R.id.radioGroupType);
+        radio1 = (RadioButton) findViewById(R.id.sales);
+        radio2 = (RadioButton) findViewById(R.id.shoppingvoucher);
+        radio3 = (RadioButton) findViewById(R.id.otherbutton);
+
+        radioGroup2 = (RadioGroup) findViewById(R.id.radio_group);
+        radio4 = (RadioButton) findViewById(R.id.percentageButton);
+        radio5 = (RadioButton) findViewById(R.id.amountRadioButton);
+
+
+        preconditionTxt = (EditText) findViewById(R.id.precondition_text);
         percentage = (EditText) findViewById(R.id.percentage);
+        amount = (EditText) findViewById(R.id.amount);
+        amountVoucher = (EditText) findViewById(R.id.voucher);
+        description = (EditText) findViewById(R.id.description_txt);
+
         amountPercentage = (LinearLayout) findViewById(R.id.amount_percentage);
         shoppingVoucher = (LinearLayout) findViewById(R.id.shopping_voucher);
-        sales = (RadioButton) findViewById(R.id.sales);
-        preconditionTxt = (EditText) findViewById(R.id.precondition_text);
-
-        shopvoc = (RadioButton) findViewById(R.id.shoppingvoucher);
-        other = (RadioButton) findViewById(R.id.otherbutton);
-
         savebtn = (Button) findViewById(R.id.save);
 
-        radiobuttonType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 Log.e("onCheckedChanged", "onCheckedChanged");
@@ -107,6 +113,36 @@ public class AddCampaignPage extends ActionBarActivity {
 
             }
         });
+
+        radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                Log.e("onCheckedChanged", "onCheckedChanged");
+                if (checkedId == R.id.percentageButton) {
+
+                    amount.setFocusable(false);
+                    amount.setFocusableInTouchMode(false);
+                    amount.setClickable(false);
+                    amount.setEnabled(false);
+                    percentage.setFocusable(true);
+                    percentage.setFocusableInTouchMode(true);
+                    percentage.setClickable(true);
+                    percentage.setEnabled(true);
+
+                } else if (checkedId == R.id.amountRadioButton) {
+
+                    percentage.setFocusable(false);
+                    percentage.setFocusableInTouchMode(false);
+                    percentage.setClickable(false);
+                    percentage.setEnabled(false);
+                    amount.setFocusable(true);
+                    amount.setFocusableInTouchMode(true);
+                    amount.setClickable(true);
+                    amount.setEnabled(true);
+                }
+            }
+        });
+
         savebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,37 +150,46 @@ public class AddCampaignPage extends ActionBarActivity {
                     @Override
                     public void run() {
                         CampaignType type = null;
-                        if (radiobuttonType.getCheckedRadioButtonId() == R.id.sales) {
-                            if (radiogroupbutton2.getCheckedRadioButtonId() == R.id.percentageButton) {
+                        if (radioGroup1.getCheckedRadioButtonId() == R.id.sales) {
+                            if (radioGroup2.getCheckedRadioButtonId() == R.id.percentageButton) {
                                 type = CampaignType.DiscountPercentage;
 
-                            } else if (radiogroupbutton2.getCheckedRadioButtonId() == R.id.amountRadioButton) {
+                            } else if (radioGroup2.getCheckedRadioButtonId() == R.id.amountRadioButton) {
                                 type = CampaignType.DiscountAmount;
                             }
-                        } else if (radiobuttonType.getCheckedRadioButtonId() == R.id.shoppingvoucher) {
+                        } else if (radioGroup1.getCheckedRadioButtonId() == R.id.shoppingvoucher) {
                             type = CampaignType.ShoppingVoucher;
-                        } else if (radiobuttonType.getCheckedRadioButtonId() == R.id.otherbutton) {
+                        } else if (radioGroup1.getCheckedRadioButtonId() == R.id.otherbutton) {
                             type = CampaignType.Other;
                         }
 
                         try {
-                            Date startDate = DatabaseManager.SQLDateFormat.parse(campaignS.getText().toString());
-                            Date endDate = DatabaseManager.SQLDateFormat.parse(campaignF.getText().toString());
+                            Date startDate = dateFormat.parse(campaignS.getText().toString());
+                            Date endDate = dateFormat.parse(campaignF.getText().toString());
 
                             float fl = 0;
-                            try {
+                            int pr = 0;
+                            if (type == CampaignType.DiscountAmount)
                                 fl = Float.parseFloat(amount.getText().toString());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            else if (type == CampaignType.ShoppingVoucher)
+                                fl = Float.parseFloat(amountVoucher.getText().toString());
+                            else if (type == CampaignType.DiscountPercentage)
+                                pr = Integer.parseInt(percentage.getText().toString());
 
 
-                            Campaign campaign = new Campaign(startDate, endDate, path, type, preconditionTxt.getText().toString(), description.getText().toString()
-                                    , Integer.parseInt(percentage.getText().toString()), fl);
+                            Campaign campaign = new Campaign(startDate, endDate, path, type,
+                                    preconditionTxt.getText().toString(), description.getText().toString()
+                                    , pr, fl);
 
                             try {
                                 DatabaseManager.addCampaign(email,password,campaign);
 
+                                Intent new_intent = new Intent(AddCampaignPage.this, PageOfOwnerShop.class);
+                                new_intent.putExtra("user_email", email);
+                                new_intent.putExtra("user_password", password);
+                                new_intent.putExtra("user_type", "Store");
+
+                                startActivity(new_intent);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
