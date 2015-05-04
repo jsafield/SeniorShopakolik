@@ -69,12 +69,12 @@ public class StoreProfilePage extends ActionBarActivity {
                             user_email.setText(email);
                             cat_array = store.getCategories();
                             locations = store.getLocations();
-                            for (int j = 0;j < cat_array.size();j++){
-                                String temp = "#" + cat_array.get(j).getName() + ", ";
-                                categories = categories.concat(temp);
-                            }
-                            user_categories.setText(categories);
                             try{
+                                for (int j = 0;j < cat_array.size();j++){
+                                    String temp = "#" + cat_array.get(j).getName() + ", ";
+                                    categories = categories.concat(temp);
+                                }
+                                user_categories.setText(categories);
 
                                 iv.setImageBitmap(image);
                             }catch(Exception e){

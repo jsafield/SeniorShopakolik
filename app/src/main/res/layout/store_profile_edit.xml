@@ -33,7 +33,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/background1"
                 android:onClick="editImageButtonOnClick"
-                android:src="@drawable/ic_action_edit"/>
+                android:src="@drawable/ic_action_edit"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -109,7 +110,8 @@
                 style= "@style/customizeButton"
                 android:layout_marginTop="15dp"
                 android:text="Add Category"
-                android:onClick="addCategoryOnClick"/>
+                android:onClick="addCategoryOnClick"
+                android:visibility="gone"/>
 
 
         </LinearLayout>
