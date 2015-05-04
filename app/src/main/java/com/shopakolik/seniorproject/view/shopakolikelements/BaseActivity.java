@@ -187,12 +187,9 @@ public class BaseActivity extends ActionBarActivity {
                     intent = new Intent(this, SettingsPage.class);
                     break;
                 case 3:
-                    intent = new Intent(this, BrandPage.class);
-                    break;
-                case 4:
                     intent = new Intent(this, ProfilePage.class);
                     break;
-                case 5:
+                case 4:
                     intent = new Intent(this, MainActivity.class);
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.remove("emailKey");

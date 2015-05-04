@@ -51,6 +51,7 @@ public class StoreProfileEditPage extends ActionBarActivity {
         name = intent.getStringExtra("user_name");
         logo_path = intent.getStringExtra("logo_url");
         cat_array = (ArrayList<Category>)intent.getSerializableExtra("categories");
+        Log.e("first category of ",cat_array.get(0).getName());
         locations = (ArrayList<Location>)intent.getSerializableExtra("locations");
 
 
@@ -89,8 +90,6 @@ public class StoreProfileEditPage extends ActionBarActivity {
 
     public void addCategoryOnClick(View view) {
         // Show DialogFragment
-        CategoryPage categoryPage = new CategoryPage();
-        categoryPage.show(getFragmentManager(), "Add Category");
     }
 
     public void editImageButtonOnClick(View view) {
