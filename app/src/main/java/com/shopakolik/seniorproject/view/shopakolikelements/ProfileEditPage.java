@@ -119,7 +119,7 @@ public class ProfileEditPage extends ActionBarActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent getNameScreenIntent = new Intent(ProfileEditPage.this, ProfilePage.class);
-                                    getNameScreenIntent.putExtra("user_email",email);
+                                    getNameScreenIntent.putExtra("user_email",new_email);
                                     getNameScreenIntent.putExtra("user_password",password);
                                     startActivity(getNameScreenIntent);
                                 }

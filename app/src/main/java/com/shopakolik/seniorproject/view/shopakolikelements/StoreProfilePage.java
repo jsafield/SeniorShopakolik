@@ -1,5 +1,6 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -137,6 +138,12 @@ public class StoreProfilePage extends ActionBarActivity {
                 try {
                     added = DatabaseManager.addLocation(email,password,currentLoc);
                     Log.e("current location added"," " + added);
+                    if(added){
+                        Context context = StoreProfilePage.this.getApplicationContext();
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, "You have successfully added location of the shop", duration);
+                        toast.show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
