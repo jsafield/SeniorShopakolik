@@ -40,7 +40,6 @@
 
     <string-array name="menu_shop_array">
         <item>Campaigns</item>
-        <item>Settings</item>
         <item>Add Campaign</item>
         <item>Profile</item>
         <item>Logout</item>
