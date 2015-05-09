@@ -36,9 +36,11 @@ import java.util.Date;
 
 public class DatabaseManager {
 
-    private static final String SERVER_URL = "http://unaldi.0fees.us/shopakolik/";
+    private static final String SERVER_URL = "http://shopakolik.elasticbeanstalk.com/";
     private static boolean locationError = false;
     public static SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static String fileKey;
+
 
     // To inform user whether adding location is failed while store adding
     public static boolean isLocationsAdded() {
@@ -417,6 +419,7 @@ public class DatabaseManager {
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
 
         String result = httpPost(SERVER_URL + "Login.php", urlParameters);
+        Log.e("url", ""+SERVER_URL + "Login.php"+ urlParameters);
 
         if (result.equals("customer\n"))
             return UserType.Customer;
@@ -449,15 +452,15 @@ public class DatabaseManager {
     public static boolean addStore(Store store) throws Exception {
 
         locationError = false;
-        String logo = httpPostFile(SERVER_URL + "UploadStoreLogo.php", store.getLogo());
+        //String logo = httpPostFile(SERVER_URL + "UploadStoreLogo.php", store.getLogo());
 
-        if (logo.equals("failure\n"))
-            return false;
-
+        /*if (logo.equals("failure\n"))
+            return false;*/
+        //Log.e("params",store.getEmail()+" "+store.getPassword()+" "+store.getName()+" "+store.getLogo()+" "+store.getCategories()+" "+store.getLocations());
         String urlParameters = "email=" + URLEncoder.encode(store.getEmail(), "UTF-8")
                 + "&password=" + URLEncoder.encode(store.getPassword(), "UTF-8")
                 + "&name=" + URLEncoder.encode(store.getName(), "UTF-8")
-                + "&logo=" + URLEncoder.encode(logo, "UTF-8")
+                + "&logo=" + URLEncoder.encode(store.getLogo(), "UTF-8")
                 + "&category_count=" + URLEncoder.encode("" + store.getCategories().size(), "UTF-8")
                 + "&location_count=" + URLEncoder.encode("" + store.getLocations().size(), "UTF-8");
 
@@ -475,8 +478,11 @@ public class DatabaseManager {
                     + "&address" + i + "="
                     + URLEncoder.encode(store.getLocations().get(i).getAddress(), "UTF-8");
         }
+        Log.e("url parameters", ""+urlParameters);
 
         String result = httpPost(SERVER_URL + "AddStore.php", urlParameters);
+
+        Log.e("RESULT", ""+result);
 
         if (result.equals("location_error\n")) {
             locationError = true;
@@ -509,15 +515,15 @@ public class DatabaseManager {
 
     public static boolean addCampaign(String email, String password, Campaign campaign) throws Exception {
 
-        String image = httpPostFile(SERVER_URL + "UploadCampaignImage.php", campaign.getImage());
+        String image = campaign.getImage();
 
-        if (image.equals("failure\n"))
-            return false;
+        /*if (image.equals("failure\n"))
+            return false;*/
         Log.e ("email ", email);
         Log.e ("password ", password);
         Log.e ("getStartDate() ", SQLDateFormat.format(campaign.getStartDate()));
         Log.e ("getEndDate ", SQLDateFormat.format(campaign.getEndDate()));
-        Log.e ("image ", image);
+        //Log.e ("image ", image);
         Log.e ("getType ", ""+campaign.getType());
         Log.e ("Condition ", campaign.getCondition());
         Log.e ("getDetails ", campaign.getDetails());
@@ -574,11 +580,11 @@ public class DatabaseManager {
     public static boolean updateCampaign(String email, String password, Campaign campaign,
                                          String previousImage) throws Exception {
 
-        String image = httpPostFile(SERVER_URL + "UploadCampaignImage.php", campaign.getImage());
+        //String image = httpPostFile(SERVER_URL + "UploadCampaignImage.php", campaign.getImage());
 
-        if (image.equals("failure\n"))
-            return false;
-
+        /*if (image.equals("failure\n"))
+            return false;*/
+        Log.e("Data Man", previousImage +" "+campaign.getImage());
         String urlParameters = "email=" + URLEncoder.encode(email, "UTF-8")
                 + "&password=" + URLEncoder.encode(password, "UTF-8")
                 + "&campaign_id=" + URLEncoder.encode("" + campaign.getCampaignId(), "UTF-8")
@@ -587,13 +593,14 @@ public class DatabaseManager {
                 + "&end_date="
                 + URLEncoder.encode(SQLDateFormat.format(campaign.getEndDate()), "UTF-8")
                 + "&isImageChanged=" + URLEncoder.encode("1", "UTF-8")
-                + "&image=" + URLEncoder.encode(image, "UTF-8")
+                + "&image=" + URLEncoder.encode(campaign.getImage(), "UTF-8")
                 + "&previmage=" + URLEncoder.encode(previousImage, "UTF-8")
                 + "&type=" + URLEncoder.encode("" + campaign.getType().ordinal(), "UTF-8")
                 + "&precondition=" + URLEncoder.encode(campaign.getCondition(), "UTF-8")
                 + "&details=" + URLEncoder.encode(campaign.getDetails(), "UTF-8")
                 + "&percentage=" + URLEncoder.encode("" + campaign.getPercentage(), "UTF-8")
                 + "&amount=" + URLEncoder.encode("" + campaign.getAmount(), "UTF-8");
+        Log.e("parameters", ""+urlParameters);
 
         String result = httpPost(SERVER_URL + "UpdateCampaign.php", urlParameters);
 
@@ -902,6 +909,7 @@ public class DatabaseManager {
                 + "&password=" + URLEncoder.encode(password, "UTF-8");
 
         String result = httpPost(SERVER_URL + "GetFavoriteStores.php", urlParameters);
+        //Log.e("result favorites", result);
 
         if (result.equals("failure\n"))
             throw new Exception("Unexpected Error In PHP File");
@@ -1113,5 +1121,19 @@ public class DatabaseManager {
         if(result.startsWith("failure"))
             return new ArrayList<Store>();
         return parseSimpleStoresFromJSON(result);
+    }
+
+    public  static Credentials getCredentials() throws Exception {
+
+        String result = httpPost(SERVER_URL + "GetCred.php", "");
+
+        Log.e("result", result);
+
+        JSONObject jsonObject = new JSONObject(result);
+
+        String acid = jsonObject.getString("ACID");
+        String poolid = jsonObject.getString("POOLID");
+        String role = jsonObject.getString("ROLE");
+        return new Credentials(acid, poolid, role);
     }
 }

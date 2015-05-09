@@ -19,20 +19,24 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.controller.databasecontroller.UserType;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
 import com.shopakolik.seniorproject.model.shopakolikelements.User;
+import com.shopakolik.seniorproject.model.shopakolikelements.Util;
 import com.shopakolik.seniorproject.view.shopakolikelements.BrandPage;
 import com.shopakolik.seniorproject.view.shopakolikelements.MainActivity;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -47,6 +51,8 @@ public class NotificationService extends Service {
     private ArrayList<Store> stores = new ArrayList<>();
     SharedPreferences sharedpreferences;
 
+    private BitmapFactory.Options options;
+
     public NotificationService() {
 
     }
@@ -56,6 +62,10 @@ public class NotificationService extends Service {
         sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         email = sharedpreferences.getString("emailKey", "");
         password = sharedpreferences.getString("passwordKey", "");
+
+
+        options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -130,7 +140,7 @@ public class NotificationService extends Service {
             public void run() {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(NotificationService.this);
                 builder.setOnlyAlertOnce(true);
-                String mlogo = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + logo;
+                final String mlogo = logo;
                 Intent i = new Intent(NotificationService.this, BrandPage.class);
                 i.putExtra("user_email", email);
                 i.putExtra("user_password", password);
@@ -151,13 +161,36 @@ public class NotificationService extends Service {
 
                 RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.notifcollapsed);
 
-                URL url = null;
+
                 Bitmap image = null;
                 try {
-                    url = new URL(mlogo);
-                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    URL url = new URL("https://s3.amazonaws.com/shopakolik/"+logo);
+                    final File file = new File(
+                            Environment.getExternalStoragePublicDirectory(
+                                    "Shop"),
+                            mlogo);
+
+                    //File f = new File(getExternalCacheDir(), logourl);
+                    if (file.exists()) {
+                        image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+mlogo, options);
+                    }else {
+                        Thread downloadT = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TransferManager tm = null;
+                                try {
+                                    tm = new TransferManager(Util.getCredProvider(NotificationService.this));
+                                    File mFile = new File(
+                                            Environment.getExternalStorageDirectory().getPath()+"/Shop/",mlogo);
+                                    tm.download("shopakolik", mlogo, mFile);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        downloadT.start();
+                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

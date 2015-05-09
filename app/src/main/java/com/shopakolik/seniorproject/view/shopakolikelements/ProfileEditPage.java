@@ -25,6 +25,7 @@ public class ProfileEditPage extends ActionBarActivity {
     private TextView user_name, user_surname, user_email, user_old_password, user_new_password, user_renew_password;
     private String email, password, name, surname,new_email,new_name,new_surname, old_password, new_password, text, renew_password;
     private boolean update;
+    private String user_type;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +36,7 @@ public class ProfileEditPage extends ActionBarActivity {
         password = intent.getStringExtra("user_password");
         name = intent.getStringExtra("user_name");
         surname = intent.getStringExtra("user_surname");
+        user_type = intent.getStringExtra("user_type");
 
 
         user_name = (TextView) findViewById(R.id.user_name_value);
@@ -118,10 +120,12 @@ public class ProfileEditPage extends ActionBarActivity {
                             builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Intent getNameScreenIntent = new Intent(ProfileEditPage.this, ProfilePage.class);
+                                    /*Intent getNameScreenIntent = new Intent(ProfileEditPage.this, ProfilePage.class);
                                     getNameScreenIntent.putExtra("user_email",new_email);
                                     getNameScreenIntent.putExtra("user_password",password);
-                                    startActivity(getNameScreenIntent);
+                                    getNameScreenIntent.putExtra("user_type", user_type);
+                                    startActivity(getNameScreenIntent);*/
+                                    finish();
                                 }
                             });
                             Log.e("setNeutralButton", "builder.setNeutralButton");
@@ -138,4 +142,15 @@ public class ProfileEditPage extends ActionBarActivity {
             }
         }).start();
     }
+
+    /*@Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ProfileEditPage.this, ProfilePage.class);
+        intent.putExtra("user_email", email);
+        intent.putExtra("user_password", password);
+        intent.putExtra("user_type", user_type);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
+    }*/
 }

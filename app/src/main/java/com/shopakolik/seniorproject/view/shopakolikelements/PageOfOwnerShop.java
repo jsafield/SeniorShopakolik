@@ -1,11 +1,13 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,13 +17,17 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.model.shopakolikelements.Campaign;
+import com.shopakolik.seniorproject.model.shopakolikelements.Constants;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
+import com.shopakolik.seniorproject.model.shopakolikelements.Util;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -41,6 +47,10 @@ public class PageOfOwnerShop extends BaseActivity {
     private ScrollView scroll;
     private int scrollY;
 
+    private Bitmap image;
+    private BitmapFactory.Options options;
+    private Context mContext;
+
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -50,6 +60,7 @@ public class PageOfOwnerShop extends BaseActivity {
         email = extras.getString("user_email");
         password = extras.getString("user_password");
         userType = extras.getString("user_type");
+        mContext = this;
 
 
         super.onCreate(savedInstanceState);
@@ -77,9 +88,40 @@ public class PageOfOwnerShop extends BaseActivity {
                     final ArrayList<Campaign> list = store.getCampaigns();
 
 
-                    String logourl = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + store.getLogo();
-                    URL url = new URL(logourl);
-                    final Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    //String logourl = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + store.getLogo();
+                    URL url = new URL("https://s3.amazonaws.com/shopakolik/"+store.getLogo());
+                    final String logourl = store.getLogo();
+                    options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    final File file = new File(
+                            Environment.getExternalStorageDirectory().getPath()+"/Shop/",
+                            logourl);
+
+                    //File f = new File(getExternalCacheDir(), logourl);
+                    if (file.exists()) {
+                        Log.e("PAGE OF OWNER ", "EXIST");
+                        image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+logourl, options);
+                    }else {
+                        Log.e("PAGE OF OWNER ", "NOT EXIST "+Environment.getExternalStorageDirectory().getPath()+"/Shop/"+logourl);
+                        Thread downloadT = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TransferManager tm = null;
+                                try {
+                                    tm = new TransferManager(Util.getCredProvider(mContext));
+                                    File mFile = new File(
+                                            Environment.getExternalStorageDirectory().getPath()+"/Shop/",logourl);
+                                    tm.download("shopakolik", logourl, mFile);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+                        downloadT.start();
+                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    }
+
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -140,9 +182,35 @@ public class PageOfOwnerShop extends BaseActivity {
                                         @Override
                                         public void run() {
                                             try {
-                                                String campImageURL = DatabaseManager.getServerUrl() + "Images/CampaignImages/" + list.get(finalI).getImage();
-                                                URL imageURL = new URL(campImageURL);
-                                                final Bitmap imageCamp = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                                                final String imagePath = list.get(finalI).getImage();
+                                                URL imageURL = new URL("https://s3.amazonaws.com/shopakolik/"+imagePath);
+                                                final File file = new File(
+                                                        Environment.getExternalStorageDirectory().getPath()+"/Shop/",
+                                                        imagePath);
+                                                if (file.exists()) {
+                                                    image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+imagePath, options);
+                                                }else {
+                                                    Thread downloadT = new Thread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            TransferManager tm = null;
+                                                            try {
+                                                                tm = new TransferManager(Util.getCredProvider(mContext));
+
+                                                                File mFile = new File(
+                                                                        Environment.getExternalStorageDirectory().getPath()+"/Shop/"
+                                                                        ,imagePath);
+                                                                tm.download("shopakolik", imagePath, mFile);
+                                                            } catch (InterruptedException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
+                                                    });
+                                                    downloadT.start();
+                                                    image = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                                                }
+
+                                                final Bitmap imageCamp = image;
 
                                                 runOnUiThread(new Runnable() {
                                                     @Override
@@ -240,6 +308,7 @@ public class PageOfOwnerShop extends BaseActivity {
                                                     intent.putExtra("campaignID", list.get(finalI).getCampaignId());
                                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                                     startActivity(intent);
+                                                    finish();
                                                 }
                                             });
                                             String feats = "";
@@ -294,5 +363,28 @@ public class PageOfOwnerShop extends BaseActivity {
         Log.e("Scrool Y Identified2 : ", "" + scroll.getScrollY());
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PageOfOwnerShop.this);
+        builder.setMessage("Are you sure you want to leave?");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

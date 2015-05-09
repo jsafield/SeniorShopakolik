@@ -9,19 +9,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.Time;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.controller.databasecontroller.UserType;
 import com.shopakolik.seniorproject.model.shopakolikelements.Campaign;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
+import com.shopakolik.seniorproject.model.shopakolikelements.Util;
 import com.shopakolik.seniorproject.view.shopakolikelements.BrandPage;
 import com.shopakolik.seniorproject.view.shopakolikelements.MainActivity;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,6 +40,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     ArrayList<Store> stores = new ArrayList<>();
     private String email, password;
     SharedPreferences sharedpreferences;
+    private BitmapFactory.Options options;
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
@@ -50,6 +55,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         sharedpreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         email = sharedpreferences.getString("emailKey", "");
         password = sharedpreferences.getString("passwordKey", "");
+
+
+        options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         final Date currentDateandTime = new Date();
 
@@ -94,7 +103,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                             Log.e("eee", "e " + (Integer.parseInt((favCamps.get(i).getEndDate().toString().substring(8, 10))) - Integer.parseInt(day)));
                             if (Integer.parseInt((favCamps.get(i).getEndDate().toString().substring(8, 10))) - Integer.parseInt(day) <= 3) {
                                 int storeID = favCamps.get(i).getStoreId();
-                                createNotification2("test", favCamps.get(i).getDetails(), DatabaseManager.getStore(email, password, storeID).getLogo(), 10, context, storeID);
+                                createNotification2("", favCamps.get(i).getDetails(), DatabaseManager.getStore(email, password, storeID).getLogo(), 10, context, storeID);
                             }
                             //createNotification2(stores.get(i).getName(), "test", stores.get(i).getLogo(), 10, context, stores.get(i).getStoreId());
                         }
@@ -112,7 +121,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             @Override
             public void run() {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-                String mlogo = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + logo;
+                final String mlogo = logo;
                 Intent i = new Intent(context, BrandPage.class);
                 i.putExtra("user_email", email);
                 i.putExtra("user_password", password);
@@ -133,13 +142,38 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 RemoteViews contentView = new RemoteViews("com.shopakolik.seniorproject", R.layout.newcampnotif);
 
-                URL url = null;
                 Bitmap image = null;
                 try {
-                    url = new URL(mlogo);
-                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+
+                    URL url = new URL("https://s3.amazonaws.com/shopakolik/"+logo);
+                    final File file = new File(
+                            Environment.getExternalStoragePublicDirectory(
+                                    "Shop"),
+                            mlogo);
+
+                    //File f = new File(getExternalCacheDir(), logourl);
+                    if (file.exists()) {
+                        image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+mlogo, options);
+                    }else {
+                                Thread downloadT = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TransferManager tm = null;
+                                try {
+                                    tm = new TransferManager(Util.getCredProvider(context));
+
+                                    File mFile = new File(
+                                            Environment.getExternalStoragePublicDirectory(
+                                                    "Shop"),mlogo);
+                                    tm.download("shopakolik", mlogo, mFile);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        downloadT.start();
+                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -160,8 +194,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                final String mlogo = logo;
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-                String mlogo = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + logo;
                 Intent i = new Intent(context, BrandPage.class);
                 i.putExtra("user_email", email);
                 i.putExtra("user_password", password);
@@ -182,13 +216,37 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 RemoteViews contentView = new RemoteViews("com.shopakolik.seniorproject", R.layout.newcampnotif);
 
-                URL url = null;
+
                 Bitmap image = null;
                 try {
-                    url = new URL(mlogo);
-                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    URL url = new URL("https://s3.amazonaws.com/shopakolik/"+logo);
+                    final File file = new File(
+                            Environment.getExternalStoragePublicDirectory(
+                                    "Shop"),
+                            mlogo);
+
+                    //File f = new File(getExternalCacheDir(), logourl);
+                    if (file.exists()) {
+                        image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+mlogo, options);
+                    }else {
+                        Thread downloadT = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TransferManager tm = null;
+                                try {
+                                    tm = new TransferManager(Util.getCredProvider(context));
+                                    File mFile = new File(
+                                            Environment.getExternalStoragePublicDirectory(
+                                                    "Shop"),mlogo);
+                                    tm.download("shopakolik", mlogo, mFile);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        downloadT.start();
+                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

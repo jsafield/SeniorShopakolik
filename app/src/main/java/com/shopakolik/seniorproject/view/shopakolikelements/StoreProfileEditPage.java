@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -17,12 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.model.shopakolikelements.Category;
 import com.shopakolik.seniorproject.model.shopakolikelements.Customer;
 import com.shopakolik.seniorproject.model.shopakolikelements.Location;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
+import com.shopakolik.seniorproject.model.shopakolikelements.Util;
 
 import java.io.File;
 import java.net.URL;
@@ -40,6 +43,9 @@ public class StoreProfileEditPage extends ActionBarActivity {
     private Store store;
     private ArrayList<Category> cat_array = new ArrayList<Category> ();
     private ArrayList<Location> locations = new ArrayList<Location>();
+
+    private Bitmap image;
+    private BitmapFactory.Options options;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,14 +70,43 @@ public class StoreProfileEditPage extends ActionBarActivity {
 
         user_name.setText(name);
         user_email.setText(email);
+        options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    String logourl = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + logo_path;
-                    URL url = new URL(logourl);
-                    final Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    final String logourl = logo_path;
+                    URL url = new URL("https://s3.amazonaws.com/shopakolik/"+store.getLogo());
+                    final File file = new File(
+                            Environment.getExternalStoragePublicDirectory(
+                                    "Shop"),
+                            logourl);
+                    if(file.exists())
+                    {
+                        image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+logourl, options);
+                    }else
+                    {
+                        Thread downloadT = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TransferManager tm = null;
+                                try {
+                                    tm = new TransferManager(Util.getCredProvider(StoreProfileEditPage.this));
+                                    File mFile = new File(
+                                            Environment.getExternalStoragePublicDirectory(
+                                                    "Shop"),logourl);
+                                    tm.download("shopakolik", logourl, mFile);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+                        downloadT.start();
+                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -204,10 +239,11 @@ public class StoreProfileEditPage extends ActionBarActivity {
                             builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Intent getNameScreenIntent = new Intent(StoreProfileEditPage.this, StoreProfilePage.class);
+                                    /*Intent getNameScreenIntent = new Intent(StoreProfileEditPage.this, StoreProfilePage.class);
                                     getNameScreenIntent.putExtra("user_email",new_email);
                                     getNameScreenIntent.putExtra("user_password",password);
-                                    startActivity(getNameScreenIntent);
+                                    startActivity(getNameScreenIntent);*/
+                                    finish();
                                 }
                             });
                             Log.e("setNeutralButton", "builder.setNeutralButton");

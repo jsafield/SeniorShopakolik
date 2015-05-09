@@ -1,8 +1,11 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -11,10 +14,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.model.shopakolikelements.Campaign;
+import com.shopakolik.seniorproject.model.shopakolikelements.Util;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -23,15 +29,25 @@ import java.util.ArrayList;
  */
 public class FavoriteCampaignPage extends BaseActivity {
 
+    private Bitmap image;
+    private BitmapFactory.Options options;
+
+    private String email;
+    private String password;
+    private String user_type;
+
     boolean isLiked;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
 
-        final String email = extras.getString("user_email");
-        final String password = extras.getString("user_password");
-        final String user_type = extras.getString("user_type");
+        email = extras.getString("user_email");
+        password = extras.getString("user_password");
+        user_type = extras.getString("user_type");
+
+        options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
         final View favView = getLayoutInflater().inflate(R.layout.favorite_campaign_page, baseLayout, false);
@@ -49,9 +65,38 @@ public class FavoriteCampaignPage extends BaseActivity {
 //                        URL url = new URL(logourl);
 //                        final Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
-                        String campImageURL = DatabaseManager.getServerUrl() + "Images/CampaignImages/" + list.get(i).getImage();
-                        URL imageURL = new URL(campImageURL);
-                        final Bitmap imageCamp = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                        final String campImageURL = list.get(i).getImage();
+                        URL imageURL = new URL("https://s3.amazonaws.com/shopakolik/"+list.get(i).getImage());
+                        final File file = new File(
+                                Environment.getExternalStoragePublicDirectory(
+                                        "Shop"),
+                                campImageURL);
+
+                        //File f = new File(getExternalCacheDir(), logourl);
+                        if (file.exists()) {
+                            image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+campImageURL, options);
+                        }else {
+                            Thread downloadT = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TransferManager tm = null;
+                                    try {
+                                        tm = new TransferManager(Util.getCredProvider(FavoriteCampaignPage.this));
+                                        File mFile = new File(
+                                                Environment.getExternalStoragePublicDirectory(
+                                                        "Shop"),campImageURL);
+                                        tm.download("shopakolik", campImageURL, mFile);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            });
+                            downloadT.start();
+                            image = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                        }
+
+                        final Bitmap imageCamp = image;
                         isLiked = DatabaseManager.isFavoriteCampaign(email, password,
                                 list.get(i).getCampaignId());
 
@@ -168,5 +213,16 @@ public class FavoriteCampaignPage extends BaseActivity {
 
         baseLayout.addView(favView);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(FavoriteCampaignPage.this, Wall.class);
+        intent.putExtra("user_email", email);
+        intent.putExtra("user_password", password);
+        intent.putExtra("user_type", user_type);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
     }
 }

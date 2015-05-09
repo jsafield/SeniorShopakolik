@@ -3,6 +3,7 @@ package com.shopakolik.seniorproject.view.shopakolikelements;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -70,7 +71,9 @@ public class ProfilePage extends ActionBarActivity {
         intent1.putExtra("user_password",password);
         intent1.putExtra("user_name",customer.getName());
         intent1.putExtra("user_surname",customer.getSurname());
+        intent1.putExtra("user_type", userType);
         startActivity(intent1);
+        //finish();
     }
 
 //    @Override
@@ -93,4 +96,15 @@ public class ProfilePage extends ActionBarActivity {
 //                return super.onOptionsItemSelected(item);
 //        }
 //    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ProfilePage.this, Wall.class);
+        intent.putExtra("user_email", email);
+        intent.putExtra("user_password", password);
+        intent.putExtra("user_type", userType);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
+    }
 }

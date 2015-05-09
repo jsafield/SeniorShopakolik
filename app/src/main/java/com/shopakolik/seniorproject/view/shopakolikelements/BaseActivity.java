@@ -228,7 +228,7 @@ public class BaseActivity extends ActionBarActivity {
                     editor.commit();
                     break;
                 default:
-                    Log.e("dçmdsc", " yanliiiiis" + position );
+                    //Log.e("dçmdsc", " yanliiiiis" + position );
             }
         }
         else
@@ -239,6 +239,7 @@ public class BaseActivity extends ActionBarActivity {
         intent.putExtra("user_type", userType);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -295,5 +296,7 @@ public class BaseActivity extends ActionBarActivity {
         Log.e("builder.create", "builder.create");
         dialog.show();
     }*/
+
+
 
 }

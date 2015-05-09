@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,12 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.controller.gps.gpsController;
 import com.shopakolik.seniorproject.model.shopakolikelements.Category;
 import com.shopakolik.seniorproject.model.shopakolikelements.Location;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
+import com.shopakolik.seniorproject.model.shopakolikelements.Util;
 
 import java.io.File;
 import java.net.URL;
@@ -37,6 +40,9 @@ public class StoreProfilePage extends ActionBarActivity {
     private ArrayList<Location> locations = new ArrayList<Location>();
     private float latitude = 0, longitude = 0;
     gpsController gps;
+    private String user_type;
+    private Bitmap image;
+    private BitmapFactory.Options options;
 
 
     public void onCreate(Bundle savedInstanceState){
@@ -46,6 +52,7 @@ public class StoreProfilePage extends ActionBarActivity {
         Intent intent = getIntent();
         email = intent.getStringExtra("user_email");
         password = intent.getStringExtra("user_password");
+        user_type = intent.getStringExtra("user_type");
 
         name = (TextView) findViewById(R.id.user_name_value);
         user_email = (TextView) findViewById(R.id.user_email_value);
@@ -60,9 +67,36 @@ public class StoreProfilePage extends ActionBarActivity {
                 //set text views inside
                 try {
                     store = DatabaseManager.getMyStore(email, password);
-                    logourl = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + store.getLogo();
-                    URL url = new URL(logourl);
-                    final Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    logourl = store.getLogo();
+                    URL url = new URL("https://s3.amazonaws.com/shopakolik/"+store.getLogo());
+                    options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    final File file = new File(
+                            Environment.getExternalStorageDirectory().getPath()+"/Shop/",
+                            logourl);
+
+                    if (file.exists()) {
+                        image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+logourl, options);
+                    }else {
+                        Thread downloadT = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TransferManager tm = null;
+                                try {
+                                    tm = new TransferManager(Util.getCredProvider(StoreProfilePage.this));
+                                    File mFile = new File(
+                                            Environment.getExternalStoragePublicDirectory(
+                                                    "Shop"),logourl);
+                                    tm.download("shopakolik", logourl, mFile);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+                        downloadT.start();
+                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -102,6 +136,7 @@ public class StoreProfilePage extends ActionBarActivity {
         intent1.putExtra("logo_url", store.getLogo());
         intent1.putExtra("categories",cat_array);
         intent1.putExtra("locations",locations);
+        intent1.putExtra("user_type",user_type);
         startActivity(intent1);
     }
 
@@ -150,5 +185,16 @@ public class StoreProfilePage extends ActionBarActivity {
             }
         }).start();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(StoreProfilePage.this, PageOfOwnerShop.class);
+        intent.putExtra("user_email", email);
+        intent.putExtra("user_password", password);
+        intent.putExtra("user_type", user_type);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
     }
 }

@@ -1,5 +1,6 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -17,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,9 +26,12 @@ import android.widget.Toast;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.controller.gps.gpsController;
+import com.shopakolik.seniorproject.controller.transfercontroller.TransferController;
 import com.shopakolik.seniorproject.model.shopakolikelements.Category;
+import com.shopakolik.seniorproject.model.shopakolikelements.Constants;
 import com.shopakolik.seniorproject.model.shopakolikelements.Location;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
+import com.shopakolik.seniorproject.model.shopakolikelements.Util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -35,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Created by zeyno on 2/5/2015.
@@ -48,15 +54,17 @@ public class SignUpForShop extends ActionBarActivity {
     private float latitude = 0, longitude = 0;
     boolean valid = true;
     CharSequence text = "";
-    private ArrayList<Location> locations = new ArrayList<Location>();
     public static ArrayList<Category> selectedCategories = new ArrayList<Category>();
     gpsController gps;
+    private Uri mUri;
+    private Context mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signupshop);
         iv = (ImageView) findViewById(R.id.currentImageView);
+        mContext = this;
     }
 
     public void categoriesClick(View view) {
@@ -91,7 +99,7 @@ public class SignUpForShop extends ActionBarActivity {
 
 
     // To handle when an image is selected from the browser, add the following to your Activity
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
@@ -102,6 +110,33 @@ public class SignUpForShop extends ActionBarActivity {
                     byte[] inputData = getBytes(is);
 
                     String path = getRealPathFromURI(currImageURI);
+                    File imgFile = new File(path);
+
+                    if (imgFile.exists()) {
+                        Bitmap myBitmap = decodeSampledBitmapFromResource(inputData, 100, 100);
+                        saveToCacheFile(myBitmap);
+                        iv.setImageBitmap(myBitmap);
+                        iv.setVisibility(View.VISIBLE);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }*/
+
+    @Override
+    protected void onActivityResult(int reqCode, int resCode, Intent data) {
+        if (resCode == Activity.RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            mUri = uri;
+            if (mUri != null) {
+                try {
+                    InputStream is = getContentResolver().openInputStream(mUri);
+                    byte[] inputData = getBytes(is);
+
+                    String path = getRealPathFromURI(mUri);
                     File imgFile = new File(path);
 
                     if (imgFile.exists()) {
@@ -132,7 +167,7 @@ public class SignUpForShop extends ActionBarActivity {
     public static File getSavePath() {
         File path;
         if (hasSDCard()) { // SD card
-            path = new File(Environment.getExternalStorageDirectory() + "/shopakolik/");
+            path = new File(Environment.getExternalStorageDirectory().getPath()+"/Shop/");
             //path = new File("/storage/extSdCard/" + "shopakolik/");
             boolean b = path.mkdirs();
             Log.e("boolean if file created", " " + b);
@@ -227,9 +262,10 @@ public class SignUpForShop extends ActionBarActivity {
         re_password = (TextView) findViewById(R.id.customer_re_password_value);
         location = (TextView) findViewById(R.id.shop_location_value);
         address = (TextView) findViewById(R.id.shop_address_value);
+
+        final ArrayList<Location> locations = new ArrayList<>();
         Location loc = new Location(location.getText().toString(), latitude, longitude, address.getText().toString());
         locations.add(loc);
-
 
 
         new Thread(new Runnable() {
@@ -241,7 +277,7 @@ public class SignUpForShop extends ActionBarActivity {
                     int index2 = email.getText().toString().indexOf(".com");
                     if (index > 0 && index2 > 0) {
                         if (password.getText().toString().equals(re_password.getText().toString()) && password.length() > 7 && password.length() < 16) {
-                            if (lastpath == null) {
+                            if (false){//lastpath == null) {
                                 text = "Please select a logo";
                                 valid = false;
                             } else {
@@ -254,7 +290,70 @@ public class SignUpForShop extends ActionBarActivity {
                                         valid = false;
                                     } else {
                                         //ProgressDialog.show(SignUpForShop.this, "", "Loading", true);
-                                        Store store = new Store(email.getText().toString(), password.getText().toString(), name.getText().toString(), lastpath, selectedCategories, locations);
+                                        final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                                        Random rnd = new Random();
+
+                                        StringBuilder sb = new StringBuilder(10);
+                                        for( int i = 0; i < 10; i++ ) {
+                                            int a = rnd.nextInt();
+                                            if(a%2 == 0)
+                                                sb.append(AB.charAt(rnd.nextInt(AB.length())));
+                                            else
+                                                sb.append((""+AB.charAt(rnd.nextInt(AB.length()))).toLowerCase());
+
+                                        }
+                                        final String fileName = sb.toString();
+                                        Thread uploadThr = new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                //Log.e("Signup for shop", Constants.AWS_ACCOUNT_ID+" "+Constants.COGNITO_ROLE_UNAUTH+" "+Constants.COGNITO_POOL_ID);
+                                                TransferController.customUpload(mContext, mUri, fileName);
+                                            }
+                                        });
+                                        uploadThr.start();
+
+                                        String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(
+                                                mContext.getContentResolver().getType(mUri));
+
+                                        File newFile = new File(Environment.getExternalStorageDirectory().getPath()+"/Shop/", fileName + "."
+                                                + extension);
+                                        if(!newFile.getParentFile().exists())
+                                        {
+                                            newFile.getParentFile().mkdir();
+                                        }
+                                        ContentResolver resolver = getContentResolver();
+                                        InputStream in = null;
+                                        FileOutputStream out = null;
+                                        try {
+                                            in = resolver.openInputStream(mUri);
+                                            out = new FileOutputStream(newFile, false);
+                                            byte[] buffer = new byte[1024];
+                                            int read;
+                                            while ((read = in.read(buffer)) != -1) {
+                                                out.write(buffer, 0, read);
+                                            }
+                                            out.flush();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }finally {
+                                            if (in != null) {
+                                                try {
+                                                    in.close();
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                            if (out != null) {
+                                                try {
+                                                    out.close();
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+;
+                                        Store store = new Store(email.getText().toString(), password.getText().toString(), name.getText().toString(), fileName + "."
+                                                + extension, selectedCategories, locations);
                                         result = DatabaseManager.addStore(store);
                                         if (result) {
                                             Log.e("true", "true");

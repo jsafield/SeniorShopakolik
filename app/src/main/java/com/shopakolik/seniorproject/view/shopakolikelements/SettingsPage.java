@@ -21,6 +21,8 @@ import com.shopakolik.seniorproject.controller.notificationcontroller.Notificati
  * Created by Zehra on 23.4.2015.
  */
 public class SettingsPage extends ActionBarActivity{
+    private String email;
+    private String password;
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -28,8 +30,8 @@ public class SettingsPage extends ActionBarActivity{
         setContentView(R.layout.settings);
 
         Intent intent = getIntent();
-        final String email = intent.getStringExtra("user_email");
-        final String password = intent.getStringExtra("user_password");
+        email = intent.getStringExtra("user_email");
+        password = intent.getStringExtra("user_password");
         final Switch notifSwitch = (Switch)findViewById(R.id.notification_switch);
         final Switch gpsSwitch = (Switch)findViewById(R.id.location_notification_switch);
         final Context context = this;
@@ -62,7 +64,7 @@ public class SettingsPage extends ActionBarActivity{
         alarmIntent.putExtra("password", password);
         final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
         final AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        final int interval = 15000; // repetition interval
+        final int interval = 20*60*1000; // repetition interval
 
         notifSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -145,6 +147,17 @@ public class SettingsPage extends ActionBarActivity{
             }
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(SettingsPage.this, Wall.class);
+        intent.putExtra("user_email", email);
+        intent.putExtra("user_password", password);
+        intent.putExtra("user_type", "Customer");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
     }
 
 }

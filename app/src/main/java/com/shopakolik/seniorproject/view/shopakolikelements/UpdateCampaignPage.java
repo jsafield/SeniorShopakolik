@@ -2,16 +2,19 @@ package com.shopakolik.seniorproject.view.shopakolikelements;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,18 +24,25 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
+import com.shopakolik.seniorproject.controller.transfercontroller.TransferController;
 import com.shopakolik.seniorproject.model.shopakolikelements.Campaign;
 import com.shopakolik.seniorproject.model.shopakolikelements.CampaignType;
+import com.shopakolik.seniorproject.model.shopakolikelements.Util;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Random;
 
 /**
  * Created by IREM on 4/26/2015.
@@ -55,13 +65,17 @@ public class UpdateCampaignPage extends ActionBarActivity {
     private RadioButton radio1, radio2, radio3, radio4, radio5;
     static final int DATE_DIALOG_ID = 999;
     static final int DATE_DIALOG_ID_2 = 666;
+    private Uri mUri;
+    private Bitmap image;
+    private BitmapFactory.Options options;
+    private String imURL;
 
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_campaign_page);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         email = intent.getStringExtra("user_email");
         password = intent.getStringExtra("user_password");
         campaignId = intent.getIntExtra("campaignID", 0);
@@ -72,6 +86,8 @@ public class UpdateCampaignPage extends ActionBarActivity {
         startdate = (TextView) findViewById(R.id.campaign_sdate);
         enddate = (TextView) findViewById(R.id.campaign_fdate);
         img = (ImageView) findViewById(R.id.currentImageView);
+        options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         radioGroup1 = (RadioGroup) findViewById(R.id.groupRadio);
         radio1 = (RadioButton) findViewById(R.id.sales);
@@ -164,6 +180,7 @@ public class UpdateCampaignPage extends ActionBarActivity {
                         }
 
                         try {
+                            DatabaseManager.removeCampaign(email, password, campaignId);
                             Date startDate = dateFormat.parse(startdate.getText().toString());
                             Date endDate = dateFormat.parse(enddate.getText().toString());
 
@@ -177,18 +194,98 @@ public class UpdateCampaignPage extends ActionBarActivity {
                                 pr = Integer.parseInt(percentage.getText().toString());
 
 //                            Log.e("", type.toString());
-                            Campaign campaign = new Campaign(campaignId, startDate, endDate, path, type,
-                                    preconditionTxt.getText().toString(), descrip.getText().toString(),
-                                    pr, fl);
+                            final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                            Random rnd = new Random();
+
+                            StringBuilder sb = new StringBuilder(10);
+                            for( int i = 0; i < 10; i++ ) {
+                                int a = rnd.nextInt();
+                                if(a%2 == 0)
+                                    sb.append(AB.charAt(rnd.nextInt(AB.length())));
+                                else
+                                    sb.append((""+AB.charAt(rnd.nextInt(AB.length()))).toLowerCase());
+
+                            }
+                            final String fileName = sb.toString();
+
+
+                            Campaign campaign;
+                            String extension = "";
+
+                            if(isImageChanged) {
+                                extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(
+                                        UpdateCampaignPage.this.getContentResolver().getType(mUri));
+                                campaign = new Campaign(startDate, endDate, fileName + "."
+                                        + extension, type,
+                                        preconditionTxt.getText().toString(), descrip.getText().toString(), pr, fl);
+                            }else
+                            {
+                                campaign = new Campaign(startDate, endDate, imURL, type,
+                                        preconditionTxt.getText().toString(), descrip.getText().toString(), pr, fl);
+                            }
+
 
 //                            Campaign campaign = new Campaign(campaignId, startDate, endDate, path, type, preconditionTxt.getText().toString(), description.getText().toString()
 //                                    , Integer.parseInt(percentage.getText().toString()), fl);
 
                             try {
-                                if (isImageChanged)
-                                    DatabaseManager.updateCampaign(email, password, campaign, previousImagePath);
-                                else
-                                    DatabaseManager.updateCampaign(email, password, campaign);
+                                if (isImageChanged) {
+
+                                    Thread uploadThr = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //Log.e("Signup for shop", Constants.AWS_ACCOUNT_ID+" "+Constants.COGNITO_ROLE_UNAUTH+" "+Constants.COGNITO_POOL_ID);
+                                            TransferController.customUpload(UpdateCampaignPage.this, mUri, fileName);
+                                        }
+                                    });
+                                    uploadThr.start();
+
+                                    File newFile = new File(Environment.getExternalStorageDirectory().getPath()+"/Shop/", fileName + "."
+                                            + extension);
+
+                                    if(!newFile.getParentFile().exists())
+                                    {
+                                        newFile.getParentFile().mkdir();
+                                    }
+                                    ContentResolver resolver = getContentResolver();
+                                    InputStream in = null;
+                                    FileOutputStream out = null;
+                                    try {
+                                        in = resolver.openInputStream(mUri);
+                                        out = new FileOutputStream(newFile, false);
+                                        byte[] buffer = new byte[1024];
+                                        int read;
+                                        while ((read = in.read(buffer)) != -1) {
+                                            out.write(buffer, 0, read);
+                                        }
+                                        out.flush();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }finally {
+                                        if (in != null) {
+                                            try {
+                                                in.close();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        if (out != null) {
+                                            try {
+                                                out.close();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                    //DatabaseManager.addCampaign(email,password,campaign);
+
+
+                                    DatabaseManager.addCampaign(email, password, campaign);
+                                }else {
+                                    DatabaseManager.removeCampaign(email, password, campaignId);
+                                    Log.e("UPDATECAMP", "" + DatabaseManager.addCampaign(email, password, campaign));
+
+                                }
 //                                Log.e("type", type.toString());
 //                                Log.e("campaign start", startdate.getText().toString());
 //                                Log.e("campaign finish", startdate.getText().toString());
@@ -201,11 +298,14 @@ public class UpdateCampaignPage extends ActionBarActivity {
                                 new_intent.putExtra("user_type", "Store");
 
                                 startActivity(new_intent);
+                                finish();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
                         } catch (ParseException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -232,10 +332,34 @@ public class UpdateCampaignPage extends ActionBarActivity {
 //                    String logoStr = DatabaseManager.getServerUrl() + "Images/StoreLogosCampaignImages/" + campaign.getLogo();
 //                    URL logoURL = new URL(logoStr);
 //                    final Bitmap logoBitmap = BitmapFactory.decodeStream(logoURL.openConnection().getInputStream());
+                    imURL = campaign.getImage();
+                    File f = new File(Environment.getExternalStorageDirectory().getPath()+"/Shop/", imURL);
+                    if(f.exists())
+                    {
+                        image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+imURL, options);
+                    }else
+                    {
+                        Thread downloadT = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TransferManager tm = null;
+                                try {
+                                    tm = new TransferManager(Util.getCredProvider(UpdateCampaignPage.this));
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
 
-                    String campImageURL = DatabaseManager.getServerUrl() + "Images/CampaignImages/" + campaign.getImage();
-                    URL imageURL = new URL(campImageURL);
-                    final Bitmap imageCamp = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                                File mFile = new File(
+                                        Environment.getExternalStoragePublicDirectory(
+                                                "Shop"), imURL);
+                                tm.download("shopakolik", imURL, mFile);
+                            }
+                        });
+                        downloadT.start();
+                        image = BitmapFactory.decodeStream(new URL("https://s3.amazonaws.com/shopakolik/"+imURL).openConnection().getInputStream());
+                    }
+
+                    final Bitmap imageCamp = image;
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -311,6 +435,7 @@ public class UpdateCampaignPage extends ActionBarActivity {
             if (requestCode == 1) {
                 // currImageURI is the global variable I'm using to hold the content:// URI of the image
                 Uri currImageURI = data.getData();
+                mUri = currImageURI;
                 path = getRealPathFromURI(currImageURI);
                 File imgFile = new File(path);
 

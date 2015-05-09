@@ -28,6 +28,8 @@ import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManage
 import com.shopakolik.seniorproject.controller.databasecontroller.UserType;
 import com.shopakolik.seniorproject.controller.notificationcontroller.AlarmReceiver;
 import com.shopakolik.seniorproject.controller.notificationcontroller.NotificationService;
+import com.shopakolik.seniorproject.model.shopakolikelements.Constants;
+import com.shopakolik.seniorproject.model.shopakolikelements.Credentials;
 import com.shopakolik.seniorproject.model.shopakolikelements.User;
 
 import org.w3c.dom.Text;
@@ -60,6 +62,8 @@ public class MainActivity extends ActionBarActivity {
 
         email = (TextView) findViewById(R.id.email);
         password = (TextView) findViewById(R.id.password);
+        new Constants();
+
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         context = this;
@@ -133,7 +137,7 @@ public class MainActivity extends ActionBarActivity {
                             Intent alarmIntent = new Intent(context, AlarmReceiver.class);
                             final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
                             final AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                            final int interval = 15000;
+                            final int interval = 20*60*1000;
                             manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
                         }
 
@@ -238,5 +242,7 @@ public class MainActivity extends ActionBarActivity {
         }
         return false;
     }
+
+
 
 }

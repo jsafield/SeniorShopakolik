@@ -2,16 +2,19 @@ package com.shopakolik.seniorproject.view.shopakolikelements;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -23,14 +26,22 @@ import android.widget.TextView;
 
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
+import com.shopakolik.seniorproject.controller.transfercontroller.TransferController;
 import com.shopakolik.seniorproject.model.shopakolikelements.Campaign;
 import com.shopakolik.seniorproject.model.shopakolikelements.CampaignType;
+import com.shopakolik.seniorproject.model.shopakolikelements.Store;
+import com.shopakolik.seniorproject.model.shopakolikelements.Util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Created by IREM on 4/10/2015.
@@ -50,7 +61,9 @@ public class AddCampaignPage extends ActionBarActivity {
     private RadioButton radio1, radio2, radio3, radio4, radio5;
     private String email = "";
     private String password;
+    private String user_type;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+    private Uri mUri;
 
     private int year;
     private int month;
@@ -68,6 +81,7 @@ public class AddCampaignPage extends ActionBarActivity {
         email = intent.getStringExtra("user_email");
         Log.e("email",email);
         password = intent.getStringExtra("user_password");
+        user_type = intent.getStringExtra("user_type");
 
         setCurrentDateOnView();
 
@@ -177,24 +191,89 @@ public class AddCampaignPage extends ActionBarActivity {
                                 pr = Integer.parseInt(percentage.getText().toString());
 
 
-                            Campaign campaign = new Campaign(startDate, endDate, path, type,
+
+                            final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                            Random rnd = new Random();
+
+                            StringBuilder sb = new StringBuilder(10);
+                            for( int i = 0; i < 10; i++ ) {
+                                int a = rnd.nextInt();
+                                if(a%2 == 0)
+                                    sb.append(AB.charAt(rnd.nextInt(AB.length())));
+                                else
+                                    sb.append((""+AB.charAt(rnd.nextInt(AB.length()))).toLowerCase());
+
+                            }
+                            final String fileName = sb.toString();
+                            Thread uploadThr = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Log.e("Signup for shop", Constants.AWS_ACCOUNT_ID+" "+Constants.COGNITO_ROLE_UNAUTH+" "+Constants.COGNITO_POOL_ID);
+                                    TransferController.customUpload(AddCampaignPage.this, mUri, fileName);
+                                }
+                            });
+                            uploadThr.start();
+
+
+                            String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(
+                                    AddCampaignPage.this.getContentResolver().getType(mUri));
+
+                            File newFile = new File(Environment.getExternalStorageDirectory().getPath()+"/Shop/", fileName + "."
+                                    + extension);
+                            if(!newFile.getParentFile().exists())
+                            {
+                                newFile.getParentFile().mkdir();
+                            }
+                            ContentResolver resolver = getContentResolver();
+                            InputStream in = null;
+                            FileOutputStream out = null;
+                            try {
+                                in = resolver.openInputStream(mUri);
+                                out = new FileOutputStream(newFile, false);
+                                byte[] buffer = new byte[1024];
+                                int read;
+                                while ((read = in.read(buffer)) != -1) {
+                                    out.write(buffer, 0, read);
+                                }
+                                out.flush();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }finally {
+                                if (in != null) {
+                                    try {
+                                        in.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                if (out != null) {
+                                    try {
+                                        out.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+
+                            Campaign campaign = new Campaign(startDate, endDate, fileName + "."
+                                    + extension, type,
                                     preconditionTxt.getText().toString(), description.getText().toString()
                                     , pr, fl);
 
                             try {
-                                DatabaseManager.addCampaign(email,password,campaign);
+                                DatabaseManager.addCampaign(email, password, campaign);
 
                                 Intent new_intent = new Intent(AddCampaignPage.this, PageOfOwnerShop.class);
                                 new_intent.putExtra("user_email", email);
                                 new_intent.putExtra("user_password", password);
                                 new_intent.putExtra("user_type", "Store");
-
                                 startActivity(new_intent);
+                                finish();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
-                        } catch (ParseException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -216,6 +295,10 @@ public class AddCampaignPage extends ActionBarActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
+            if(data != null)
+            {
+                mUri = data.getData();
+            }
             if (requestCode == 1) {
                 // currImageURI is the global variable I'm using to hold the content:// URI of the image
                 Uri currImageURI = data.getData();
@@ -330,6 +413,17 @@ public class AddCampaignPage extends ActionBarActivity {
 
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(AddCampaignPage.this, PageOfOwnerShop.class);
+        intent.putExtra("user_email", email);
+        intent.putExtra("user_password", password);
+        intent.putExtra("user_type", user_type);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
+    }
 
 }
 

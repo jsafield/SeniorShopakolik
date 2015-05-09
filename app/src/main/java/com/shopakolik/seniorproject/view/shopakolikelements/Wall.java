@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
@@ -23,13 +24,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.s3.transfermanager.Download;
+import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.model.shopakolikelements.Category;
 import com.shopakolik.seniorproject.model.shopakolikelements.Customer;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
 import com.shopakolik.seniorproject.model.shopakolikelements.User;
+import com.shopakolik.seniorproject.model.shopakolikelements.Util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -44,6 +49,8 @@ public class Wall extends BaseActivity {
 
     private static String email,password,userType;
     private static long lastUpdated = 0;
+    private Bitmap image;
+    private BitmapFactory.Options options;
 
     public void fillStoreArray(final ArrayList<Store> stores,long t) throws IOException {
 
@@ -53,20 +60,49 @@ public class Wall extends BaseActivity {
         final View wallView = getLayoutInflater().inflate(R.layout.wall, baseLayout, false);
 
         final LinearLayout brand_list = (LinearLayout) wallView.findViewById(R.id.brand_list);
-
+        options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         for (int i = 0; i < stores.size(); i++) {
-            String logourl = DatabaseManager.getServerUrl()+ "Images/StoreLogos/" + stores.get(i).getLogo();
-            URL url = new URL(logourl);
-            final Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            final String logourl = stores.get(i).getLogo();
+            URL url = new URL("https://s3.amazonaws.com/shopakolik/"+logourl);
+            final File file = new File(
+                    Environment.getExternalStoragePublicDirectory(
+                            "Shop"),
+                    logourl);
+
+            //File f = new File(getExternalCacheDir(), logourl);
+            if (file.exists()) {
+                image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+logourl, options);
+            }else {
+                Thread downloadT = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TransferManager tm = null;
+                        try {
+                            tm = new TransferManager(Util.getCredProvider(Wall.this));
+
+                            File mFile = new File(
+                                    Environment.getExternalStoragePublicDirectory(
+                                            "Shop"),logourl);
+                           tm.download("shopakolik", logourl, mFile);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                downloadT.start();
+                image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            }
             final int finalI = i;
+            final Bitmap storeBitmap = image;
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         View itemView = getLayoutInflater().inflate(R.layout.brandlistitem, brand_list, false);
-                        ImageView campaignImage = (ImageView) itemView.findViewById(R.id.brand_logo);
+                        ImageView brandLogo = (ImageView) itemView.findViewById(R.id.brand_logo);
                         TextView title = (TextView) itemView.findViewById(R.id.brand_name);
-                        campaignImage.setImageBitmap(image);
+                        brandLogo.setImageBitmap(storeBitmap);
                         title.setText(stores.get(finalI).getName());
                         itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -78,6 +114,7 @@ public class Wall extends BaseActivity {
                                 intent.putExtra("user_type", userType);
                                 Log.e("wall user", ""+(userType==null));
                                 startActivity(intent);
+                                finish();
                             }
                         });
                         brand_list.addView(itemView);
@@ -222,5 +259,27 @@ public class Wall extends BaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Wall.this);
+        builder.setMessage("Are you sure you want to leave?");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
 }

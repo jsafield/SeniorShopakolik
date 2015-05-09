@@ -1,10 +1,12 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -18,12 +20,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.model.shopakolikelements.Campaign;
 import com.shopakolik.seniorproject.model.shopakolikelements.Category;
+import com.shopakolik.seniorproject.model.shopakolikelements.Constants;
 import com.shopakolik.seniorproject.model.shopakolikelements.Store;
+import com.shopakolik.seniorproject.model.shopakolikelements.Util;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,17 +43,25 @@ import java.util.Date;
 public class BrandPage extends BaseActivity {
 
 
+    private Bitmap image;
+    private Context mContext;
+    private BitmapFactory.Options options;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
+        mContext = this;
 
         final int storeID = extras.getInt("store_id");
         final String email = extras.getString("user_email");
         final String password = extras.getString("user_password");
+        options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         RelativeLayout baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
         final View brandView = getLayoutInflater().inflate(R.layout.brandpage, baseLayout, false);
+
 
         final LinearLayout campaignList = (LinearLayout) brandView.findViewById(R.id.campaignlist);
 
@@ -57,11 +71,43 @@ public class BrandPage extends BaseActivity {
                 try {
                     final Store store = DatabaseManager.getStore(email, password, storeID);
 
-                    String logourl = DatabaseManager.getServerUrl() + "Images/StoreLogos/" + store.getLogo();
-                    URL url = new URL(logourl);
-                    final Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-//                    final BitmapDrawable imageDrawable = new BitmapDrawable(BrandPage.this.getResources(), image);
+                    //final String logourl = store.getLogo();
+                    //URL url = new URL(logourl);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    final String logourl = store.getLogo();
+                    options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    final File file = new File(
+                            Environment.getExternalStoragePublicDirectory(
+                                    "Shop"),
+                            logourl);
 
+                    URL url = new URL("https://s3.amazonaws.com/shopakolik/"+store.getLogo());
+                    if (file.exists()) {
+                        image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+logourl, options);
+                    }else {
+                        Thread downloadT = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TransferManager tm = null;
+                                try {
+                                    tm = new TransferManager(Util.getCredProvider(mContext));
+                                    File mFile = new File(
+                                            Environment.getExternalStoragePublicDirectory(
+                                                    "Shop"),logourl);
+                                    tm.download("shopakolik", logourl, mFile);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+                        downloadT.start();
+                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    }
+
+                    final BitmapFactory.Options finalOptions = options;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -114,12 +160,44 @@ public class BrandPage extends BaseActivity {
                                                 final boolean isLiked = DatabaseManager.isFavoriteCampaign(email, password,
                                                         store.getCampaigns().get(finalI).getCampaignId());
 
-                                                String campImageURL = DatabaseManager.getServerUrl()
-                                                        + "Images/CampaignImages/"
-                                                        + store.getCampaigns().get(finalI).getImage();
-                                                URL imageURL = new URL(campImageURL);
-                                                final Bitmap imageCamp = BitmapFactory.decodeStream(
-                                                        imageURL.openConnection().getInputStream());
+                                                //String campImageURL = DatabaseManager.getServerUrl()
+                                                //        + "Images/CampaignImages/"
+                                                //        + store.getCampaigns().get(finalI).getImage();
+                                                final String imagePath = store.getCampaigns().get(finalI).getImage();
+                                                URL imageURL = new URL("https://s3.amazonaws.com/shopakolik/"+ imagePath);
+
+
+                                                final File file = new File(
+                                                        Environment.getExternalStoragePublicDirectory(
+                                                                "Shop"),
+                                                        imagePath);
+
+                                                if (file.exists()) {
+                                                    image = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/Shop/"+imagePath, finalOptions);
+                                                    //Log.e("BRANDPAGE",imagePath+" "+Environment.getExternalStoragePublicDirectory("Shop")+imagePath);
+                                                }else {
+                                                    Thread downloadT = new Thread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            TransferManager tm = null;
+                                                            try {
+                                                                tm = new TransferManager(Util.getCredProvider(BrandPage.this));
+                                                                File mFile = new File(
+                                                                        Environment.getExternalStoragePublicDirectory(
+                                                                                "Shop"), imagePath);
+                                                                //Log.e("BRANDPAGE",imagePath);
+                                                                tm.download("shopakolik", imagePath, mFile);
+                                                            } catch (InterruptedException e) {
+                                                                e.printStackTrace();
+                                                            }
+
+                                                        }
+                                                    });
+                                                    downloadT.start();
+                                                    image = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                                                }
+                                                final Bitmap imageCamp = image;
+
 
                                                 runOnUiThread(new Runnable() {
                                                     @Override
