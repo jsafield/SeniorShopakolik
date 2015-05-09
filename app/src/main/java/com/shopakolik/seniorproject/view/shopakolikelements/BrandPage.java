@@ -46,6 +46,9 @@ public class BrandPage extends BaseActivity {
     private Bitmap image;
     private Context mContext;
     private BitmapFactory.Options options;
+    private String user_type;
+    private String email;
+    private String password;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,8 +57,9 @@ public class BrandPage extends BaseActivity {
         mContext = this;
 
         final int storeID = extras.getInt("store_id");
-        final String email = extras.getString("user_email");
-        final String password = extras.getString("user_password");
+        email = extras.getString("user_email");
+        password = extras.getString("user_password");
+        user_type = extras.getString("user_type");
         options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
@@ -338,6 +342,17 @@ public class BrandPage extends BaseActivity {
 
 
         baseLayout.addView(brandView);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(BrandPage.this, Wall.class);
+        intent.putExtra("user_email", email);
+        intent.putExtra("user_password", password);
+        intent.putExtra("user_type", user_type);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
     }
 
 }
