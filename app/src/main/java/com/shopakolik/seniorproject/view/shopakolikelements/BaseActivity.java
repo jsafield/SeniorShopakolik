@@ -31,7 +31,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.shopakolik.seniorproject.R;
+import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.controller.notificationcontroller.AlarmReceiver;
 import com.shopakolik.seniorproject.controller.notificationcontroller.NotificationService;
 
@@ -204,6 +206,10 @@ public class BaseActivity extends ActionBarActivity {
                     final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
                     final AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                     manager.cancel(pendingIntent);
+                    if(DatabaseManager.isFBuser) {
+                        LoginManager.getInstance().logOut();
+                        DatabaseManager.isFBuser = false;
+                    }
                     break;
                 default:
             }

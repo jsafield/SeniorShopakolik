@@ -4,6 +4,8 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
+    repositories { mavenCentral() }
+
     defaultConfig {
         applicationId "com.shopakolik.seniorproject"
         minSdkVersion 15
@@ -32,4 +34,5 @@ dependencies {
     compile files('libs/aws-android-sdk-core-2.2.1.jar')
     compile files('libs/aws-android-sdk-s3-2.2.1.jar')
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+    compile 'com.android.support:appcompat-v7:22.1.1'
 }

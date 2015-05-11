@@ -1,5 +1,6 @@
 package com.shopakolik.seniorproject.view.shopakolikelements;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -23,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.controller.databasecontroller.UserType;
@@ -44,7 +46,8 @@ public class MainActivity extends ActionBarActivity {
     public static final String Email = "emailKey";
     public static final String Password = "passwordKey";
     public static String PACKAGE_NAME;
-    private Context context;
+    public static Context context;
+    public static Activity curWall;
 
     SharedPreferences sharedpreferences;
 
@@ -53,6 +56,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PACKAGE_NAME = getApplicationContext().getPackageName();
+        //FacebookSdk.sdkInitialize(getApplicationContext());
 
 
         Button signInButton = (Button) findViewById(R.id.signInButton);

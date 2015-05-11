@@ -61,6 +61,7 @@ public class PickCategoryPage extends DialogFragment {
                 } else {
                     BrandList brandList = new BrandList();
                     brandList.show(getFragmentManager(), "Pick Brand");
+                    dismiss();
                 }
             }
         });

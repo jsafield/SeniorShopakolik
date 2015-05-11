@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.s3.transfermanager.Download;
 import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
+import com.facebook.login.LoginManager;
 import com.shopakolik.seniorproject.R;
 import com.shopakolik.seniorproject.controller.databasecontroller.DatabaseManager;
 import com.shopakolik.seniorproject.model.shopakolikelements.Category;
@@ -66,8 +67,7 @@ public class Wall extends BaseActivity {
             final String logourl = stores.get(i).getLogo();
             URL url = new URL("https://s3.amazonaws.com/shopakolik/"+logourl);
             final File file = new File(
-                    Environment.getExternalStoragePublicDirectory(
-                            "Shop"),
+                    Environment.getExternalStorageDirectory().getPath()+"/Shop/",
                     logourl);
 
             //File f = new File(getExternalCacheDir(), logourl);
@@ -82,8 +82,7 @@ public class Wall extends BaseActivity {
                             tm = new TransferManager(Util.getCredProvider(Wall.this));
 
                             File mFile = new File(
-                                    Environment.getExternalStoragePublicDirectory(
-                                            "Shop"),logourl);
+                                    Environment.getExternalStorageDirectory().getPath()+"/Shop/",logourl);
                            tm.download("shopakolik", logourl, mFile);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -141,6 +140,7 @@ public class Wall extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainActivity.curWall = this;
 
         Intent intent1 = getIntent();
         email = intent1.getStringExtra("user_email");
@@ -149,7 +149,7 @@ public class Wall extends BaseActivity {
 
         Log.e("email",email);
         Log.e("password", password);
-        Log.e("user type", userType);
+        //Log.e("user type", userType);
 
         new Thread(new Runnable() {
             @Override
@@ -268,6 +268,8 @@ public class Wall extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
+                if(DatabaseManager.isFBuser)
+                    LoginManager.getInstance().logOut();
             }
         });
 

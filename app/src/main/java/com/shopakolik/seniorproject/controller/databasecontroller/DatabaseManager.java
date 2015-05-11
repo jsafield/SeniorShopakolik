@@ -40,6 +40,7 @@ public class DatabaseManager {
     private static boolean locationError = false;
     public static SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     public static String fileKey;
+    public static  boolean isFBuser = false;
 
 
     // To inform user whether adding location is failed while store adding

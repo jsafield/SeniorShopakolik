@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
-    android:background="@color/background_main">
+    android:background="@color/background_main"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto">
 
     <View
         android:id="@+id/space1"
@@ -74,7 +75,8 @@
         android:id="@+id/logIn_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="3dp">
+        android:paddingTop="3dp"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/signInButton"
@@ -85,6 +87,14 @@
             android:text="@string/signInButton"
             android:background="@color/buttonColor2"
             android:textColor="@color/white"/>
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.shopakolik.seniorproject.view.shopakolikelements.FaceBookFragment"
+            android:id="@+id/fragment"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.2" />
     </LinearLayout>
 
     <View
@@ -94,11 +104,13 @@
         android:layout_weight="1"
         android:orientation="horizontal"/>
 
+
     <RelativeLayout
         android:id="@+id/signUpLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
+
 
         <TextView
             android:id="@+id/SignUpAsCustomer"

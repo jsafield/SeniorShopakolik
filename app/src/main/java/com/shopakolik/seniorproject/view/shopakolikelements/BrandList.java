@@ -79,6 +79,11 @@ public class BrandList extends DialogFragment {
                                         intent.putExtra("user_password", Wall.getPassword());
                                         intent.putExtra("user_type", "Store");
                                         startActivity(intent);
+                                        dismiss();
+                                        if(MainActivity.curWall != null)
+                                        {
+                                            MainActivity.curWall.finish();
+                                        }
                                     }
                                 });
                             } catch (Exception e) {
